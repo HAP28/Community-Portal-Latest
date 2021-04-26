@@ -1,0 +1,29 @@
+<app-header></app-header>
+<div class="container">
+  <div class="card my-3" *ngFor="let item of Articles">
+    <div class="card-header">
+      {{ item.Title }}
+    </div>
+    <div class="card-body">
+      <blockquote class="blockquote mb-0">
+        <p [innerHTML]="item.Text"></p>
+        <footer class="blockquote-footer">
+          Posted On <cite title="Source Title">{{ item.PostedOn }}</cite>
+        </footer>
+      </blockquote>
+    </div>
+  </div>
+</div>
+<div class="card my-3" *ngFor="let item of Articles">
+  <div class="card-header">
+    {{ item.Title }}
+  </div>
+  <div class="card-body">
+    <blockquote class="blockquote mb-0">
+      <div [innerHTML]="item.Text"></div>
+      <footer class="blockquote-footer">
+        Posted On <cite title="Source Title">{{ item.PostedOn }}</cite>
+      </footer>
+    </blockquote>
+  </div>
+</div>

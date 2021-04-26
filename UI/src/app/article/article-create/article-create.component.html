@@ -1,0 +1,133 @@
+<div class="header">
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img src="../../assets/images/logo.png" width="200" height="70" class="d-inline-block align-top" alt=""></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link colour-me" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link colour-me" href="/article-posts">Articles</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle colour-me" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Community
+            </a>
+            <ul class="dropdown-menu colour-me" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">News</a></li>
+              <li><a class="dropdown-item" href="#">Medical</a></li>
+              <li><a class="dropdown-item" href="#">Politics</a></li>
+              <!-- <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li> -->
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link colour-me" href="#">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link colour-me" href="#">Contact Us</a>
+          </li>
+        </ul>
+        
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle welcome" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa fa-user"></i>&nbsp; Welcome {{userDetails.FirstName}} !!
+            </a>
+            <ul class="dropdown-menu colour-me" aria-labelledby="navbarDropdown">
+              <li><button class="dropdown-item drop" href="#"><i class="fa fa-plus-square"></i>&nbsp;Create Article</button></li>
+              <li><button class="dropdown-item drop" href="#"><i class="fa fa-user"></i>&nbsp;Profile</button></li>
+              <li><button class="dropdown-item drop" href="#" (click) = "close()"><i class="fa fa-sign-out"></i>&nbsp;Logout</button></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <br><br><br><br>
+</div>
+
+<div class="container">
+  <h1 class="text-center">Create Article</h1>
+  <form #imageForm="ngForm" #rteForm="ngForm" id="form-element">
+      <div class="mb-3">
+      <label class="form-label">Title</label>
+      <input type="text" #Title ngModel class="form-control" id="title" placeholder="Title.." name="title" autocomplete="off">
+      </div>
+      
+      <div class="mb-3">
+        <label for="formFile" class="form-label">Select Category</label>
+        <select class="form-select" aria-label="Default select example" name="category" aria-placeholder="Choose Category" id="category">
+          <option selected>Choose Category</option>
+          <option value="1">Fashion</option>
+          <option value="2">Food</option>
+          <option value="3">Travel</option>
+          <option value="4">Music</option>
+          <option value="5">Fitness</option>
+          <option value="6">Sports</option>
+          <option value="7">Finance</option>
+          <option value="8">Political</option>
+          <option value="9">Bussiness</option>
+          <option value="10">News</option>
+          <option value="11">Gaming</option>
+          <option value="12">Others</option>
+        </select>
+            <!-- <input type="file" class="form-control" id="formFile" (change)="selectFile($event)">
+            <div [innerHtml]='msg' *ngIf="msg" style="color: red;"></div>
+            <div><img [src]="url" *ngIf="url"></div> -->
+    </div>
+
+      <!-- <div class="mb-3">
+          <label class="form-label">Description</label>
+        <div class="sample-container">
+          <div class="default-section">
+            <div id="iframeRTE">
+            </div>
+          </div>
+        </div>
+        </div> -->
+        
+        <div class="form-group mt-3">
+          <textarea id="defaultRTE" required name="defaultRTE" class="form-control"></textarea>
+          <div id="dateError" style="padding-top: 10px"></div>
+      </div>
+      <div class="form-group">
+          <div class="col-sm-3 control-label"></div>
+          <div class="col-sm-6">
+              <div id='error'></div>
+          </div>
+      </div>
+
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="reset" class="btn btn-danger me-md-2">Reset</button>
+          <button class="btn btn-primary me-md-2" type="button"  ejs-button [disabled]="!rteForm.valid">Save as Draft</button>
+          <button class="btn btn-success" type="submit" id="validateSubmit" ejs-button [disabled]="!rteForm.valid">Publish Live</button>
+      </div>
+  </form>
+</div>
+<style>
+  .e-rte-content body{
+      color: black;
+      background-color: white;
+  }
+
+  .sb-header {
+      z-index: 100;
+  }
+
+  .sb-content.e-view.hide-header {
+      top: 0 !important;
+  }
+
+  .sb-header.e-view.hide-header {
+      display: none;
+  }
+</style>
+
+<br><br><br>
+
+<app-footer></app-footer>

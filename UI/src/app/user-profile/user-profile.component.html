@@ -1,0 +1,66 @@
+<div class="header">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#"><img src="../../assets/images/logo.png" width="200" height="70" class="d-inline-block align-top" alt=""></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link colour-me" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link colour-me" href="#">Articles</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle colour-me" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Community
+              </a>
+              <ul class="dropdown-menu colour-me" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">News</a></li>
+                <li><a class="dropdown-item" href="#">Medical</a></li>
+                <li><a class="dropdown-item" href="#">Politics</a></li>
+                <!-- <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li> -->
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link colour-me" href="#">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link colour-me" href="#">Contact Us</a>
+            </li>
+          </ul>
+          
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle welcome" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-user"></i>&nbsp; Welcome User !!
+              </a>
+              <ul class="dropdown-menu colour-me" aria-labelledby="navbarDropdown">
+                <li><button class="dropdown-item drop" href="#" (click) = "createarticle()"><i class="fa fa-plus-square"></i>&nbsp;Create Article</button></li>
+                <li><button class="dropdown-item drop" href="#"><i class="fa fa-user"></i>&nbsp;Profile</button></li>
+                <li><button class="dropdown-item drop" href="#" (click) = "close()"><i class="fa fa-sign-out"></i>&nbsp;Logout</button></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="header-frame">
+      <div class="header-banner">Welcome to Developer's Community</div>
+      
+      <span class="small">Find answers, ask questions, and connect with our community</span>
+  
+      <form class="form-inline d-flex">
+        <input class="form-control mr-sm-2 " type="search" placeholder="Search.." aria-label="Search">
+      </form>
+      <br><br><br>
+    </div>
+</div>
+
+<app-article-posts></app-article-posts>
+
+<app-footer></app-footer>
+  

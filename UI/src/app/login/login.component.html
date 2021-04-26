@@ -1,0 +1,58 @@
+<app-header></app-header>
+<app-body></app-body>
+<app-footer></app-footer>
+<div class="container">
+    <div class="myCard">
+        <div class="row">
+             <div class="col-md-6">
+                <div class="myLeftCtn">
+                   <form #form="ngForm" [formGroup]="loginForm" class="myForm text-center" (ngSubmit)="onSubmit(form)" autocomplete="off"> <!-- [formGroup]="loginForm" -->
+                      <header>Login</header>
+ 
+                        <div class="form-group">
+                            <input type="email" name="email" class="myInput form-control" [(ngModel)]="formModel.email"  placeholder="email" id="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" formControlName="email"/>
+                            <div *ngIf="submitted && f.email.errors" class="invalid-feedback" id="usernameValidation">
+                                <div *ngIf="f.email.errors.required">Email is required</div>
+                            </div>
+                        </div>
+ 
+                        <div class="form-group">
+                            <input class="myInput form-control" type="password" name="password" id="password" [(ngModel)]="formModel.password" placeholder="Password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" formControlName="password"/> 
+                            <div *ngIf="submitted && f.password.errors" class="invalid-feedback" id="passwordValidation">
+                                <div *ngIf="f.password.errors.required">Password is required</div>
+                                <div *ngIf="f.password.errors.minlength">Password must be a atleast 8 characters</div>
+                                <div *ngIf="f.password.errors.pattern">Password must have atleast 1 small , 1 capital and 1 special character</div>
+                            </div>
+                        </div>
+ 
+                        <div class="form-group">
+                            <label>
+                                <input id="check_1" name="remember"  type="checkbox" required><small>&nbsp; Remember me</small>
+                            </label>
+                        </div>
+ 
+                        <input type="submit" class="butt" value="Login">
+ 
+                        <div (click) = "gotoregistration()" class="signup">Not have an account ? <span>Sign Up</span> here</div>
+                    </form>     
+                </div>
+             </div>
+ 
+             <div class="col-md-6">
+                <div class="myRightCtn">
+                  <button class="close" (click) = "close()" mat-button>X</button>
+                    <div class="box">
+                      <header>Hello Peeps!</header>
+                      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. 
+                         Inventore sunt quas tenetur, placeat id sed harum velit tempora, 
+                         sit quos, iste dolore necessitatibus ullam nostrum voluptate 
+                         itaque aut repellat enim.
+                      </p>
+                         <input type="button" class="butt_out" value="Learn More" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+ 
