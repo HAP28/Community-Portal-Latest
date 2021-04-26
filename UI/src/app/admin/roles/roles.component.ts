@@ -10,7 +10,8 @@ import { UserService } from 'src/app/shared/user.service';
 export class RolesComponent implements OnInit {
 
   rolesList: any
-  constructor(private _router: Router,private service: UserService) { }
+  constructor(private _router: Router,private service: UserService) { 
+  }
 
   ngOnInit(): void {
     this.refreshList()

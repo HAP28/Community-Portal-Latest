@@ -1,8 +1,13 @@
 <app-navbar></app-navbar>
 <div class="container">
-    
+  <h1 class="mb-3">Section</h1>
+    <div class="form-group">
+      <select class="form-control" id="categoryselection">
+        <option selected>Select Category</option>
+      </select>
+    </div>
     <div class="input-group mb-5">
-        <input type="text" class="form-control" placeholder="Add Section" required>
+        <input type="text" id="section_name" class="form-control" placeholder="Add Section" required>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Add New Section</button>
     </div>
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -16,13 +21,13 @@
                   <form>
                     <div class="mb-3">
                       <!-- <label for="message-text" class="col-form-label">Message:</label> -->
-                      <textarea class="form-control" id="message-text" rows="5" placeholder="Description..."></textarea>
+                      <textarea class="form-control" id="section_description" rows="5" placeholder="Description..."></textarea>
                     </div>
                   </form>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Add Section</button>
+                  <button type="button" class="btn btn-secondary" id="closesection" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" (click)="AddSection()">Add Section</button>
                 </div>
             </div>
         </div>
@@ -47,77 +52,33 @@
             <li><a href="">Link 1</a></li>
             <li><a href="">Link 2</a></li>
             <li><a href="">Link 3</a></li>
-            <li><a href="">Link 4</a></li>
-            <li><a href="">Link 5</a></li>
-            <li><a href="">Link 6</a></li>
-            <li><a href="">Link 7</a></li>
-            <li><a href="">Link 8</a></li>
-            <li><a href="">Link 9</a></li>
           </ul>
         </nav>
       </div>
   
       <div class="col-md-9">
         <div class="row row-cols-1 row-cols-md-3 g-4">
-          <div class="col">
+          <div class="col" *ngFor="let item of sectionList">
             <div class="card shadow p-3 mb-5 bg-body rounded">
-              <img src="..." class="card-img-top" alt="...">
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <div><a class="link" href="#">Learn <fa-icon [icon]="faArrowRight"></fa-icon></a></div>
+                <h5 class="card-title">{{item.Section_Name}}</h5>
+                <p class="card-text">{{item.Section_Description}}</p>
+                <div class="buttons" style="display: flex">
+                  <div>
+                    <a class="link button hand"
+                      >Edit <fa-icon [icon]="faArrowRight"></fa-icon
+                    ></a>
+                  </div>
+                  <div class="ml-3">
+                    <a
+                      class="link text-danger button hand"
+                      (click)="DeleteSection(item.Section_Id)"
+                      >Delete <fa-icon [icon]="faArrowRight"></fa-icon
+                    ></a>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col">
-            <div class="card shadow p-3 mb-5 bg-body rounded">
-              <img src="..." class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                <div><a class="link" href="#">Learn <fa-icon [icon]="faArrowRight"></fa-icon></a></div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card shadow p-3 mb-5 bg-body rounded">
-              <img src="..." class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.This content is a little bit longer.</p>
-                <div><a class="link" href="#">Learn <fa-icon [icon]="faArrowRight"></fa-icon></a></div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card shadow p-3 mb-5 bg-body rounded">
-              <img src="..." class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                <div><a class="link" href="#">Learn <fa-icon [icon]="faArrowRight"></fa-icon></a></div>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-              <div class="card shadow p-3 mb-5 bg-body rounded">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.This content is a little bit longer.</p>
-                  <div><a class="link" href="#">Learn <fa-icon [icon]="faArrowRight"></fa-icon></a></div>
-              </div>
-              </div>
-          </div>
-          <div class="col">
-              <div class="card shadow p-3 mb-5 bg-body rounded">
-                <img src="..." class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.This content is a little bit longer.</p>
-                  <div><a class="link" href="#">Learn <fa-icon [icon]="faArrowRight"></fa-icon></a></div>
-              </div>
-              </div>
           </div>
         </div>
       </div>

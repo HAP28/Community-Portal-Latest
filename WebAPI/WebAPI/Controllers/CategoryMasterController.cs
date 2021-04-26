@@ -142,44 +142,60 @@ namespace WebAPI.Controllers
         // GET: CategoryMasterController/Edit/5
         public ActionResult Edit(CategoryMaster cat)
         {
-            string query = @"Update CategoryMaster set Category_Name ='" + cat.CategoryName + "', Category_Description = '" + cat.CategoryDescription + "',Product_Id='" + cat.ProductId + "' where Category_Id = " + cat.CategoryId;
-            DataTable table = new DataTable();
-            string sqlDataSource = configuration.GetConnectionString("DataConnection");
-            SqlDataReader dataReader;
-            using (SqlConnection connection = new SqlConnection(sqlDataSource))
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(query, connection))
+                string query = @"Update CategoryMaster set Category_Name ='" + cat.CategoryName + "', Category_Description = '" + cat.CategoryDescription + "',Product_Id='" + cat.ProductId + "' where Category_Id = " + cat.CategoryId;
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
                 {
-                    dataReader = command.ExecuteReader();
-                    table.Load(dataReader);
-                    dataReader.Close();
-                    connection.Close();
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
                 }
+                return new JsonResult("Data Updated");
             }
-            return new JsonResult("Data Updated");
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+                //throw;
+            }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         // GET: CategoryMasterController/Delete/5
         public ActionResult Delete(int id)
         {
-            string query = @"delete from dbo.CategoryMaster where Category_Id = '" + id + "'";
-            DataTable table = new DataTable();
-            string sqlDataSource = configuration.GetConnectionString("DataConnection");
-            SqlDataReader dataReader;
-            using (SqlConnection connection = new SqlConnection(sqlDataSource))
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(query, connection))
+                string query = @"delete from dbo.CategoryMaster where Category_Id = '" + id + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
                 {
-                    dataReader = command.ExecuteReader();
-                    table.Load(dataReader);
-                    dataReader.Close();
-                    connection.Close();
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
                 }
+                return new JsonResult("Data Deleted");
             }
-            return new JsonResult("Data Deleted");
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+                //throw;
+            }
         }
     }
 }

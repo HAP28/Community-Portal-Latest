@@ -163,7 +163,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         // GET: SectionMasterController/Delete/5
         public ActionResult Delete(int id)
         {
