@@ -168,7 +168,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         // GET: ProductMasterController/Delete/5
         public ActionResult Delete(int id)
         {

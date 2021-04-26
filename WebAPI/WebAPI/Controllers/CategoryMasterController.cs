@@ -160,7 +160,7 @@ namespace WebAPI.Controllers
             return new JsonResult("Data Updated");
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         // GET: CategoryMasterController/Delete/5
         public ActionResult Delete(int id)
         {
