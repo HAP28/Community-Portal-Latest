@@ -113,6 +113,9 @@ export class UserService {
   getUserRoles(userId) {
     return this.http.get(this.APIURL + '/UserRoles/' + userId);
   }
+  putUserRoles(id, model) {
+    return this.http.put(this.APIURL + '/UserRoles/' + id, model);
+  }
   //get Permission By Roles
   getPermissionByRoles(roleId) {
     return this.http.get(this.APIURL + '/Permission/' + roleId);
@@ -121,7 +124,6 @@ export class UserService {
   putPermissionByRoles(model) {
     return this.http.put(this.APIURL + '/Permission', model);
   }
-  
 
   getAllArticles() {
     return this.http.get(this.APIURL + '/ArticleMaster');
@@ -131,8 +133,6 @@ export class UserService {
     return this.http.post(this.APIURL + '/ArticleMaster', article);
   }
 
-  
-  
   //get products
   getProducts() {
     return this.http.get(this.APIURL + '/ProductMaster');
@@ -169,5 +169,4 @@ export class UserService {
   deleteSectionbyid(sectionid) {
     return this.http.delete(this.APIURL + '/SectionMaster/' + sectionid);
   }
-  
 }

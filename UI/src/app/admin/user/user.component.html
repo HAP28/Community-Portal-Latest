@@ -1,35 +1,45 @@
 <app-navbar></app-navbar>
 <div class="container mt-3">
   <h1>Users List</h1>
-    <br><hr>
+  <br />
+  <hr />
   <table class="table table-striped">
     <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Users</th>
-          <th scope="col">Email</th>
-          <th scope="col">Roles</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of user; let i = index">
-          <th scope="row">{{i+1}}</th>
-          <td>{{item.FirstName}}</td>
-          <td>{{item.Email}}</td>
-          <td>{{item.Role}}</td>
-          <td>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                  Action
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  <li><a class="dropdown-item" href="#">Manage Roles</a></li>
-                </ul>
-              </div>
-          </td>
-        </tr>
-      </tbody>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Users</th>
+        <th scope="col">Email</th>
+        <th scope="col">Roles</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of user; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ item.FirstName }}</td>
+        <td>{{ item.Email }}</td>
+        <td>{{ item.Role }}</td>
+        <td>
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Action
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li>
+                <a class="dropdown-item" href="/manageroles?id={{ item.Id }}"
+                  >Manage Roles</a
+                >
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    </tbody>
   </table>
-
 </div>
