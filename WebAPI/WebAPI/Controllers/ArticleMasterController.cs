@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using WebAPI.Models;
 
@@ -19,9 +23,15 @@ namespace WebAPI.Controllers
     public class ArticleMasterController : ControllerBase
     {
         readonly private IConfiguration configuration;
-        public ArticleMasterController(IConfiguration _configuration)
+        private IHostingEnvironment hostingEnv;
+        public ArticleMasterController(IConfiguration _configuration, IHostingEnvironment environment)
         {
             this.configuration = _configuration;
+            hostingEnv = environment;
+        }
+        public class FileUploadAPI
+        {
+            public IFormFile files { get; set; }
         }
         // GET: api/<ArticleMasterController>
         [AllowAnonymous]
@@ -225,6 +235,43 @@ namespace WebAPI.Controllers
             catch (Exception e)
             {
                 return new JsonResult(e.Message);
+            }
+        }
+        [AllowAnonymous]
+        [Route("image")]
+        [AcceptVerbs("Post")]
+        public void SaveImage(IList<IFormFile> UploadFiles)
+        {
+            try
+            {
+                foreach (IFormFile file in UploadFiles)
+                {
+                    if (UploadFiles != null)
+                    {
+                        string filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                        filename = hostingEnv.WebRootPath + "\\Uploads" + $@"\{filename}";
+
+                        // Create a new directory, if it does not exists
+                        if (!Directory.Exists(hostingEnv.WebRootPath + "\\Uploads"))
+                        {
+                            Directory.CreateDirectory(hostingEnv.WebRootPath + "\\Uploads");
+                        }
+
+                        if (!System.IO.File.Exists(filename))
+                        {
+                            using (FileStream fs = System.IO.File.Create(filename))
+                            {
+                                file.CopyTo(fs);
+                                fs.Flush();
+                            }
+                            Response.StatusCode = 200;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 204;
             }
         }
     }

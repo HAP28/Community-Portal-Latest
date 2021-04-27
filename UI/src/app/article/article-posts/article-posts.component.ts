@@ -21,6 +21,7 @@ export class ArticlePostsComponent implements OnInit {
     this.service.getAllArticles().subscribe(
       (res) => {
         this.Articles = res;
+        console.log(this.Articles);
       }, (err) => {
         console.log(err);
       }

@@ -124,11 +124,11 @@ export class UserService {
   
 
   getAllArticles() {
-    return this.http.get(this.APIURL + '/Post');
+    return this.http.get(this.APIURL + '/ArticleMaster');
   }
 
   postArticle(article: any) {
-    return this.http.post(this.APIURL + '/Post', article);
+    return this.http.post(this.APIURL + '/ArticleMaster', article);
   }
 
   

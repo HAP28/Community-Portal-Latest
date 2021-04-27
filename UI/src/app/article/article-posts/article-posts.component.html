@@ -2,11 +2,11 @@
 <div class="container">
   <div class="card my-3" *ngFor="let item of Articles">
     <div class="card-header">
-      {{ item.Title }}
+      {{ item.Article_Title }}
     </div>
     <div class="card-body">
       <blockquote class="blockquote mb-0">
-        <p [innerHTML]="item.Text"></p>
+        <p [innerHTML]="item.Description"></p>
         <footer class="blockquote-footer">
           Posted On <cite title="Source Title">{{ item.PostedOn }}</cite>
         </footer>
@@ -14,7 +14,7 @@
     </div>
   </div>
 </div>
-<div class="card my-3" *ngFor="let item of Articles">
+<!-- <div class="card my-3" *ngFor="let item of Articles">
   <div class="card-header">
     {{ item.Title }}
   </div>
@@ -26,4 +26,4 @@
       </footer>
     </blockquote>
   </div>
-</div>
+</div> -->

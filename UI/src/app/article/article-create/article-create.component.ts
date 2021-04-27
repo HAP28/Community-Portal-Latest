@@ -67,7 +67,7 @@ export class ArticleCreateComponent implements OnInit {
             ]
           },
           insertImageSettings: {
-            saveUrl: 'http://localhost:65241/api/Post/image',
+            saveUrl: 'http://localhost:65241/api/ArticleMaster/image',
             path: 'http://localhost:65241/Uploads/',
             removeUrl: 'https://ej2.syncfusion.com/services/api/uploadbox/Remove',
             // maxWidth: '400px',
@@ -79,8 +79,8 @@ export class ArticleCreateComponent implements OnInit {
             enable: true,
             path: '/Pictures/Food',
             ajaxSettings: {
-                url: 'http://localhost:65241/api/Post/image',
-                uploadUrl: 'http://localhost:65241/api/Post/image'
+                url: 'http://localhost:65241/api/ArticleMaster/image',
+                uploadUrl: 'http://localhost:65241/api/ArticleMaster/image'
             }
         }
 });
@@ -96,10 +96,16 @@ export class ArticleCreateComponent implements OnInit {
       let formData = new FormData(form);
       let rteValue = formData.get('defaultRTE');
       
-      this.x['Title'] = formData.get('title');      
-      this.x['Text'] = rteValue
-      this.x['CategoryId'] = 1;
-      this.x['Id'] = "97d86dd2-7053-40f1-9df8-c20ad565681a";
+      this.x['articleTitle'] = formData.get('title');      
+      this.x['articleDescription'] = rteValue
+      this.x['categoryId'] = 2;
+      this.x['productId'] = 2;
+      this.x['sectionId'] = 1;
+      this.x['visible'] = 'public';
+      this.x['status'] = false;
+      this.x['draft'] = false;
+      this.x['archive'] = false;
+      this.x['id'] = this.userDetails.Id;
       console.log(this.x);
       this.service.postArticle(this.x).subscribe((res) => {
         console.log(res);
