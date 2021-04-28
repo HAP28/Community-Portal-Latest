@@ -1,35 +1,62 @@
 <app-navbar></app-navbar>
 <div class="container mt-3">
   <h1>Roles</h1>
-   
+  <div class="input-group mb-3">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Enter the RoleName to Add New Role"
+      id="roleName"
+      name="Name"
+      required
+    />
+    <button type="button" class="btn btn-primary" (click)="addRole()">
+      Add New Role
+    </button>
+  </div>
   <table class="table table-striped">
     <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Role</th>
-          <th scope="col">Id</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of rolesList;let i = index">
-          <th scope="row">{{i+1}}</th>
-          <td>{{item.Name}}</td>
-          <td>{{item.Id}}</td>
-          <td>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                  Action
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  <li><a class="dropdown-item" href="#">Edit</a></li>
-                  <li><a class="dropdown-item" href="#">Delete</a></li>
-                  <li><a class="dropdown-item hand" (click) = "permission(rolesList[i].Id)">Manage Permissions</a></li>
-                </ul>
-              </div>
-          </td>
-        </tr>
-      </tbody>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Role</th>
+        <th scope="col">Id</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of rolesList; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ item.Name }}</td>
+        <td>{{ item.Id }}</td>
+        <td>
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Action
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <!-- <li><a class="dropdown-item" href="#">Edit</a></li> -->
+              <li>
+                <a class="dropdown-item" (click)="deleteRole(item.Id)"
+                  >Delete</a
+                >
+              </li>
+              <li>
+                <a
+                  class="dropdown-item hand"
+                  (click)="permission(rolesList[i].Id)"
+                  >Manage Permissions</a
+                >
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    </tbody>
   </table>
-
 </div>
