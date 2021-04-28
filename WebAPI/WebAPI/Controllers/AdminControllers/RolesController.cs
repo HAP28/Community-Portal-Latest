@@ -38,13 +38,32 @@ namespace WebAPI.Controllers.AdminControllers
         {
             if (roleName != null)
             {
-                _ = new IdentityRole { Name = roleName };
-                await _roleManager.CreateAsync(new IdentityRole(roleName.Trim()));
-                return Ok("Roles added");
+                var role = new IdentityRole { Name = roleName };
+                //await _roleManager.CreateAsync(new IdentityRole(roleName.Trim()));
+                await _roleManager.CreateAsync(role);
+                return Ok("Roles added Successfully");
             }
             else
             {
                 return BadRequest(roleName);
+            }
+        }
+        [HttpDelete("{roleid}")]
+        public async Task<IActionResult> DeleteRole(string roleid)
+        {
+            var role = await _roleManager.FindByIdAsync(roleid);
+            if (role != null)
+            {
+                var result = await _roleManager.DeleteAsync(role);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result);
+                }
+                return Ok("Role Deleted Sucessfully");
+            }
+            else
+            {
+                return BadRequest(role);
             }
         }
     }

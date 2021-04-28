@@ -104,6 +104,12 @@ export class UserService {
   getRoles() {
     return this.http.get(this.APIURL + '/Roles');
   }
+  addRoles(roleName) {
+    return this.http.post(this.APIURL + '/Roles/' + roleName, null);
+  }
+  deleteRoles(roleid) {
+    return this.http.delete(this.APIURL + '/Roles/' + roleid);
+  }
   //admin
   //get every User details
   getAllUsers() {
