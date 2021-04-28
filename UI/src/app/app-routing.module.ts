@@ -16,29 +16,75 @@ import { ProductComponent } from './admin/product/product.component';
 import { CategoryComponent } from './admin/category/category.component';
 import { SectionComponent } from './admin/section/section.component';
 import { PermissionComponent } from './admin/permission/permission.component';
-
+import { ManageRolesComponent } from './admin/manage-roles/manage-roles.component';
 
 const routes: Routes = [
-  {path:'home', component: HomeComponent},
-  {path: 'header', component: HeaderComponent},
-  {path:'', redirectTo: '/home', pathMatch: 'full'},
-  {path: 'login', component: LoginComponent},
-  {path: 'registration', component: RegistrationComponent},
-  {path: 'app', component: AppComponent},
-  {path: 'user-profile', component: UserProfileComponent},
-  {path: 'article-create', component:ArticleCreateComponent, canActivate: [AuthGuard], data : {roles:["Publisher","Admin","Reviewer"]}},
-  {path: 'article-posts', component:ArticlePostsComponent},
-  {path: 'dashboard', component:DashboardComponent, canActivate: [AuthGuard], data : {roles: ["Admin"]}},
-  {path: 'user', component:UserComponent, canActivate: [AuthGuard], data : {roles: ["Admin"]}},
-  {path: 'roles', component:RolesComponent, canActivate: [AuthGuard], data : {roles: ["Admin"]}},
-  {path: 'product', component:ProductComponent, canActivate: [AuthGuard], data : {roles: ["Admin"]}},
-  {path: 'category', component:CategoryComponent, canActivate: [AuthGuard], data : {roles: ["Admin"]}},
-  {path: 'section', component:SectionComponent, canActivate: [AuthGuard], data : {roles: ["Admin"]}},
-  {path: 'permission', component:PermissionComponent, canActivate: [AuthGuard], data : {roles: ["Admin"]}}
+  { path: 'home', component: HomeComponent },
+  { path: 'header', component: HeaderComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'registration', component: RegistrationComponent },
+  { path: 'app', component: AppComponent },
+  { path: 'user-profile', component: UserProfileComponent },
+  {
+    path: 'article-create',
+    component: ArticleCreateComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['Publisher', 'Admin', 'Reviewer'] },
+  },
+  { path: 'article-posts', component: ArticlePostsComponent },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['Admin'] },
+  },
+  {
+    path: 'user',
+    component: UserComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['Admin'] },
+  },
+  {
+    path: 'roles',
+    component: RolesComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['Admin'] },
+  },
+  {
+    path: 'product',
+    component: ProductComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['Admin'] },
+  },
+  {
+    path: 'category',
+    component: CategoryComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['Admin'] },
+  },
+  {
+    path: 'section',
+    component: SectionComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['Admin'] },
+  },
+  {
+    path: 'permission',
+    component: PermissionComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['Admin'] },
+  },
+  {
+    path: 'manageroles',
+    component: ManageRolesComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['Admin'] },
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
