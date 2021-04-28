@@ -63,7 +63,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        // GET api/<ArticleMasterController>/5
+        // GET api/<ArticleMasterController>/article/5
         [AllowAnonymous]
         [HttpGet("article/{id}")]
         public JsonResult Get(int id)
@@ -71,6 +71,96 @@ namespace WebAPI.Controllers
             try
             {
                 string query = @"select * from ArticleMaster where Article_Id = '" + id + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+
+        // GET api/<ArticleMasterController>/product/5
+        [AllowAnonymous]
+        [HttpGet("product/{pid}")]
+        public JsonResult GetByProduct(int pid)
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+
+        // GET api/<ArticleMasterController>/product/5/category/4
+        [AllowAnonymous]
+        [HttpGet("product/{pid}/category/{cid}")]
+        public JsonResult GetByProductCategory(int pid,int cid)
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Category_Id = '" + cid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+
+        // GET api/<ArticleMasterController>/product/5/category/4/section/3
+        [AllowAnonymous]
+        [HttpGet("product/{pid}/category/{cid}/section/{sid}")]
+        public JsonResult GetByProductCategorySection(int pid, int cid,int sid)
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Category_Id = '" + cid + "' and Section_Id = '" + sid + "'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators} from '@angular/forms';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { UserService } from 'src/app/shared/user.service';
 import * as $ from 'jquery';
@@ -15,10 +15,31 @@ export class ProductComponent implements OnInit {
   user: any;
   productForm = {};
   faArrowRight = faArrowRight;
-  constructor(private service: UserService, private toastr: ToastrService) {}
+  productform!: FormGroup;
+  submitted = false;
+  constructor(private service: UserService, private toastr: ToastrService,private formBuilder:FormBuilder) {}
 
   ngOnInit(): void {
     this.refreshList();
+    this.productform = this.formBuilder.group({
+      product: ['', [Validators.required]],
+     
+     
+      });
+  }
+
+  get f() { return this.productform.controls; }
+  onSubmit() {
+    // alert('j');
+    this.submitted = true;
+    // stop here if form is invalid
+    if (this.productform.invalid) {
+        return;
+    }
+    if(this.submitted)
+    {
+      console.log('validation checked');
+    }
   }
 
   refreshList() {
@@ -49,8 +70,12 @@ export class ProductComponent implements OnInit {
             this.toastr.success('Product Successfully Added', 'Success');
           },
           (err) => {
-            console.log(err);
+            console.log();
+            if(err.error.errors.ProductDescription[0]){
+              this.toastr.error('Description is required', 'Product Add Failed');
+            }else{
             this.toastr.error('Product Add Failed', 'Error');
+            }
           }
         );
       },
@@ -60,6 +85,7 @@ export class ProductComponent implements OnInit {
     );
     console.log('ProductForm :', this.productForm);
   }
+
   deleteProduct(id) {
     console.log('Id ', id);
     if (confirm('Are you sure you want to delete this product ?') == true) {

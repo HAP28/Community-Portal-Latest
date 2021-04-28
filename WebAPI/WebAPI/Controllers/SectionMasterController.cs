@@ -107,6 +107,36 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
+        [AllowAnonymous]
+        [HttpGet("category/{cid}")]
+        // GET: SectionMasterController/Details/5
+        public JsonResult GetSectionByCategory(string cid)
+        {
+            try
+            {
+                string query = @"select * from SectionMaster where Category_Id = '" + cid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+
         // POST: SectionMasterController/Create
         [HttpPost]
         public JsonResult Create(SectionMaster section)

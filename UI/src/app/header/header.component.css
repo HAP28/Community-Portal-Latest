@@ -13,13 +13,14 @@
     color:#f6f5f1 !important;
     font-weight: bold;
     margin-left: 40px;
+    /* background-color: gray; */
 }
 .dropdown-menu{
     background: transparent;
     border: none;
 }
 .dropdown-item{
-    text-align: center;
+    text-align: right;
     color: white;
     font-weight: bold;
 }

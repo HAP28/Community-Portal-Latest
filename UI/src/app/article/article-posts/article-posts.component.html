@@ -1,29 +1,51 @@
 <app-header></app-header>
-<div class="container">
-  <div class="card my-3" *ngFor="let item of Articles">
-    <div class="card-header">
-      {{ item.Article_Title }}
-    </div>
-    <div class="card-body">
-      <blockquote class="blockquote mb-0">
-        <p [innerHTML]="item.Description"></p>
-        <footer class="blockquote-footer">
-          Posted On <cite title="Source Title">{{ item.PostedOn }}</cite>
-        </footer>
-      </blockquote>
-    </div>
+<div class="searching my-3">
+  <div class="container">
+    <div class="card">  
+      <div class="card-body">  
+      <form (ngSubmit) = "searchArticle()">  
+          <div class="row">  
+              <div class="form-group col-sm-3">   
+                  <label>Product</label>  
+                      <select class="form-select" id="productList" (change)="fetchCategory()">
+                          <option value="" selected>Choose Product</option>
+                      </select>  
+              </div>  
+              <div class="form-group col-sm-3">   
+                  <label>Category</label>  
+                      <select class="form-select" id="categoryList" (change) = "fetchSection()">
+                          <option value = "" selected>Choose Category</option>
+                      </select>
+              </div>  
+              <div class="form-group col-sm-3">   
+                  <label>Section</label>  
+                  <select class="form-select" id="sectionList">
+                      <option value="" selected>Choose Section</option>
+                  </select>
+              </div>  
+              <div class="form-group col-sm-3">   
+                  <button type="submit" class="btn btn-primary size">Search</button>
+                  <button type="reset" class="btn btn-danger size1" (click) = "refreshList()">Reset</button>
+              </div> 
+          </div>  
+          </form>  
+      </div>  
+  </div>
   </div>
 </div>
-<!-- <div class="card my-3" *ngFor="let item of Articles">
-  <div class="card-header">
-    {{ item.Title }}
+<div class="container">
+  <div class="card-box" *ngFor="let item of Articles">
+    <div class="py-3" style="display: flex;">
+      <h4 class="header-title"> {{ item.Article_Title }} </h4>
+    </div>
+        <div class="main">
+            <h5 class="text-custom">Lead designer / Developer</h5>
+            <p class="text-muted font-18 mb-0" [innerHTML]="item.Description"></p>
+            <footer class="blockquote-footer m-3">
+              Posted On <cite title="Source Title">{{ item.PostedOn }}</cite>
+            </footer>
+            <small style="text-align: right;">Posted By : {{item.user}}</small>
+        </div>
+        <hr>
   </div>
-  <div class="card-body">
-    <blockquote class="blockquote mb-0">
-      <div [innerHTML]="item.Text"></div>
-      <footer class="blockquote-footer">
-        Posted On <cite title="Source Title">{{ item.PostedOn }}</cite>
-      </footer>
-    </blockquote>
-  </div>
-</div> -->
+</div>

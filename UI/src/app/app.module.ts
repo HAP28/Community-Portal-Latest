@@ -31,6 +31,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
+import { ManageRolesComponent } from './admin/manage-roles/manage-roles.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { ToastrModule } from 'ngx-toastr';
     CategoryComponent,
     SectionComponent,
     PermissionComponent,
+    ManageRolesComponent,
   ],
   imports: [
     BrowserModule,

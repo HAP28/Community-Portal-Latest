@@ -51,7 +51,10 @@ export class LoginComponent implements OnInit {
         (err:any)=>{
           if(err.status == 400){
             alert('Incorrect Username or Password');
-          } else{
+          } else if(err.status == 404){
+            alert('User doesnt exist! Please check the Email address');
+          } 
+          else{
             console.log('Error while connecting to the server' + err.message);        
           }
         }

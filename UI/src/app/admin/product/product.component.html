@@ -2,7 +2,20 @@
 <div class="container">
   <h1 class="mb-3">Products</h1>
 
-  <div class="input-group mb-3">
+  <form [formGroup]="productform" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Add Product" id="Product_Name"
+          name="Product_Name" formControlName="product" [ngClass]="{ 'is-invalid': submitted && f.product.errors }" 
+            onkeyup="if(this.value.length > 0) document.getElementById('add_button').disabled = false; else document.getElementById('add_button').disabled = true;" />
+          <input type="submit" class="btn btn-primary" value="Add New Product" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap"  id="add_button" disabled/>
+          <div *ngIf="submitted && f.product.errors" class="invalid-feedback">
+            <div *ngIf="f.product.errors.required">Product Name is required</div>
+          </div>
+        </div>
+    </div>
+  </form>
+  <!-- <div class="input-group mb-3">
     <input
       type="text"
       class="form-control"
@@ -20,7 +33,7 @@
     >
       Add New Product
     </button>
-  </div>
+  </div> -->
 
   <div
     class="modal fade"
@@ -51,6 +64,7 @@
                 placeholder="Description..."
                 id="Product_Description"
                 name="Product_Description"
+                required
               ></textarea>
             </div>
           </form>

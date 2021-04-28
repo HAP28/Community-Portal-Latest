@@ -108,6 +108,35 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
+        [AllowAnonymous]
+        [HttpGet("product/{pid}")]
+        // GET: CategoryMasterController/product/5
+        public JsonResult GetByProduct(string pid)
+        {
+            try
+            {
+                string query = @"select * from CategoryMaster where Product_Id = '" + pid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
 
         // POST: CategoryMasterController/Create
         [HttpPost]

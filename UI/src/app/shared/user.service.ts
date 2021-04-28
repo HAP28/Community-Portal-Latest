@@ -109,9 +109,16 @@ export class UserService {
   getAllUsers() {
     return this.http.get(this.APIURL + '/Users');
   }
+  //getUser by user id
+  getUserById(uid){
+    return this.http.get(this.APIURL + '/Users/user/' + uid)
+  }
   //get user roles
   getUserRoles(userId) {
     return this.http.get(this.APIURL + '/UserRoles/' + userId);
+  }
+  putUserRoles(id, model) {
+    return this.http.put(this.APIURL + '/UserRoles/' + id, model);
   }
   //get Permission By Roles
   getPermissionByRoles(roleId) {
@@ -121,18 +128,24 @@ export class UserService {
   putPermissionByRoles(model) {
     return this.http.put(this.APIURL + '/Permission', model);
   }
-  
 
   getAllArticles() {
     return this.http.get(this.APIURL + '/ArticleMaster');
   }
-
+  // filter article
+  getArticleByProduct(pid){
+    return this.http.get(this.APIURL + '/ArticleMaster/product/' + pid);
+  }
+  getArticleByProductAndCategory(pid,cid){
+    return this.http.get(this.APIURL + '/ArticleMaster/product/' + pid + '/category/' + cid);
+  }
+  getArticleByProductAndCategoryAndSection(pid,cid,sid){
+    return this.http.get(this.APIURL + '/ArticleMaster/product/' + pid + '/category/' + cid + '/section/' + sid);
+  }
   postArticle(article: any) {
     return this.http.post(this.APIURL + '/ArticleMaster', article);
   }
 
-  
-  
   //get products
   getProducts() {
     return this.http.get(this.APIURL + '/ProductMaster');
@@ -143,6 +156,8 @@ export class UserService {
   deleteProductbyid(productid) {
     return this.http.delete(this.APIURL + '/ProductMaster/' + productid);
   }
+
+
   //get Categories
   getCategory() {
     return this.http.get(this.APIURL + '/CategoryMaster');
@@ -150,12 +165,17 @@ export class UserService {
   getCategoriesByUid(Uid) {
     return this.http.get(this.APIURL + '/CategoryMaster/user/' + Uid);
   }
+  getCategoryByProducts(Pid){
+    return this.http.get(this.APIURL + '/CategoryMaster/product/' + Pid);
+  }
   postCategory(category: any) {
     return this.http.post(this.APIURL + '/CategoryMaster', category);
   }
   deleteCategorybyid(catid) {
     return this.http.delete(this.APIURL + '/CategoryMaster/' + catid);
   }
+
+
   //get Sections
   getSection() {
     return this.http.get(this.APIURL + '/SectionMaster');
@@ -163,11 +183,13 @@ export class UserService {
   getSectionByUid(Uid) {
     return this.http.get(this.APIURL + '/SectionMaster/user/' + Uid);
   }
+  getSectionByCategory(Cid){
+    return this.http.get(this.APIURL + '/SectionMaster/category/' + Cid);
+  }
   postSection(section: any) {
     return this.http.post(this.APIURL + '/SectionMaster', section);
   }
   deleteSectionbyid(sectionid) {
     return this.http.delete(this.APIURL + '/SectionMaster/' + sectionid);
   }
-  
 }

@@ -1,3 +1,31 @@
 .header-frame{
     display: none;
 }
+.card{
+    border: none;
+    margin-left: 90px;
+}
+.size{
+    margin-top: 30px;   
+}
+.size1{
+    margin-top: 30px;   
+    margin-left: 10px;
+}
+.card-box {
+    padding: 20px;
+    /* border-radius: 10px; */
+    /* margin-bottom: 30px;
+    margin-top: 30px; */
+    background-color: #F5F5F5;
+}
+.text-custom {
+    color: #11b1bd!important;
+}
+.text-muted {
+    color: #778388!important;
+}
+
+.font-18 {
+    font-size: 18px!important;
+}
