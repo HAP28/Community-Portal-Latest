@@ -3,47 +3,41 @@
 
 <div class="container">
   <h1 class="text-center">Create Article</h1>
-  <form #imageForm="ngForm" #rteForm="ngForm" id="form-element">
+  <form #rteForm="ngForm" id="form-element">
       <div class="mb-3">
-      <label class="form-label">Title</label>
+      <label class="form-label">Title</label> 
+      <small class="text-danger" id="titlered" style="visibility: hidden; float: right;">this field is required*</small>
       <input type="text" #Title ngModel class="form-control" id="title" placeholder="Title.." name="title" autocomplete="off">
       </div>
       
-      <div class="mb-3">
-        <label for="formFile" class="form-label">Select Category</label>
-        <select class="form-select" aria-label="Default select example" name="category" aria-placeholder="Choose Category" id="category">
-          <option selected>Choose Category</option>
-          <option value="1">Fashion</option>
-          <option value="2">Food</option>
-          <option value="3">Travel</option>
-          <option value="4">Music</option>
-          <option value="5">Fitness</option>
-          <option value="6">Sports</option>
-          <option value="7">Finance</option>
-          <option value="8">Political</option>
-          <option value="9">Bussiness</option>
-          <option value="10">News</option>
-          <option value="11">Gaming</option>
-          <option value="12">Others</option>
-        </select>
-            <!-- <input type="file" class="form-control" id="formFile" (change)="selectFile($event)">
-            <div [innerHtml]='msg' *ngIf="msg" style="color: red;"></div>
-            <div><img [src]="url" *ngIf="url"></div> -->
+      <div class="row">
+        <div class="col-md-4">
+          <label for="product" class="form-label">Select Product</label>
+          <small class="text-danger" id="productred" style="visibility: hidden; float: right;">this field is required*</small>
+          <select class="form-select" aria-label="Default select example" name="product" aria-placeholder="Choose Product" id="product" (change) = "fetchCategory()">
+            <option value="" selected>Choose Product</option>
+          </select>  
+        </div>
+        <div class="col-md-4">
+          <label for="category" class="form-label">Select Category</label>
+          <small class="text-danger" id="categoryred" style="visibility: hidden; float: right;">this field is required*</small>
+          <select class="form-select" aria-label="Default select example" name="category" aria-placeholder="Choose Category" id="category" (change) = "fetchSection()">
+            <option value="" selected>Choose Category</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="section" style="display: inline-block;" class="form-label">Select Section</label>
+          <small class="text-danger" id="sectionred" style="visibility: hidden; float: right;">this field is required*</small>
+          <select class="form-select" aria-label="Default select example" name="section" aria-placeholder="Choose Section" id="section">
+            <option value="" selected>Choose Section</option>
+          </select>
+        </div>
     </div>
 
-      <!-- <div class="mb-3">
-          <label class="form-label">Description</label>
-        <div class="sample-container">
-          <div class="default-section">
-            <div id="iframeRTE">
-            </div>
-          </div>
-        </div>
-        </div> -->
         
-        <div class="form-group mt-3">
-          <textarea id="defaultRTE" required name="defaultRTE" class="form-control"></textarea>
-          <div id="dateError" style="padding-top: 10px"></div>
+      <div class="form-group mt-3">
+        <textarea id="defaultRTE" required name="defaultRTE" class="form-control"></textarea>
+        <div id="dateError" style="padding-top: 10px"></div>
       </div>
       <div class="form-group">
           <div class="col-sm-3 control-label"></div>
@@ -52,10 +46,24 @@
           </div>
       </div>
 
+      <label class="my-3"><b>Visibility :</b></label><small class="text-danger" id="chackboxred" style="visibility: hidden; float: right;">Please Choose at least one field*</small>
+    <br>
+      <div class="form-check form-check-inline">
+          <input class="form-check-input" type="checkbox" id="public" value="1" name="visibility" (change) = "checkBoxValidation()">
+          <label class="form-check-label" for="inlineCheckbox1">Public/Everyone</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="applicationuser" name="visibility" value="2">
+        <label class="form-check-label" for="inlineCheckbox2">Application Users</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="signedinuser" name="visibility" value="3">
+        <label class="form-check-label" for="inlineCheckbox3">Signed in Users</label>
+      </div>
+
       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
           <button type="reset" class="btn btn-danger me-md-2">Reset</button>
-          <button class="btn btn-primary me-md-2" type="button"  ejs-button [disabled]="!rteForm.valid">Save as Draft</button>
-          <button class="btn btn-success" type="submit" id="validateSubmit" ejs-button [disabled]="!rteForm.valid">Publish Live</button>
+          <button class="btn btn-primary" type="submit" id="validateSubmit" ejs-button [disabled]="!rteForm.valid">Publish Live</button>
       </div>
   </form>
 </div>

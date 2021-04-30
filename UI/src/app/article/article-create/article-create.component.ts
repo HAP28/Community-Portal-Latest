@@ -68,8 +68,11 @@ export class ArticleCreateComponent implements OnInit {
   ) {}
   url: any;
   msg = '';
-
+  product:any;
+  category: any;
+  section: any;
   ngOnInit(): void {
+    this.refreshList();
     $('#header-frame').css('display','none');
     this.service.getUserProfile().subscribe(
       (res) => {
@@ -148,17 +151,23 @@ export class ArticleCreateComponent implements OnInit {
       getValue();
     });
 
+    
+
     const getValue = () => {
+      let visibility = "";
+      $.each($("input[name='visibility']:checked"), function(){
+        visibility += $(this).val();
+      });
+      
       let form = document.getElementById('form-element') as HTMLFormElement;
       let formData = new FormData(form);
       let rteValue = formData.get('defaultRTE');
-
       this.x['articleTitle'] = formData.get('title');
       this.x['articleDescription'] = rteValue;
-      this.x['categoryId'] = 2;
-      this.x['productId'] = 2;
-      this.x['sectionId'] = 1;
-      this.x['visible'] = 'public';
+      this.x['categoryId'] = $('#category').val();
+      this.x['productId'] = $('#product').val();
+      this.x['sectionId'] = $('#section').val();
+      this.x['visible'] = visibility;
       this.x['status'] = false;
       this.x['draft'] = true;
       this.x['archive'] = false;
@@ -168,15 +177,16 @@ export class ArticleCreateComponent implements OnInit {
         (res) => {
           this.toast.success('Article Published', 'Success');
           console.log(res);
-          $('#title').text('');
-          $('#category').text('Choose Category');
-          $('#defaultRTE').text('');
+          // $('#title').text('');
+          // $('#category').text('Choose Category');
+          // $('#defaultRTE').text('');
         },
         (err) => {
-          this.toast.success('Article Failed to Publish', 'Error');
+          this.toast.error('Article Failed to Publish', 'Error');
           console.log(err);
         }
       );
+      
     };
 
     //   let hostUrl: string = 'https://ej2-aspcore-service.azurewebsites.net/';
@@ -250,14 +260,114 @@ export class ArticleCreateComponent implements OnInit {
     //   }
   }
 
+  clearProductList(){
+    $('#product')
+          .find('option')
+          .remove()
+          .end()
+          .append('<option value="">Choose Product</option>')
+          .val('');
+  }
+  clearCategoryList(){
+    $('#category')
+    .find('option')
+    .remove()
+    .end()
+    .append('<option value="">Choose Category</option>')
+    .val('');
+  }
+  clearSectionList(){
+    $('#section')
+    .find('option')
+    .remove()
+    .end()
+    .append('<option value="">Choose Section</option>')
+    .val('');
+  }
+
+  refreshList(){
+    //disable dropdown
+    $('#category').prop('disabled',true);
+    $('#section').prop('disabled',true);
+    // fetch all products
+    
+    this.service.getProducts().subscribe(
+      (res) => {
+        this.clearProductList();
+        this.clearCategoryList()
+        this.clearSectionList();
+        this.product = res;
+        for (var i = 0; i < this.product.length; i++) {
+          //creates option tag
+          console.log(this.product[i]);
+          $('<option/>')
+            .val(this.product[i].Product_Id)
+            .html(this.product[i].Product_Name)
+            .appendTo('#product');
+        }
+      }
+    )
+  }
+
+  fetchCategory(){
+    this.clearCategoryList();
+    this.clearSectionList();
+    var productSelected = $('#product').val();
+    this.service.getCategoryByProducts(productSelected).subscribe(
+      (res) => {
+        this.category = res;
+        for (var i = 0; i < this.category.length; i++) {
+          //creates option tag
+          console.log(this.category[i]);
+          $('<option/>')
+            .val(this.category[i].Category_Id)
+            .html(this.category[i].Category_Name)
+            .appendTo('#category');
+        }
+        $('#category').prop('disabled',false);
+      },(err) => {
+        console.log(err);
+      }
+    )
+  }
+
+  fetchSection(){
+    this.clearSectionList();
+    var categorySelected = $('#category').val();
+    this.service.getSectionByCategory(categorySelected).subscribe(
+      (res) => {
+        this.section = res;
+        for (var i = 0; i < this.section.length; i++) {
+          //creates option tag
+          console.log(this.section[i]);
+          $('<option/>')
+            .val(this.section[i].Section_Id)
+            .html(this.section[i].Section_Name)
+            .appendTo('#section');
+        }
+        $('#section').prop('disabled',false);
+      },(err) => {
+        console.log(err);
+      }
+    )
+  }
+
+  checkBoxValidation(){
+    if($('#public').prop("checked")){
+      $('#applicationuser').prop("checked",false);
+      $('#signedinuser').prop("checked",false);
+      $('#applicationuser').attr("disabled",true);
+      $('#signedinuser').attr("disabled",true);
+    }else{
+      $('#applicationuser').attr("disabled",false);
+      $('#signedinuser').attr("disabled",false);
+    }
+  }
+
   close() {
     alert('logged out');
     localStorage.removeItem('token');
     this._router.navigate(['/']);
   }
-
-  // onSubmit(form1) {
-  //   this.submitted = true;
-  //   console.log(form1.value);
-  // }
+  
 }
