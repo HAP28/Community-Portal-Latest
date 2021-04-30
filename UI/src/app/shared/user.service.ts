@@ -7,6 +7,7 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { ConfirmedValidator } from '../custom-validators';
+import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
 
 @Injectable({
   providedIn: 'root',
@@ -141,6 +142,9 @@ export class UserService {
 
   getAllArticles() {
     return this.http.get(this.APIURL + '/ArticleMaster');
+  }
+  getArticleById(articleid) {
+    return this.http.get(this.APIURL + '/ArticleMaster/article/' + articleid);
   }
   // filter article
   getArticleByProduct(pid) {

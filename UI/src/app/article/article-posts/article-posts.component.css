@@ -24,6 +24,7 @@
   /* margin-bottom: 30px;
     margin-top: 30px; */
   background-color: #f5f5f5;
+  cursor: pointer;
 }
 .text-custom {
   color: #11b1bd !important;
@@ -34,4 +35,8 @@
 
 .font-18 {
   font-size: 18px !important;
+}
+.container .main a {
+  color: #0000ee;
+  text-decoration: underline;
 }

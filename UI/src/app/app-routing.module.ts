@@ -83,7 +83,7 @@ const routes: Routes = [
     data: { roles: ['Admin'] },
   },
   {
-    path: 'fullarticle',
+    path: 'article',
     component: FullarticleComponent,
     canActivate: [AuthGuard],
     data: { roles: ['Admin'] },

@@ -3,12 +3,15 @@
   rel="stylesheet"
 />
 
-<h1 class="text-center header">Article Title</h1>
+<h1 class="text-center header">{{ this.fullarticle[0].Article_Title }}</h1>
 
 <div class="container">
   <p class="article">
     <span
-      ><h4>Product/Category/Section</h4>
+      ><h4>
+        {{ this.productName }} / {{ this.categoryName }} /
+        {{ this.sectionName }}
+      </h4>
       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
         <a class="btn btn-primary btn-sm" href="/article-posts" type="button"
           >Back</a
@@ -16,27 +19,23 @@
       </div>
     </span>
     <br />
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus dolores,
-    incidunt obcaecati nulla iste harum aliquid quo deleniti quaerat eaque,
-    suscipit, cumque itaque aspernatur perspiciatis ullam voluptatem unde!
-    Nulla, amet?Lorem ipsum dolor sit amet consectetur adipisicing elit.
-    Molestias temporibus voluptatem, obcaecati tenetur amet sed maiores incidunt
-    impedit officiis assumenda facere consequatur exercitationem consequuntur
-    repudiandae reprehenderit ipsam vel architecto odit. Lorem ipsum dolor, sit
-    amet consectetur adipisicing elit.
-    <img src="img_girl.jpg" alt="Logo of Portal" />
-    <br /><br />
-    <button
-      class="btn btn-primary"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#collapseExample"
-      aria-expanded="false"
-      aria-controls="collapseExample"
-    >
-      Comment
-    </button>
   </p>
+
+  <div [innerHTML]="this.fullarticle[0].Description"></div>
+
+  <img src="img_girl.jpg" alt="Logo of Portal" />
+  <br /><br />
+  <button
+    class="btn btn-primary"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#collapseExample"
+    aria-expanded="false"
+    aria-controls="collapseExample"
+  >
+    Comment
+  </button>
+
   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <label
       ><i>Was this Article Useful ?</i>

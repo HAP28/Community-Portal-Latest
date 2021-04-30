@@ -60,7 +60,10 @@
         class="text-muted font-18 mb-0 show-less"
         [innerHTML]="item.Description"
       ></p>
-      <a href="/fullarticle">Read More..</a>
+
+      <!-- <a href="/fullarticle">Read More..</a> -->
+      <a (click)="readMore(item.Article_Id)">Read More</a>
+
       <footer class="blockquote-footer m-3">
         Posted On <cite title="Source Title">{{ item.PostedOn }}</cite>
       </footer>
