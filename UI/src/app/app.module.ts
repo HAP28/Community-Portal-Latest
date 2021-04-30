@@ -28,6 +28,10 @@ import { CategoryComponent } from './admin/category/category.component';
 import { SectionComponent } from './admin/section/section.component';
 import { PermissionComponent } from './admin/permission/permission.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { ToastrModule } from 'ngx-toastr';
+import { ManageRolesComponent } from './admin/manage-roles/manage-roles.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +53,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     ProductComponent,
     CategoryComponent,
     SectionComponent,
-    PermissionComponent
+    PermissionComponent,
+    ManageRolesComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,13 +64,18 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     NgbModule,
     FormsModule,
     RichTextEditorModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
   ],
-  providers: [UserService,{
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi : true
-  }],
-  bootstrap: [AppComponent]
+  providers: [
+    UserService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

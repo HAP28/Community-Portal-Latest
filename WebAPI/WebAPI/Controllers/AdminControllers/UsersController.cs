@@ -28,6 +28,13 @@ namespace WebAPI.Controllers.AdminControllers
             var allUsersExceptCurrentUser = await _userManager.Users.Where(a => a.Id != currentUser.Id).ToListAsync();
             return Ok(allUsersExceptCurrentUser);
         }
-
+        // Get: user/userId
+        [AllowAnonymous]
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> Index(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            return Ok(user);
+        }
     }
 }

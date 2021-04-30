@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using WebAPI.Models;
 
@@ -19,9 +23,15 @@ namespace WebAPI.Controllers
     public class ArticleMasterController : ControllerBase
     {
         readonly private IConfiguration configuration;
-        public ArticleMasterController(IConfiguration _configuration)
+        private IHostingEnvironment hostingEnv;
+        public ArticleMasterController(IConfiguration _configuration, IHostingEnvironment environment)
         {
             this.configuration = _configuration;
+            hostingEnv = environment;
+        }
+        public class FileUploadAPI
+        {
+            public IFormFile files { get; set; }
         }
         // GET: api/<ArticleMasterController>
         [AllowAnonymous]
@@ -53,7 +63,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        // GET api/<ArticleMasterController>/5
+        // GET api/<ArticleMasterController>/article/5
         [AllowAnonymous]
         [HttpGet("article/{id}")]
         public JsonResult Get(int id)
@@ -61,6 +71,96 @@ namespace WebAPI.Controllers
             try
             {
                 string query = @"select * from ArticleMaster where Article_Id = '" + id + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+
+        // GET api/<ArticleMasterController>/product/5
+        [AllowAnonymous]
+        [HttpGet("product/{pid}")]
+        public JsonResult GetByProduct(int pid)
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+
+        // GET api/<ArticleMasterController>/product/5/category/4
+        [AllowAnonymous]
+        [HttpGet("product/{pid}/category/{cid}")]
+        public JsonResult GetByProductCategory(int pid,int cid)
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Category_Id = '" + cid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+
+        // GET api/<ArticleMasterController>/product/5/category/4/section/3
+        [AllowAnonymous]
+        [HttpGet("product/{pid}/category/{cid}/section/{sid}")]
+        public JsonResult GetByProductCategorySection(int pid, int cid,int sid)
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Category_Id = '" + cid + "' and Section_Id = '" + sid + "'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -225,6 +325,43 @@ namespace WebAPI.Controllers
             catch (Exception e)
             {
                 return new JsonResult(e.Message);
+            }
+        }
+        [AllowAnonymous]
+        [Route("image")]
+        [AcceptVerbs("Post")]
+        public void SaveImage(IList<IFormFile> UploadFiles)
+        {
+            try
+            {
+                foreach (IFormFile file in UploadFiles)
+                {
+                    if (UploadFiles != null)
+                    {
+                        string filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                        filename = hostingEnv.WebRootPath + "\\Uploads" + $@"\{filename}";
+
+                        // Create a new directory, if it does not exists
+                        if (!Directory.Exists(hostingEnv.WebRootPath + "\\Uploads"))
+                        {
+                            Directory.CreateDirectory(hostingEnv.WebRootPath + "\\Uploads");
+                        }
+
+                        if (!System.IO.File.Exists(filename))
+                        {
+                            using (FileStream fs = System.IO.File.Create(filename))
+                            {
+                                file.CopyTo(fs);
+                                fs.Flush();
+                            }
+                            Response.StatusCode = 200;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                Response.StatusCode = 204;
             }
         }
     }

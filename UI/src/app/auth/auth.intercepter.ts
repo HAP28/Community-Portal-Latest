@@ -4,19 +4,19 @@ import { Router } from "@angular/router";
 import { from, Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import { UserService } from "../shared/user.service";
-
+import * as $ from 'jquery';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor{
 
     constructor(private router: Router, private service: UserService) {
     }
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{         
         if(localStorage.getItem('loggedUser') != null){
             const cloneReq = req.clone({
                 headers: req.headers.set('Authorization','Bearer ' + this.service.currentUser.Token)
             });
-            console.log(this.service.currentUser.Token);
+            // console.log(this.service.currentUser.Token);
             return next.handle(cloneReq).pipe(
                 tap(
                     succ => {},

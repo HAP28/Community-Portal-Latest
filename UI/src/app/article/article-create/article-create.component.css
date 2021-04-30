@@ -1,10 +1,9 @@
-.header{
-    background-color: black; 
-    color: #f6f5f1;
-}
 .header-frame{
-    margin-left: 20px; 
-    margin-right: 20px;
+    display: none!important;
+}
+.header{
+    background-color: #16A596; 
+    color: #f6f5f1;
 }
 .navbar-dark{
     font-size: 18px;
@@ -19,12 +18,12 @@
     border: none;
 }
 .dropdown-item{
-    text-align: center;
-    color: white;
+    text-align: right;
+    color: black;
     font-weight: bold;
 }
 .dropdown-item:hover{
-    color: black;
+    /* background-color: #16A596; */
 }
 .button{
     float: right;

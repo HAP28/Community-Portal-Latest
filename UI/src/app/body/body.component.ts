@@ -16,7 +16,7 @@ export class BodyComponent implements OnInit {
   }
 
   refreshList(){
-    this.service.getCategories().subscribe(
+    this.service.getCategory().subscribe(
       (res) => {
         console.log(res);
         this.categoryList = res;

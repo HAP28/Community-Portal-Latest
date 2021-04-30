@@ -1,104 +1,210 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { HttpClient, HttpClientModule, HttpHeaderResponse, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpClientModule,
+  HttpHeaderResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { ConfirmedValidator } from '../custom-validators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
+  constructor(private fb: FormBuilder, private http: HttpClient) {}
 
-  constructor(private fb:FormBuilder,private http:HttpClient) { }
+  readonly APIURL = 'http://localhost:65241/api';
+  formModel = this.fb.group(
+    {
+      FirstName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.pattern('^[_A-z]*((-|s)*[_A-z])*$'),
+        ],
+      ],
 
-  readonly APIURL = "http://localhost:65241/api";
-  formModel = this.fb.group({
-    FirstName: ['',[Validators.required,  Validators.minLength(2), Validators.pattern('^[_A-z]*((-|\s)*[_A-z])*$')]],
+      LastName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.pattern('^[_A-z]*((-|s)*[_A-z])*$'),
+        ],
+      ],
 
-    LastName: ['',[Validators.required,  Validators.minLength(2), Validators.pattern('^[_A-z]*((-|\s)*[_A-z])*$')]],
+      // UserName: ['',[Validators.required,  Validators.minLength(2), Validators.pattern('^[_A-z0-9]*((-|\s)*[_A-z0-9])*$')]],
 
-    // UserName: ['',[Validators.required,  Validators.minLength(2), Validators.pattern('^[_A-z0-9]*((-|\s)*[_A-z0-9])*$')]],
+      Email: ['', [Validators.required, Validators.email]],
 
-    Email: ['', [Validators.required, Validators.email]],
+      Password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
+          ),
+        ],
+      ],
 
-    Password: ['', [Validators.required, Validators.minLength(8),Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')]],
-
-    confirmpassword: ['', [Validators.required, Validators.minLength(8),Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')]]
-    },{
-      validator: ConfirmedValidator('Password', 'confirmpassword')
+      confirmpassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
+          ),
+        ],
+      ],
+    },
+    {
+      validator: ConfirmedValidator('Password', 'confirmpassword'),
     }
   );
-  get f() { return this.formModel.controls; }
+  get f() {
+    return this.formModel.controls;
+  }
 
-  register(){
+  register() {
     var body = {
       // UserName : this.formModel.value.UserName,
-      Email : this.formModel.value.Email,
-      Password : this.formModel.value.Password,
-      FirstName : this.formModel.value.FirstName,
-      LastName : this.formModel.value.LastName,
+      Email: this.formModel.value.Email,
+      Password: this.formModel.value.Password,
+      FirstName: this.formModel.value.FirstName,
+      LastName: this.formModel.value.LastName,
     };
     console.log(body);
-    return this.http.post(this.APIURL + "/Account/Register",body,{responseType: 'text'});
+    return this.http.post(this.APIURL + '/Account/Register', body, {
+      responseType: 'text',
+    });
   }
 
-  public get currentUser() : any{
-    if(localStorage.getItem('loggedUser') != undefined){
+  public get currentUser(): any {
+    if (localStorage.getItem('loggedUser') != undefined) {
       return JSON.parse(localStorage.getItem('loggedUser'));
-    }
-    else
-      return null;
+    } else return null;
   }
 
-  login(formData){
-    return this.http.post<any>(this.APIURL + "/Account/Login",formData,{observe: 'response'});
+  login(formData) {
+    return this.http.post<any>(this.APIURL + '/Account/Login', formData, {
+      observe: 'response',
+    });
   }
-  
-  getUserProfile(){
+
+  getUserProfile() {
     // console.log(this.APIURL + '/UserProfile');
-    
+
     return this.http.get(this.APIURL + '/UserProfile');
   }
-
-  getCategories(){
-    return this.http.get(this.APIURL + '/CategoryMaster');
-  }
-
-  getCategoriesByUid(Uid){
-    return this.http.get(this.APIURL + '/CategoryMaster/user/' + Uid);
-  }
-  
-  getAllArticles(){
-    return this.http.get(this.APIURL + '/Post');
-  }
-
-  postArticle(article:any){
-    return this.http.post(this.APIURL + '/Post',article);
-  }
-
-
-  //admin
-  //get every User details
-  getAllUsers(){
-    return this.http.get(this.APIURL + "/Users");
-  }
-  //get user roles
-  getUserRoles(userId){
-    return this.http.get(this.APIURL + "/UserRoles/" + userId);
-  }
   //get Roles
-  getRoles(){
+  getRoles() {
     return this.http.get(this.APIURL + '/Roles');
   }
-  //get products
-  getProducts(){
-    return this.http.get(this.APIURL + '/ProductMaster');
+  addRoles(roleName) {
+    return this.http.post(this.APIURL + '/Roles/' + roleName, null);
   }
-  //get Categories
-  getCategory(){
-    return this.http.get(this.APIURL + '/CategoryMaster');
+  deleteRoles(roleid) {
+    return this.http.delete(this.APIURL + '/Roles/' + roleid);
+  }
+  //admin
+  //get every User details
+  getAllUsers() {
+    return this.http.get(this.APIURL + '/Users');
+  }
+  //getUser by user id
+  getUserById(uid){
+    return this.http.get(this.APIURL + '/Users/user/' + uid)
+  }
+  //get user roles
+  getUserRoles(userId) {
+    return this.http.get(this.APIURL + '/UserRoles/' + userId);
+  }
+  putUserRoles(id, model) {
+    return this.http.put(this.APIURL + '/UserRoles/' + id, model);
   }
   //get Permission By Roles
-  getPermissionByRoles(roleId){
+  getPermissionByRoles(roleId) {
     return this.http.get(this.APIURL + '/Permission/' + roleId);
+  }
+  //put permission by role id
+  putPermissionByRoles(model) {
+    return this.http.put(this.APIURL + '/Permission', model);
+  }
+
+  getAllArticles() {
+    return this.http.get(this.APIURL + '/ArticleMaster');
+  }
+  // filter article
+  getArticleByProduct(pid){
+    return this.http.get(this.APIURL + '/ArticleMaster/product/' + pid);
+  }
+  getArticleByProductAndCategory(pid,cid){
+    return this.http.get(this.APIURL + '/ArticleMaster/product/' + pid + '/category/' + cid);
+  }
+  getArticleByProductAndCategoryAndSection(pid,cid,sid){
+    return this.http.get(this.APIURL + '/ArticleMaster/product/' + pid + '/category/' + cid + '/section/' + sid);
+  }
+  postArticle(article: any) {
+    return this.http.post(this.APIURL + '/ArticleMaster', article);
+  }
+
+  //get products
+  getProducts() {
+    return this.http.get(this.APIURL + '/ProductMaster');
+  }
+  getProductsById(id){
+    return this.http.get(this.APIURL + '/ProductMaster/product/' + id);
+  }
+  postProduct(product: any) {
+    return this.http.post(this.APIURL + '/ProductMaster', product);
+  }
+  deleteProductbyid(productid) {
+    return this.http.delete(this.APIURL + '/ProductMaster/' + productid);
+  }
+
+
+  //get Categories
+  getCategory() {
+    return this.http.get(this.APIURL + '/CategoryMaster');
+  }
+  getCategoryById(id){
+    return this.http.get(this.APIURL + '/CategoryMaster/Category/' + id);
+  }
+  getCategoriesByUid(Uid) {
+    return this.http.get(this.APIURL + '/CategoryMaster/user/' + Uid);
+  }
+  getCategoryByProducts(Pid){
+    return this.http.get(this.APIURL + '/CategoryMaster/product/' + Pid);
+  }
+  postCategory(category: any) {
+    return this.http.post(this.APIURL + '/CategoryMaster', category);
+  }
+  deleteCategorybyid(catid) {
+    return this.http.delete(this.APIURL + '/CategoryMaster/' + catid);
+  }
+
+
+  //get Sections
+  getSection() {
+    return this.http.get(this.APIURL + '/SectionMaster');
+  }
+  getSectionById(id){
+    return this.http.get(this.APIURL + '/SectionMaster/section/' + id);
+  }
+  getSectionByUid(Uid) {
+    return this.http.get(this.APIURL + '/SectionMaster/user/' + Uid);
+  }
+  getSectionByCategory(Cid){
+    return this.http.get(this.APIURL + '/SectionMaster/category/' + Cid);
+  }
+  postSection(section: any) {
+    return this.http.post(this.APIURL + '/SectionMaster', section);
+  }
+  deleteSectionbyid(sectionid) {
+    return this.http.delete(this.APIURL + '/SectionMaster/' + sectionid);
   }
 }
