@@ -364,5 +364,35 @@ namespace WebAPI.Controllers
                 Response.StatusCode = 204;
             }
         }
+
+        // Visibility API
+        [AllowAnonymous]
+        [HttpGet("article/visible/{id}")]
+        public JsonResult GetArticlebyvisible(string id)
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where visible = '" + id + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
     }
 }
