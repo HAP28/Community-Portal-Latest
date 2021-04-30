@@ -1,0 +1,110 @@
+.header {
+  background-color: #16a596;
+  padding: 40px;
+  color: white;
+}
+.container {
+  margin-top: 30px;
+}
+.top {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 50px;
+  outline: none;
+  padding: 0px 10px 5px 10px;
+  background-color: salmon;
+  border: none;
+  margin-bottom: 10px;
+}
+.text-muted1 {
+  margin-right: 90px;
+  color: #acacac;
+  font-size: 14px;
+  font-style: italic;
+}
+.article {
+  background-color: #e1f1dd;
+  padding: 20px;
+  border-radius: 20px;
+}
+.comment {
+  text-decoration: none;
+  color: black;
+  font-weight: 600;
+}
+.user {
+  margin-left: 10px;
+}
+.img-sm {
+  width: 46px;
+  height: 46px;
+  border-radius: 50px;
+}
+.media-block .media-left {
+  display: block;
+  float: left;
+}
+
+.media-block .media-right {
+  float: right;
+}
+
+.media-block .media-body {
+  display: block;
+  overflow: hidden;
+  width: auto;
+}
+
+.middle .media-left,
+.middle .media-right,
+.middle .media-body {
+  vertical-align: middle;
+}
+
+.thumbnail {
+  border-radius: 0;
+  border-color: #e9e9e9;
+}
+.text-muted,
+a.text-muted:hover,
+a.text-muted:focus {
+  color: #acacac;
+}
+.text-sm {
+  font-size: 0.9em;
+}
+.text-5x,
+.text-4x,
+.text-5x,
+.text-2x,
+.text-lg,
+.text-sm,
+.text-xs {
+  line-height: 1.25;
+}
+.text-semibold {
+  margin-left: 10px;
+}
+.btn-trans {
+  background-color: transparent;
+  border-color: transparent;
+  color: #929292;
+}
+
+.btn-icon {
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
+.btn-sm,
+.btn-group-sm > .btn,
+.btn-icon.btn-sm {
+  padding: 5px 10px !important;
+}
+
+.mar-top {
+  margin-top: 15px;
+}

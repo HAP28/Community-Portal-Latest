@@ -18,7 +18,6 @@ import { ArticleCreateComponent } from './article/article-create/article-create.
 import { HomeComponent } from './home/home.component';
 import { UserService } from './shared/user.service';
 import { AuthInterceptor } from './auth/auth.intercepter';
-import { ArticleCommentComponent } from './article/article-comment/article-comment.component';
 import { NavbarComponent } from './admin/navbar/navbar.component';
 import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { UserComponent } from './admin/user/user.component';
@@ -32,6 +31,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
 import { ManageRolesComponent } from './admin/manage-roles/manage-roles.component';
+import { FullarticleComponent } from './article/fullarticle/fullarticle.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,6 @@ import { ManageRolesComponent } from './admin/manage-roles/manage-roles.componen
     ArticlePostsComponent,
     ArticleCreateComponent,
     HomeComponent,
-    ArticleCommentComponent,
     NavbarComponent,
     DashboardComponent,
     UserComponent,
@@ -55,6 +54,7 @@ import { ManageRolesComponent } from './admin/manage-roles/manage-roles.componen
     SectionComponent,
     PermissionComponent,
     ManageRolesComponent,
+    FullarticleComponent,
   ],
   imports: [
     BrowserModule,

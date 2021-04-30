@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/shared/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user',
@@ -10,7 +11,7 @@ export class UserComponent implements OnInit {
   user: any;
   roleList: any;
   flag = 0;
-  constructor(private service: UserService) {}
+  constructor(private service: UserService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.refreshList();
@@ -49,5 +50,21 @@ export class UserComponent implements OnInit {
       }
     );
     // console.log(this.roleList);
+  }
+  deleteUser(id) {
+    this.service.deleteUserById(id).subscribe(
+      (res) => {
+        this.toastr.success(res.toString(), 'User Deleted');
+        this.refreshList();
+      },
+      (err) => {
+        if (err.status == 200) {
+          this.toastr.success('Success', 'User Deleted');
+          this.refreshList();
+        } else {
+          this.toastr.error(err.toString(), 'User Failed to Delete');
+        }
+      }
+    );
   }
 }

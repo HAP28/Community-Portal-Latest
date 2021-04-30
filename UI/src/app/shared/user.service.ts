@@ -116,8 +116,12 @@ export class UserService {
     return this.http.get(this.APIURL + '/Users');
   }
   //getUser by user id
-  getUserById(uid){
-    return this.http.get(this.APIURL + '/Users/user/' + uid)
+  getUserById(uid) {
+    return this.http.get(this.APIURL + '/Users/user/' + uid);
+  }
+  //delete User by Id
+  deleteUserById(uid) {
+    return this.http.delete(this.APIURL + '/Users/userdelete/' + uid);
   }
   //get user roles
   getUserRoles(userId) {
@@ -139,14 +143,24 @@ export class UserService {
     return this.http.get(this.APIURL + '/ArticleMaster');
   }
   // filter article
-  getArticleByProduct(pid){
+  getArticleByProduct(pid) {
     return this.http.get(this.APIURL + '/ArticleMaster/product/' + pid);
   }
-  getArticleByProductAndCategory(pid,cid){
-    return this.http.get(this.APIURL + '/ArticleMaster/product/' + pid + '/category/' + cid);
+  getArticleByProductAndCategory(pid, cid) {
+    return this.http.get(
+      this.APIURL + '/ArticleMaster/product/' + pid + '/category/' + cid
+    );
   }
-  getArticleByProductAndCategoryAndSection(pid,cid,sid){
-    return this.http.get(this.APIURL + '/ArticleMaster/product/' + pid + '/category/' + cid + '/section/' + sid);
+  getArticleByProductAndCategoryAndSection(pid, cid, sid) {
+    return this.http.get(
+      this.APIURL +
+        '/ArticleMaster/product/' +
+        pid +
+        '/category/' +
+        cid +
+        '/section/' +
+        sid
+    );
   }
   postArticle(article: any) {
     return this.http.post(this.APIURL + '/ArticleMaster', article);
@@ -156,7 +170,7 @@ export class UserService {
   getProducts() {
     return this.http.get(this.APIURL + '/ProductMaster');
   }
-  getProductsById(id){
+  getProductsById(id) {
     return this.http.get(this.APIURL + '/ProductMaster/product/' + id);
   }
   postProduct(product: any) {
@@ -166,18 +180,17 @@ export class UserService {
     return this.http.delete(this.APIURL + '/ProductMaster/' + productid);
   }
 
-
   //get Categories
   getCategory() {
     return this.http.get(this.APIURL + '/CategoryMaster');
   }
-  getCategoryById(id){
+  getCategoryById(id) {
     return this.http.get(this.APIURL + '/CategoryMaster/Category/' + id);
   }
   getCategoriesByUid(Uid) {
     return this.http.get(this.APIURL + '/CategoryMaster/user/' + Uid);
   }
-  getCategoryByProducts(Pid){
+  getCategoryByProducts(Pid) {
     return this.http.get(this.APIURL + '/CategoryMaster/product/' + Pid);
   }
   postCategory(category: any) {
@@ -187,18 +200,17 @@ export class UserService {
     return this.http.delete(this.APIURL + '/CategoryMaster/' + catid);
   }
 
-
   //get Sections
   getSection() {
     return this.http.get(this.APIURL + '/SectionMaster');
   }
-  getSectionById(id){
+  getSectionById(id) {
     return this.http.get(this.APIURL + '/SectionMaster/section/' + id);
   }
   getSectionByUid(Uid) {
     return this.http.get(this.APIURL + '/SectionMaster/user/' + Uid);
   }
-  getSectionByCategory(Cid){
+  getSectionByCategory(Cid) {
     return this.http.get(this.APIURL + '/SectionMaster/category/' + Cid);
   }
   postSection(section: any) {
