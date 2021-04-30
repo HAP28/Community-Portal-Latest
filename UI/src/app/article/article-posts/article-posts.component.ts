@@ -11,7 +11,7 @@ import * as $ from 'jquery';
 })
 export class ArticlePostsComponent implements OnInit {
 
-  butDisabled = "disabled";
+//   butDisabled = "disabled";
   Articles: any;
   searching: any;
   product: any;
@@ -20,6 +20,7 @@ export class ArticlePostsComponent implements OnInit {
   result: any;
   response: any;
   FullName: any;
+  isDataAvailable:boolean = false;
   constructor(private service: UserService) { }
 
   ngOnInit(): void {
@@ -138,11 +139,41 @@ export class ArticlePostsComponent implements OnInit {
       (res) => {
         this.Articles = res;
         console.log(this.Articles)
-        for(var i=0;i<this.Articles.length;i++){
-          this.FullName = this.userFullName(this.Articles[i].User_Id);
-          console.log(this.FullName);
-          this.Articles[i].user = localStorage.getItem(this.Articles[i].User_Id);
-        }
+        this.Articles.forEach(element => {
+			this.service.getUserById(element.User_Id).subscribe(
+				(res) => {
+					var response = res;
+					element.user = response['FirstName'] + ' ' + response['LastName'];
+				},(err) => {
+					console.log(err);
+				}
+			);
+			this.service.getProductsById(element.Product_Id).subscribe(
+				(res)=> {
+				  var responseP = res;
+				  element.product = responseP[0]['Product_Name'];
+				},(err) => {
+					console.log(err);
+				}
+			);
+			this.service.getCategoryById(element.Category_Id).subscribe(
+				(res)=> {
+				  var response = res;
+				  element.category = response[0]['Category_Name'];
+				},(err) => {
+					console.log(err);
+				}
+			);
+			this.service.getSectionById(element.Section_Id).subscribe(
+				(res)=> {
+				  var response = res;
+				  element.section = response[0]['Section_Name'];
+				},(err) => {
+					console.log(err);
+				}
+			);
+		});
+		  this.isDataAvailable = true;
       }, (err) => {
         console.log(err);
       }
@@ -154,7 +185,6 @@ export class ArticlePostsComponent implements OnInit {
     var category = $('#categoryList').val();
     var section = $('#sectionList').val();
     if(product == ''){
-
       alert('Select Product');
       this.refreshList();
       return;
@@ -163,8 +193,44 @@ export class ArticlePostsComponent implements OnInit {
         this.service.getArticleByProduct(product).subscribe(
           (res) => {
             this.Articles = res;
-            this.Articles['user'] = this.userFullName(this.Articles.User_Id);
-            console.log(res);
+				  this.Articles.forEach(element => {
+					  this.service.getUserById(element.User_Id).subscribe(
+						  (res) => {
+							  var response = res;
+							  element.user = response['FirstName'] + ' ' + response['LastName'];
+						  },(err) => {
+							  console.log(err);
+						  }
+					  );
+					  this.service.getProductsById(element.Product_Id).subscribe(
+						(res)=> {
+						  var responseP = res;
+						  element.product = responseP[0]['Product_Name'];
+						},(err) => {
+							console.log(err);
+						}
+					);
+					this.service.getCategoryById(element.Category_Id).subscribe(
+						(res)=> {
+						  var response = res;
+						  element.category = response[0]['Category_Name'];
+						},(err) => {
+							console.log(err);
+						}
+					);
+					this.service.getSectionById(element.Section_Id).subscribe(
+						(res)=> {
+						  var response = res;
+						  element.section = response[0]['Section_Name'];
+						},(err) => {
+							console.log(err);
+						}
+					);
+				  });
+				  
+					this.isDataAvailable = true;
+				
+            console.log(this.Articles);
           },(err) => {
             console.log(err);
           }
@@ -173,42 +239,93 @@ export class ArticlePostsComponent implements OnInit {
         this.service.getArticleByProductAndCategory(product,category).subscribe(
           (res) => {
             this.Articles = res;
-            this.Articles['user'] = this.userFullName(this.Articles.User_Id);
-            console.log(res);
-          },(err) => {
-            console.log(err);
-          }
-        )
+            
+				  console.log(this.Articles)
+				  this.Articles.forEach(element => {
+						this.service.getUserById(element.User_Id).subscribe(
+							(res) => {
+								var response = res;
+								element.user = response['FirstName'] + ' ' + response['LastName'];
+							},(err) => {
+								console.log(err);
+							}
+						);		
+						this.service.getProductsById(element.Product_Id).subscribe(
+							(res)=> {
+							  var responseP = res;
+							  element.product = responseP[0]['Product_Name'];
+							},(err) => {
+								console.log(err);
+							}
+						);
+						this.service.getCategoryById(element.Category_Id).subscribe(
+							(res)=> {
+							  var response = res;
+							  element.category = response[0]['Category_Name'];
+							},(err) => {
+								console.log(err);
+							}
+						);
+						this.service.getSectionById(element.Section_Id).subscribe(
+							(res)=> {
+							  var response = res;
+							  element.section = response[0]['Section_Name'];
+							},(err) => {
+								console.log(err);
+							}
+						);	
+				  });
+					this.isDataAvailable = true;
+				}, (err) => {
+				  console.log(err);
+				})
       } else{
         this.service.getArticleByProductAndCategoryAndSection(product,category,section).subscribe(
           (res) => {
             this.Articles = res;
-            this.Articles['user'] = this.userFullName(this.Articles.User_Id);
-            console.log(res);
-          },(err) => {
-            console.log(err);
+			
+				  console.log(this.Articles)
+				  this.Articles.forEach(element => {
+					  this.service.getUserById(element.User_Id).subscribe(
+						  (res) => {
+							  var response = res;
+							  element.user = response['FirstName'] + ' ' + response['LastName'];
+						  },(err) => {
+							  console.log(err);
+						  }
+					  );
+					  this.service.getProductsById(element.Product_Id).subscribe(
+						(res)=> {
+						  var responseP = res;
+						  element.product = responseP[0]['Product_Name'];
+						},(err) => {
+							console.log(err);
+						}
+					);
+					this.service.getCategoryById(element.Category_Id).subscribe(
+						(res)=> {
+						  var response = res;
+						  element.category = response[0]['Category_Name'];
+						},(err) => {
+							console.log(err);
+						}
+					);
+					this.service.getSectionById(element.Section_Id).subscribe(
+						(res)=> {
+						  var response = res;
+						  element.section = response[0]['Section_Name'];
+						},(err) => {
+							console.log(err);
+						}
+					);
+				  });
+					this.isDataAvailable = true;
+				}, (err) => {
+            		console.log(err);
           }
         )
       }
     }
   }
-  userFullName(uid){
-    // var response;
-    console.log(uid);
-    this.service.getUserById(uid).subscribe(
-      (res) => {
-        console.log(res);
-        
-        this.response = res;
-        console.log(this.response.FirstName + " " + this.response.LastName);
-        this.result = this.response['FirstName'] + " " + this.response['LastName'];
-        localStorage.setItem(uid,this.result);
-        return this.result;
-      },(err) => {
-        this.result = "error"
-        console.log(err);
-        return this.result;
-      }
-    )
-  }
+  
 }

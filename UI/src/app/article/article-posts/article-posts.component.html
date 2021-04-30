@@ -33,13 +33,13 @@
   </div>
   </div>
 </div>
-<div class="container">
+<div class="container" *ngIf="isDataAvailable">
   <div class="card-box" *ngFor="let item of Articles">
     <div class="py-3" style="display: flex;">
       <h4 class="header-title"> {{ item.Article_Title }} </h4>
     </div>
         <div class="main">
-            <h5 class="text-custom">Lead designer / Developer</h5>
+            <h5 class="text-custom">{{item.product}} / {{item.category}} / {{item.section}}</h5>
             <p class="text-muted font-18 mb-0" [innerHTML]="item.Description"></p>
             <footer class="blockquote-footer m-3">
               Posted On <cite title="Source Title">{{ item.PostedOn }}</cite>

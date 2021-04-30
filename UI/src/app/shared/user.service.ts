@@ -156,6 +156,9 @@ export class UserService {
   getProducts() {
     return this.http.get(this.APIURL + '/ProductMaster');
   }
+  getProductsById(id){
+    return this.http.get(this.APIURL + '/ProductMaster/product/' + id);
+  }
   postProduct(product: any) {
     return this.http.post(this.APIURL + '/ProductMaster', product);
   }
@@ -167,6 +170,9 @@ export class UserService {
   //get Categories
   getCategory() {
     return this.http.get(this.APIURL + '/CategoryMaster');
+  }
+  getCategoryById(id){
+    return this.http.get(this.APIURL + '/CategoryMaster/Category/' + id);
   }
   getCategoriesByUid(Uid) {
     return this.http.get(this.APIURL + '/CategoryMaster/user/' + Uid);
@@ -185,6 +191,9 @@ export class UserService {
   //get Sections
   getSection() {
     return this.http.get(this.APIURL + '/SectionMaster');
+  }
+  getSectionById(id){
+    return this.http.get(this.APIURL + '/SectionMaster/section/' + id);
   }
   getSectionByUid(Uid) {
     return this.http.get(this.APIURL + '/SectionMaster/user/' + Uid);
