@@ -16,6 +16,7 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Http;
 using WebAPI.Models.AdminUserModels;
 
+
 namespace WebAPI
 {
     public class Startup
@@ -46,7 +47,7 @@ namespace WebAPI
             //services.AddIdentity<UserRegistrationDto, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
             //   .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddIdentity<UserRegistrationDto, IdentityRole>()
+            services.AddIdentity<UserRegistrationDto, IdentityRole>(opt => opt.SignIn.RequireConfirmedEmail = true)
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
@@ -80,6 +81,13 @@ namespace WebAPI
                 //options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 8;
             });
+
+            //Email Service
+            //var section = Configuration.GetSection("Email");
+            //var sender = new SmtpEmailSender(section["host"], int.Parse(section["port"]), section["fromaddress"], section["password"]);
+            //services.AddSingleton<IEmailSender>(sender);
+
+
 
             //services.AddCors();
 

@@ -36,5 +36,19 @@ namespace WebAPI.Controllers.AdminControllers
             var user = await _userManager.FindByIdAsync(userId);
             return Ok(user);
         }
+        [HttpDelete("user/{userId}")]
+        public async Task<IActionResult> delete(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if(user == null)
+            {
+                return Ok("User not found");
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+                return Ok("User Deleted SuccessFully");
+            else
+                return BadRequest("User not Deleted");
+        }
     }
 }

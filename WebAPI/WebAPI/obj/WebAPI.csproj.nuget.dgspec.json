@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HARSHIT\\Desktop\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj": {}
+    "D:\\Internship HIPL\\Community Portal Main\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HARSHIT\\Desktop\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj": {
+    "D:\\Internship HIPL\\Community Portal Main\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HARSHIT\\Desktop\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj",
+        "projectUniqueName": "D:\\Internship HIPL\\Community Portal Main\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj",
         "projectName": "WebAPI",
-        "projectPath": "C:\\Users\\HARSHIT\\Desktop\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj",
-        "packagesPath": "C:\\Users\\HARSHIT\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HARSHIT\\Desktop\\Community-Portal-Latest\\WebAPI\\WebAPI\\obj\\",
+        "projectPath": "D:\\Internship HIPL\\Community Portal Main\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj",
+        "packagesPath": "C:\\Users\\meet0\\.nuget\\packages\\",
+        "outputPath": "D:\\Internship HIPL\\Community Portal Main\\Community-Portal-Latest\\WebAPI\\WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\HARSHIT\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\meet0\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -80,6 +80,14 @@
               "target": "Package",
               "version": "[5.0.4, )"
             },
+            "MimeKit": {
+              "target": "Package",
+              "version": "[2.11.0, )"
+            },
+            "NETCore.MailKit": {
+              "target": "Package",
+              "version": "[2.0.3, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.1.0, )"
@@ -107,7 +115,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

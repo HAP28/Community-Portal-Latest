@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -26,7 +28,9 @@ namespace WebAPI.Controllers.AdminControllers
         private UserManager<UserRegistrationDto> userManager;
         private SignInManager<UserRegistrationDto> signInManager;
         private readonly ApplicationSettings appSettings;
+       // private IEmailSender emailSender;
         readonly private IConfiguration configuration;
+        
 
         public AccountController(IConfiguration _configuration,UserManager<UserRegistrationDto> _userManager, SignInManager<UserRegistrationDto> _signInManager, IOptions<ApplicationSettings> _appSettings)
         {
@@ -34,7 +38,8 @@ namespace WebAPI.Controllers.AdminControllers
             this.userManager = _userManager;
             this.signInManager = _signInManager;
             this.configuration = _configuration;
-        }
+           
+    }
 
         [HttpPost, AllowAnonymous]
         [Route("Register")]
@@ -52,7 +57,7 @@ namespace WebAPI.Controllers.AdminControllers
                         UserName = request.Email,
                         NormalizedUserName = request.Email,
                         Email = request.Email,
-                        EmailConfirmed = true,
+                        EmailConfirmed = false,
                         PhoneNumberConfirmed = true,
                     };
 
@@ -64,7 +69,10 @@ namespace WebAPI.Controllers.AdminControllers
                             var role = await userManager.AddToRoleAsync(user, Roles.Viewer.ToString());
                             if (role.Succeeded)
                             {
-                                return Ok("User Successfull Added");
+                              
+                                return Ok("User Registered Successfully");
+
+              
                             }
                             else
                             {
@@ -123,6 +131,9 @@ namespace WebAPI.Controllers.AdminControllers
                 var user = await userManager.FindByEmailAsync(model.Email);
                 if (user != null)
                 {
+                    if (!await userManager.IsEmailConfirmedAsync(user))
+                        return Ok("Email is not confirmed");
+
                     if (await this.userManager.IsLockedOutAsync(user))
                     {
                         ModelState.AddModelError("userbanned", "Your account has been disabled by an administrator.");
@@ -177,5 +188,21 @@ namespace WebAPI.Controllers.AdminControllers
             }
            
         }
+        //[HttpGet("verifyaccount")]
+        //[ActionName("VerifyAccount")]
+        //public async Task<IActionResult> VerifyAccount(string uid, string token)
+        //{
+        //    var user = await userManager.FindByIdAsync(uid);
+        //    if (user == null)
+        //        return BadRequest("No User");
+        //    else
+        //    {
+        //        var result = this.userManager.ConfirmEmailAsync(user, token);
+        //        if (result.Result.Succeeded)
+        //            return Ok("Email has been verified");
+        //        else
+        //            return BadRequest("Not Verified");
+        //    }
+        //}
     }
 }
