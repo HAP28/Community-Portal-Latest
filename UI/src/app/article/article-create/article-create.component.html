@@ -1,37 +1,47 @@
 <app-header></app-header>
 
-
 <div class="container">
   <h1 class="text-center">Create Article</h1>
   <form #imageForm="ngForm" #rteForm="ngForm" id="form-element">
-      <div class="mb-3">
+    <div class="mb-3">
       <label class="form-label">Title</label>
-      <input type="text" #Title ngModel class="form-control" id="title" placeholder="Title.." name="title" autocomplete="off">
-      </div>
-      
-      <div class="mb-3">
-        <label for="formFile" class="form-label">Select Category</label>
-        <select class="form-select" aria-label="Default select example" name="category" aria-placeholder="Choose Category" id="category">
-          <option selected>Choose Category</option>
-          <option value="1">Fashion</option>
-          <option value="2">Food</option>
-          <option value="3">Travel</option>
-          <option value="4">Music</option>
-          <option value="5">Fitness</option>
-          <option value="6">Sports</option>
-          <option value="7">Finance</option>
-          <option value="8">Political</option>
-          <option value="9">Bussiness</option>
-          <option value="10">News</option>
-          <option value="11">Gaming</option>
-          <option value="12">Others</option>
-        </select>
-            <!-- <input type="file" class="form-control" id="formFile" (change)="selectFile($event)">
+      <input
+        type="text"
+        #Title
+        ngModel
+        class="form-control"
+        id="title"
+        placeholder="Title.."
+        name="title"
+        autocomplete="off"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="formFile" class="form-label">Select Category</label>
+      <select class="form-select">
+        <option selected>Products</option>
+      </select>
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        name="category"
+        aria-placeholder="Choose Category"
+        id="category"
+      >
+        <option selected>Choose Category</option>
+      </select>
+
+      <br />
+      <select class="form-select">
+        <option selected>Sections</option>
+      </select>
+      <!-- <input type="file" class="form-control" id="formFile" (change)="selectFile($event)">
             <div [innerHtml]='msg' *ngIf="msg" style="color: red;"></div>
             <div><img [src]="url" *ngIf="url"></div> -->
     </div>
 
-      <!-- <div class="mb-3">
+    <!-- <div class="mb-3">
           <label class="form-label">Description</label>
         <div class="sample-container">
           <div class="default-section">
@@ -40,44 +50,64 @@
           </div>
         </div>
         </div> -->
-        
-        <div class="form-group mt-3">
-          <textarea id="defaultRTE" required name="defaultRTE" class="form-control"></textarea>
-          <div id="dateError" style="padding-top: 10px"></div>
-      </div>
-      <div class="form-group">
-          <div class="col-sm-3 control-label"></div>
-          <div class="col-sm-6">
-              <div id='error'></div>
-          </div>
-      </div>
 
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button type="reset" class="btn btn-danger me-md-2">Reset</button>
-          <button class="btn btn-primary me-md-2" type="button"  ejs-button [disabled]="!rteForm.valid">Save as Draft</button>
-          <button class="btn btn-success" type="submit" id="validateSubmit" ejs-button [disabled]="!rteForm.valid">Publish Live</button>
+    <div class="form-group mt-3">
+      <textarea
+        id="defaultRTE"
+        required
+        name="defaultRTE"
+        class="form-control"
+      ></textarea>
+      <div id="dateError" style="padding-top: 10px"></div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-3 control-label"></div>
+      <div class="col-sm-6">
+        <div id="error"></div>
       </div>
+    </div>
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button type="reset" class="btn btn-danger me-md-2">Reset</button>
+      <button
+        class="btn btn-primary me-md-2"
+        type="button"
+        ejs-button
+        [disabled]="!rteForm.valid"
+      >
+        Save as Draft
+      </button>
+      <button
+        class="btn btn-success"
+        type="submit"
+        id="validateSubmit"
+        ejs-button
+        [disabled]="!rteForm.valid"
+      >
+        Publish Live
+      </button>
+    </div>
   </form>
 </div>
 <style>
-  .e-rte-content body{
-      color: black;
-      background-color: white;
+  .e-rte-content body {
+    color: black;
+    background-color: white;
   }
 
   .sb-header {
-      z-index: 100;
+    z-index: 100;
   }
 
   .sb-content.e-view.hide-header {
-      top: 0 !important;
+    top: 0 !important;
   }
 
   .sb-header.e-view.hide-header {
-      display: none;
+    display: none;
   }
 </style>
 
-<br><br><br>
+<br /><br /><br />
 
 <app-footer></app-footer>
