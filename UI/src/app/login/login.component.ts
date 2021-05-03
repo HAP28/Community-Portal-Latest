@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit {
             alert('User doesnt exist! Please check the Email address');
           } 
           else{
-            console.log('Error while connecting to the server' + err.message);        
+            alert(err.error.wrongpass[0]);    
           }
         }
       );
