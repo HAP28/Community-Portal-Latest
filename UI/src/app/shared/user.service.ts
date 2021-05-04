@@ -180,6 +180,9 @@ export class UserService {
   postProduct(product: any) {
     return this.http.post(this.APIURL + '/ProductMaster', product);
   }
+  updateProduct(product: any) {
+    return this.http.put(this.APIURL + '/ProductMaster', product);
+  }
   deleteProductbyid(productid) {
     return this.http.delete(this.APIURL + '/ProductMaster/' + productid);
   }
@@ -203,6 +206,9 @@ export class UserService {
   deleteCategorybyid(catid) {
     return this.http.delete(this.APIURL + '/CategoryMaster/' + catid);
   }
+  updateCategory(category: any) {
+    return this.http.put(this.APIURL + '/CategoryMaster', category);
+  }
 
   //get Sections
   getSection() {
@@ -222,5 +228,8 @@ export class UserService {
   }
   deleteSectionbyid(sectionid) {
     return this.http.delete(this.APIURL + '/SectionMaster/' + sectionid);
+  }
+  updateSection(section: any) {
+    return this.http.put(this.APIURL + '/SectionMaster', section);
   }
 }

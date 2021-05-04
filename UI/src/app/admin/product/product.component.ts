@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators} from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { UserService } from 'src/app/shared/user.service';
 import * as $ from 'jquery';
@@ -14,30 +19,39 @@ export class ProductComponent implements OnInit {
   productList: any;
   user: any;
   productForm = {};
+  updateProductForm = {};
   faArrowRight = faArrowRight;
   productform!: FormGroup;
+  editProduct: any;
+  getusername: any;
+  userid: any;
   submitted = false;
-  constructor(private service: UserService, private toastr: ToastrService,private formBuilder:FormBuilder) {}
+  productname: any;
+  viewproduct: any;
+  constructor(
+    private service: UserService,
+    private toastr: ToastrService,
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.refreshList();
     this.productform = this.formBuilder.group({
       product: ['', [Validators.required]],
-     
-     
-      });
+    });
   }
 
-  get f() { return this.productform.controls; }
+  get f() {
+    return this.productform.controls;
+  }
   onSubmit() {
     // alert('j');
     this.submitted = true;
     // stop here if form is invalid
     if (this.productform.invalid) {
-        return;
+      return;
     }
-    if(this.submitted)
-    {
+    if (this.submitted) {
       console.log('validation checked');
     }
   }
@@ -71,10 +85,13 @@ export class ProductComponent implements OnInit {
           },
           (err) => {
             console.log();
-            if(err.error.errors.ProductDescription[0]){
-              this.toastr.error('Description is required', 'Product Add Failed');
-            }else{
-            this.toastr.error('Product Add Failed', 'Error');
+            if (err.error.errors.ProductDescription[0]) {
+              this.toastr.error(
+                'Description is required',
+                'Product Add Failed'
+              );
+            } else {
+              this.toastr.error('Product Add Failed', 'Error');
             }
           }
         );
@@ -99,5 +116,79 @@ export class ProductComponent implements OnInit {
         }
       );
     }
+  }
+  populateProduct(id) {
+    console.log(id);
+    this.service.getProductsById(id).subscribe(
+      (res) => {
+        console.log('getproductbyid', res);
+        this.editProduct = res;
+        this.userid = this.editProduct[0].User_Id;
+        this.productname = this.editProduct[0].Product_Name;
+        console.log(this.editProduct[0].Product_Description);
+        $('#pname').val(this.editProduct[0].Product_Name);
+        $('#editdesc').val(this.editProduct[0].Product_Description);
+        this.service.getUserById(this.editProduct[0].User_Id).subscribe(
+          (res) => {
+            this.getusername = res['FirstName'] + ' ' + res['LastName'];
+            console.log(this.getusername);
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+  updateProduct(id) {
+    console.log('Product id: ', id);
+    this.updateProductForm['productId'] = id;
+    this.updateProductForm['productName'] = $('#pname').val();
+    this.updateProductForm['productDescription'] = $('#editdesc').val();
+    this.updateProductForm['id'] = this.userid;
+    this.service.updateProduct(this.updateProductForm).subscribe(
+      (res) => {
+        console.log(res);
+        this.toastr.success(res.toString(), 'Success');
+        this.clearUpdateForm();
+      },
+      (err) => {
+        this.toastr.error(err.toString(), 'Failed');
+        console.log(err);
+      }
+    );
+  }
+  clearUpdateForm() {
+    $('#pname').val('');
+    $('#editdesc').val('');
+    document.getElementById('closewindow').click();
+    this.refreshList();
+  }
+  viewspecificProduct(id) {
+    this.service.getProductsById(id).subscribe(
+      (res) => {
+        this.viewproduct = res[0];
+        console.log(this.viewproduct);
+        $('#viewproductname').text(this.viewproduct.Product_Name);
+        $('#productdescription').text(this.viewproduct.Product_Description);
+
+        this.service.getUserById(this.viewproduct.User_Id).subscribe(
+          (res) => {
+            $('#username').text(
+              'Product Created by ' + res['FirstName'] + ' ' + res['LastName']
+            );
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }

@@ -12,9 +12,15 @@ import * as $ from 'jquery';
 export class SectionComponent implements OnInit {
   sectionList: any;
   sectionForm = {};
+  editsection: any;
+  editsectionForm = {};
   categoryList: any;
   user: any;
   category: any;
+  fullname: any;
+  sectionName: any;
+  cat: any;
+  viewsection: any;
   faArrowRight = faArrowRight;
 
   constructor(private service: UserService, private toastr: ToastrService) {}
@@ -102,5 +108,123 @@ export class SectionComponent implements OnInit {
         }
       );
     }
+  }
+  clearCategoryList() {
+    $('#editcategoryselection')
+      .find('option')
+      .remove()
+      .end()
+      .append('<option value="">Choose Category</option>')
+      .val('');
+  }
+  populateSection(secid) {
+    this.clearCategoryList();
+    this.loadcategories();
+    this.service.getSectionById(secid).subscribe(
+      (res) => {
+        this.editsection = res;
+        console.log('get section', this.editsection);
+        this.editsectionForm['id'] = this.editsection[0].User_Id;
+        console.log('section response', this.editsection);
+        this.service.getUserById(this.editsection[0].User_Id).subscribe(
+          (res) => {
+            this.fullname = res['FirstName'] + ' ' + res['LastName'];
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+        this.sectionName = this.editsection[0].Section_Name;
+        $('#secname').val(this.editsection[0].Section_Name);
+        $('#secdesc').val(this.editsection[0].Section_Description);
+        $('#editcategoryselection')
+          .val('' + this.editsection[0].Category_Id)
+          .change();
+        // this.service.getProductsById(this.editcategory[0].Product_Id).subscribe(
+        //   (res) => {
+        //     this.productbyid = res;
+        //     console.log('Pname ', this.productbyid[0].Product_Name);
+        //     $('#editproductselection')
+        //       // .find('option')
+        //       .val('' + this.editcategory[0].Product_Id)
+        //       .html('' + this.productbyid[0].Product_Name);
+        //   },
+        //   (err) => {
+        //     console.log(err);
+        //   }
+        // );
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+  loadcategories() {
+    this.service.getCategory().subscribe(
+      (res) => {
+        this.cat = res;
+        for (var i = 0; i < this.cat.length; i++) {
+          //creates option tag
+          console.log(this.cat[i]);
+          $('<option/>')
+            .val(this.cat[i].Category_Id)
+            .html(this.cat[i].Category_Name)
+            .appendTo('#editcategoryselection');
+        }
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+  updateSection(id) {
+    console.log(id);
+    this.editsectionForm['sectionId'] = id;
+    this.editsectionForm['sectionName'] = $('#secname').val();
+    this.editsectionForm['sectionDescription'] = $('#secdesc').val();
+    this.editsectionForm['categoryId'] = $('#editcategoryselection').val();
+    console.log('final data to update ', this.editsectionForm);
+    this.service.updateSection(this.editsectionForm).subscribe(
+      (res) => {
+        console.log(res);
+        this.toastr.success(res.toString(), 'Success');
+        this.clearUpdateForm();
+      },
+      (err) => {
+        this.toastr.error(err.toString(), 'Failed');
+        console.log(err);
+      }
+    );
+  }
+  clearUpdateForm() {
+    $('#secname').val('');
+    $('#secdesc').val('');
+    this.clearCategoryList();
+    document.getElementById('closewindow').click();
+    this.refreshList();
+  }
+  viewspecificSection(id) {
+    this.service.getSectionById(id).subscribe(
+      (res) => {
+        this.viewsection = res[0];
+        console.log(this.viewsection);
+        $('#viewsectionname').text(this.viewsection.Section_Name);
+        $('#sectiondescription').text(this.viewsection.Section_Description);
+
+        this.service.getUserById(this.viewsection.User_Id).subscribe(
+          (res) => {
+            $('#username').text(
+              'Section Created by ' + res['FirstName'] + ' ' + res['LastName']
+            );
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }

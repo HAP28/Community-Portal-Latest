@@ -78,13 +78,24 @@
 
   <div class="row row-cols-1 row-cols-md-3 g-4">
     <div class="col" *ngFor="let item of categoryList">
-      <div class="card shadow p-3 mb-5 bg-body rounded">
+      <div
+        class="card shadow p-3 mb-5 bg-body rounded animate"
+        data-bs-toggle="modal"
+        data-bs-target="#viewcategory"
+        (click)="viewspecificCategory(item.Category_Id)"
+      >
         <div class="card-body">
           <h5 class="card-title">{{ item.Category_Name }}</h5>
-          <p class="card-text">{{ item.Category_Description }}</p>
+          <p class="card-text" class="show-less">
+            {{ item.Category_Description }}
+          </p>
           <div class="buttons" style="display: flex">
             <div>
-              <a class="link button"
+              <a
+                class="link button"
+                data-bs-toggle="modal"
+                (click)="populateCategory(item.Category_Id)"
+                data-bs-target="#categorymodal"
                 >Edit <fa-icon [icon]="faArrowRight"></fa-icon
               ></a>
             </div>
@@ -97,6 +108,149 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit category Modal -->
+<div
+  class="modal fade"
+  id="categorymodal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title"
+          id="exampleModalLabel"
+          name="catlable"
+          style="justify-content: center"
+        >
+          {{ this.categoryName }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <h4>Category Created by {{ this.fullname }}</h4>
+          </div>
+          <div class="form-group">
+            <label for="product" class="form-label">Select Product</label>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              name="product"
+              aria-placeholder="Choose Product"
+              id="editproductselection"
+            >
+              <option value="" selected>Choose Product</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="catname" class="col-form-label">Category Name</label>
+            <input type="text" class="form-control" id="catname" />
+          </div>
+          <div class="form-group">
+            <label for="catdesc" class="col-form-label"
+              >Category Description</label
+            >
+            <textarea
+              class="form-control"
+              id="message-text"
+              rows="5"
+              id="catdesc"
+            ></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          id="closewindow"
+        >
+          Cancle
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="updateCategory(this.editcategory[0].Category_Id)"
+        >
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Product Details -->
+
+<div
+  class="modal fade"
+  id="viewcategory"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title"
+          id="viewcategoryname"
+          style="justify-content: center"
+        >
+          ANC
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <h5 id="username"></h5>
+          </div>
+
+          <h6 style="text-decoration: underline; font-style: italic">
+            Category Desciption
+          </h6>
+          <div class="form-group">
+            <p class="col-form-label" id="categorydescription"></p>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          id="closewindow"
+        >
+          Cancle
+        </button>
       </div>
     </div>
   </div>

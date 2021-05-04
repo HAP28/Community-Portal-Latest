@@ -1,3 +1,19 @@
 .button {
   cursor: pointer;
 }
+.show-less {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.animate {
+  outline: solid 0px #007bff;
+  transition: outline 0.3s linear;
+  cursor: pointer;
+}
+.animate:hover {
+  /* border: 2px solid #0069d9; */
+  outline-width: 3px;
+}

@@ -5,14 +5,30 @@
   <form [formGroup]="productform" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Add Product" id="Product_Name"
-          name="Product_Name" formControlName="product" [ngClass]="{ 'is-invalid': submitted && f.product.errors }" 
-            onkeyup="if(this.value.length > 0) document.getElementById('add_button').disabled = false; else document.getElementById('add_button').disabled = true;" />
-          <input type="submit" class="btn btn-primary" value="Add New Product" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap"  id="add_button" disabled/>
-          <div *ngIf="submitted && f.product.errors" class="invalid-feedback">
-            <div *ngIf="f.product.errors.required">Product Name is required</div>
-          </div>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Add Product"
+          id="Product_Name"
+          name="Product_Name"
+          formControlName="product"
+          [ngClass]="{ 'is-invalid': submitted && f.product.errors }"
+          onkeyup="if(this.value.length > 0) document.getElementById('add_button').disabled = false; else document.getElementById('add_button').disabled = true;"
+        />
+        <input
+          type="submit"
+          class="btn btn-primary"
+          value="Add New Product"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          data-bs-whatever="@getbootstrap"
+          id="add_button"
+          disabled
+        />
+        <div *ngIf="submitted && f.product.errors" class="invalid-feedback">
+          <div *ngIf="f.product.errors.required">Product Name is required</div>
         </div>
+      </div>
     </div>
   </form>
   <!-- <div class="input-group mb-3">
@@ -94,13 +110,24 @@
 
   <div class="row row-cols-1 row-cols-md-3 g-4">
     <div class="col" *ngFor="let item of productList">
-      <div class="card shadow p-3 mb-5 bg-body rounded">
+      <div
+        class="card shadow p-3 mb-5 bg-body rounded animate"
+        data-bs-toggle="modal"
+        data-bs-target="#viewproduct"
+        (click)="viewspecificProduct(item.Product_Id)"
+      >
         <div class="card-body">
           <h5 class="card-title">{{ item.Product_Name }}</h5>
-          <p class="card-text">{{ item.Product_Description }}</p>
+          <p class="card-text" class="show-less">
+            {{ item.Product_Description }}
+          </p>
           <div class="buttons" style="display: flex">
             <div>
-              <a class="link button"
+              <a
+                class="link button"
+                (click)="populateProduct(item.Product_Id)"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal1"
                 >Edit <fa-icon [icon]="faArrowRight"></fa-icon
               ></a>
             </div>
@@ -113,6 +140,141 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Edit Product Details -->
+<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+  Launch demo modal
+</button> -->
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal1"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title"
+          id="exampleModalLabel"
+          style="justify-content: center"
+        >
+          {{ this.productname }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <h4>Product Created by {{ this.getusername }}</h4>
+          </div>
+          <div class="form-group">
+            <label for="pname" class="col-form-label">Product Name</label>
+            <input type="text" class="form-control" id="pname" />
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label"
+              >Product Description</label
+            >
+            <textarea
+              class="form-control"
+              id="message-text"
+              rows="5"
+              id="editdesc"
+            ></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          id="closewindow"
+        >
+          Cancle
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="updateProduct(this.editProduct[0].Product_Id)"
+        >
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Product Details -->
+
+<div
+  class="modal fade"
+  id="viewproduct"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title"
+          id="viewproductname"
+          style="justify-content: center"
+        >
+          ANC
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <h5 id="username"></h5>
+          </div>
+
+          <h6 style="text-decoration: underline; font-style: italic">
+            Product Desciption
+          </h6>
+          <div class="form-group">
+            <p class="col-form-label" id="productdescription"></p>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          id="closewindow"
+        >
+          Cancle
+        </button>
       </div>
     </div>
   </div>

@@ -1,87 +1,282 @@
 <app-navbar></app-navbar>
 <div class="container">
   <h1 class="mb-3">Section</h1>
-    <div class="form-group">
-      <select class="form-control" id="categoryselection">
-        <option selected>Select Category</option>
-      </select>
-    </div>
-    <div class="input-group mb-5">
-        <input type="text" id="section_name" class="form-control" placeholder="Add Section" required>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Add New Section</button>
-    </div>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Description</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="mb-3">
-                      <!-- <label for="message-text" class="col-form-label">Message:</label> -->
-                      <textarea class="form-control" id="section_description" rows="5" placeholder="Description..."></textarea>
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" id="closesection" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary" (click)="AddSection()">Add Section</button>
-                </div>
-            </div>
+  <div class="form-group">
+    <select class="form-control" id="categoryselection">
+      <option selected>Select Category</option>
+    </select>
+  </div>
+  <div class="input-group mb-5">
+    <input
+      type="text"
+      id="section_name"
+      class="form-control"
+      placeholder="Add Section"
+      required
+    />
+    <button
+      type="button"
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModal"
+      data-bs-whatever="@getbootstrap"
+    >
+      Add New Section
+    </button>
+  </div>
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Description</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <!-- <label for="message-text" class="col-form-label">Message:</label> -->
+              <textarea
+                class="form-control"
+                id="section_description"
+                rows="5"
+                placeholder="Description..."
+              ></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            id="closesection"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="button" class="btn btn-primary" (click)="AddSection()">
+            Add Section
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6 col-md-3">
+      <nav class="vertical-menu">
+        <ul class="mainmenu">
+          <li>
+            <a href=""
+              >Page Index
+              <hr
+            /></a>
+          </li>
+          <li><a href="">Home</a></li>
+          <li><a href="">About</a></li>
+          <li>
+            <a href="" class="dropdown-toggle">Products</a>
+            <ul class="submenu">
+              <li><a href="">Tops</a></li>
+              <li><a href="">Bottoms</a></li>
+              <li><a href="">Footwear</a></li>
+            </ul>
+          </li>
+          <li><a href="">Contact us</a></li>
+          <li><a href="">Link 1</a></li>
+          <li><a href="">Link 2</a></li>
+          <li><a href="">Link 3</a></li>
+        </ul>
+      </nav>
     </div>
 
-    <div class="row">
-  
-      <div class="col-6 col-md-3">
-        <nav class=" vertical-menu">
-          <ul class="mainmenu">
-            <li><a href="">Page Index<hr></a></li>
-            <li><a href="">Home</a></li>
-            <li><a href="">About</a></li>
-            <li><a href="" class="dropdown-toggle">Products</a>
-              <ul class="submenu">
-                <li><a href="">Tops</a></li>
-                <li><a href="">Bottoms</a></li>
-                <li><a href="">Footwear</a></li>
-              </ul>
-            </li>
-            <li><a href="">Contact us</a></li>
-            <li><a href="">Link 1</a></li>
-            <li><a href="">Link 2</a></li>
-            <li><a href="">Link 3</a></li>
-          </ul>
-        </nav>
-      </div>
-  
-      <div class="col-md-9">
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-          <div class="col" *ngFor="let item of sectionList">
-            <div class="card shadow p-3 mb-5 bg-body rounded">
-              <div class="card-body">
-                <h5 class="card-title">{{item.Section_Name}}</h5>
-                <p class="card-text">{{item.Section_Description}}</p>
-                <div class="buttons" style="display: flex">
-                  <div>
-                    <a class="link button hand"
-                      >Edit <fa-icon [icon]="faArrowRight"></fa-icon
-                    ></a>
-                  </div>
-                  <div class="ml-3">
-                    <a
-                      class="link text-danger button hand"
-                      (click)="DeleteSection(item.Section_Id)"
-                      >Delete <fa-icon [icon]="faArrowRight"></fa-icon
-                    ></a>
-                  </div>
+    <div class="col-md-9">
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" *ngFor="let item of sectionList">
+          <div
+            class="card shadow p-3 mb-5 bg-body rounded animate"
+            data-bs-toggle="modal"
+            data-bs-target="#viewsection"
+            (click)="viewspecificSection(item.Section_Id)"
+          >
+            <div class="card-body">
+              <h5 class="card-title">{{ item.Section_Name }}</h5>
+              <p class="card-text show-less">{{ item.Section_Description }}</p>
+              <div class="buttons" style="display: flex">
+                <div>
+                  <a
+                    class="link button"
+                    data-bs-toggle="modal"
+                    (click)="populateSection(item.Section_Id)"
+                    data-bs-target="#sectionmodal"
+                    >Edit <fa-icon [icon]="faArrowRight"></fa-icon
+                  ></a>
+                </div>
+                <div class="ml-3">
+                  <a
+                    class="link text-danger button hand"
+                    (click)="DeleteSection(item.Section_Id)"
+                    >Delete <fa-icon [icon]="faArrowRight"></fa-icon
+                  ></a>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-  
     </div>
   </div>
+</div>
+
+<!-- Edit Section -->
+<div
+  class="modal fade"
+  id="sectionmodal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title"
+          id="exampleModalLabel"
+          name="seclable"
+          style="justify-content: center"
+        >
+          {{ this.sectionName }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <h4>Section Created by {{ this.fullname }}</h4>
+          </div>
+          <div class="form-group">
+            <label for="category" class="form-label">Select Category</label>
+            <select
+              class="form-select"
+              aria-label="Default select example"
+              name="category"
+              aria-placeholder="Choose Category"
+              id="editcategoryselection"
+            >
+              <option value="" selected>Choose Category</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="secname" class="col-form-label">Section Name</label>
+            <input type="text" class="form-control" id="secname" />
+          </div>
+          <div class="form-group">
+            <label for="secdesc" class="col-form-label"
+              >Section Description</label
+            >
+            <textarea
+              class="form-control"
+              id="message-text"
+              rows="5"
+              id="secdesc"
+            ></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          id="closewindow"
+        >
+          Cancle
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="updateSection(this.editsection[0].Section_Id)"
+        >
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Product Details -->
+
+<div
+  class="modal fade"
+  id="viewsection"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title"
+          id="viewsectionname"
+          style="justify-content: center"
+        >
+          ANC
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <h5 id="username"></h5>
+          </div>
+
+          <h6 style="text-decoration: underline; font-style: italic">
+            Section Desciption
+          </h6>
+          <div class="form-group">
+            <p class="col-form-label" id="sectiondescription"></p>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          id="closewindow"
+        >
+          Cancle
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
