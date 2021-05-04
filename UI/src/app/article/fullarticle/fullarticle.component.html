@@ -6,25 +6,20 @@
 <h1 class="text-center header">{{ this.fullarticle[0].Article_Title }}</h1>
 
 <div class="container">
-  <p class="article">
-    <span
-      ><h4>
-        {{ this.productName }} / {{ this.categoryName }} /
-        {{ this.sectionName }}
-      </h4>
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <a class="btn btn-primary btn-sm" href="/article-posts" type="button"
-          >Back</a
-        >
+  <p class="article mb-5">
+    <span class="mb-3">
+        <!-- class="d-grid gap-2 d-md-flex justify-content-md-end" -->
+      <div style="display: flex;">
+        <h5 style="margin-right: auto;">{{ this.productName }} / {{ this.categoryName }} / {{ this.sectionName }}</h5>
+        <div style="float: right; text-align: right;">
+          <a class="btn btn-primary btn-sm" style="float: right;" href="/article-posts" type="button">Back</a>
+        </div>
       </div>
+      <div [innerHTML]="this.fullarticle[0].Description"></div>
+
     </span>
-    <br />
   </p>
 
-  <div [innerHTML]="this.fullarticle[0].Description"></div>
-
-  <img src="img_girl.jpg" alt="Logo of Portal" />
-  <br /><br />
   <button
     class="btn btn-primary"
     type="button"
@@ -32,9 +27,10 @@
     data-bs-target="#collapseExample"
     aria-expanded="false"
     aria-controls="collapseExample"
+    id="cmtbtn"
   >
     Comment
-  </button>
+  </button> <p class="text-danger" *ngIf="loggedInUser">Please Login to Comment</p>
 
   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <label
@@ -54,20 +50,22 @@
   </div>
   <br />
   <div class="collapse" id="collapseExample">
-    <textarea
-      placeholder="What's on your mind ?"
-      id=""
-      cols="150"
-      rows="3"
-    ></textarea>
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <button class="btn btn-primary" type="button">Post</button>
-    </div>
+      <textarea
+        placeholder="What's on your mind ?"
+        id="comment"
+        cols="150"
+        rows="3"
+        [(ngModel)]="userName"
+        required
+      ></textarea>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button class="btn btn-primary" type="button" (click) = "postComment()" [disabled]="userName === ''">Post</button>
+      </div>
   </div>
 
   <div class="comments">
-    <h4 class="mb-3">Comments..</h4>
-    <div class="media-block">
+    <h4 class="mb-3">{{cmtHeading}}</h4>
+    <div class="media-block" *ngFor="let item of commentsList">
       <a class="media-left" href="#"
         ><img
           class="img-circle img-sm"
@@ -76,70 +74,27 @@
       /></a>
       <div class="media-body">
         <div class="mar-btm">
-          <a href="#" class="btn-link text-semibold media-heading box-inline"
-            >Drashti Shah</a
+          <a class="btn-link text-semibold media-heading box-inline"
+            >{{item.user}}</a
           >
-          <p class="text-muted text-sm user">From @username - 11 min ago</p>
+          <p class="text-muted text-sm user">{{item.PostedOn}}</p>
         </div>
         <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem sunt,
-          cupiditate autem deserunt fugit possimus inventore exercitationem
-          nulla illo quis odit harum quaerat suscipit doloribus aperiam commodi
-          at laborum ut.
+          {{item.Comment_Text}}
         </p>
         <div class="pad-ver">
-          <div class="btn-group">
-            <a class="btn btn-sm btn-default btn-hover-success" href="#"
-              ><i class="fa fa-thumbs-up"></i
-            ></a>
-            <a class="btn btn-sm btn-default btn-hover-danger" href="#"
-              ><i class="fa fa-thumbs-down"></i
-            ></a>
+          <ng-container *ngIf="this.currentUser">
+          <div class="btn-group" *ngIf="item.User_Id === user.Id || this.admin">
+            <form (ngSubmit) = "deleteComment(item.Comment_Id)">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
           </div>
-          <a class="btn btn-sm btn-default btn-hover-primary" href="#"
-            >Comment</a
-          >
+        </ng-container>
         </div>
       </div>
-    </div>
-
     <hr />
-
-    <div class="media-block">
-      <a class="media-left" href="#"
-        ><img
-          class="img-circle img-sm"
-          alt="Profile Picture"
-          src="https://bootdey.com/img/Content/avatar/avatar1.png"
-      /></a>
-      <div class="media-body">
-        <div class="mar-btm">
-          <a href="#" class="btn-link text-semibold media-heading box-inline"
-            >Harshit Parikh</a
-          >
-          <p class="text-muted text-sm user">From @username - 20 min ago</p>
-        </div>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem sunt,
-          cupiditate autem deserunt fugit possimus inventore exercitationem
-          nulla illo quis odit harum quaerat suscipit doloribus aperiam commodi
-          at laborum ut.
-        </p>
-        <div class="pad-ver">
-          <div class="btn-group">
-            <a class="btn btn-sm btn-default btn-hover-success" href="#"
-              ><i class="fa fa-thumbs-up"></i
-            ></a>
-            <a class="btn btn-sm btn-default btn-hover-danger" href="#"
-              ><i class="fa fa-thumbs-down"></i
-            ></a>
-          </div>
-          <a class="btn btn-sm btn-default btn-hover-primary" href="#"
-            >Comment</a
-          >
-        </div>
-      </div>
     </div>
+
   </div>
   <br /><br />
 </div>

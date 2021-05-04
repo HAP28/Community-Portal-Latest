@@ -89,7 +89,7 @@ namespace WebAPI.Controllers
             }
             return new JsonResult(table);
         }
-
+        [AllowAnonymous]
         [HttpGet("article/{Aid}")]
         // GET: ProductMasterController/Details/5
         public JsonResult GetProductByArticle(int Aid)
@@ -156,17 +156,17 @@ namespace WebAPI.Controllers
                 }
                 return new JsonResult("Data Inserted");
             }
-            catch
+            catch(Exception e)
             {
 
-                return new JsonResult("Unauthorized User");
+                return new JsonResult(e.Message);
 
             }
         }
 
         [HttpPut]
         // GET: ProductMasterController/Edit/5
-        public ActionResult Edit(Comment comment)
+        public JsonResult Edit(Comment comment)
         {
             string query = @"Update Comment set Comment_Texte ='" + comment.Comment_text + "', User_Id = '" + comment.Id + "',Article_Id = '" + comment.ArticleId + "' where Comment_Id = " + comment.Comment_id;
             DataTable table = new DataTable();
@@ -186,9 +186,9 @@ namespace WebAPI.Controllers
             return new JsonResult("Data Updated");
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         // GET: ProductMasterController/Delete/5
-        public ActionResult Delete(int id)
+        public JsonResult Delete(int id)
         {
             string query = @"delete from dbo.Comment where Comment_Id = '" + id + "'";
             DataTable table = new DataTable();

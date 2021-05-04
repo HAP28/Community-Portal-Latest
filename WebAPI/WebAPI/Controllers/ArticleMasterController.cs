@@ -100,7 +100,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "'";
+                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Status = '" + true + "' and Visibility = '1'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -126,11 +126,11 @@ namespace WebAPI.Controllers
         // GET api/<ArticleMasterController>/product/5/category/4
         [AllowAnonymous]
         [HttpGet("product/{pid}/category/{cid}")]
-        public JsonResult GetByProductCategory(int pid,int cid)
+        public JsonResult GetByProductCategory(int pid, int cid)
         {
             try
             {
-                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Category_Id = '" + cid + "'";
+                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Category_Id = '" + cid + "' and Status = '" + true + "' and Visibility = '1'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -156,11 +156,11 @@ namespace WebAPI.Controllers
         // GET api/<ArticleMasterController>/product/5/category/4/section/3
         [AllowAnonymous]
         [HttpGet("product/{pid}/category/{cid}/section/{sid}")]
-        public JsonResult GetByProductCategorySection(int pid, int cid,int sid)
+        public JsonResult GetByProductCategorySection(int pid, int cid, int sid)
         {
             try
             {
-                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Category_Id = '" + cid + "' and Section_Id = '" + sid + "'";
+                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Category_Id = '" + cid + "' and Section_Id = '" + sid + "' and Status = '" + true + "' and Visibility = '1'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -190,6 +190,156 @@ namespace WebAPI.Controllers
             try
             {
                 string query = @"select * from ArticleMaster where User_Id = '" + uid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+
+        // Visibility API
+        [AllowAnonymous]
+        [HttpGet("visible/{visibility}")]
+        public JsonResult GetArticlebyvisible(string visibility)
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where Visibility = '" + visibility + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+
+        // status API
+        [AllowAnonymous]
+        [HttpGet("status/{status}")]
+        public JsonResult GetArticlebyStatus(string status)
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where Status = '" + status + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+
+        // status API
+        [AllowAnonymous]
+        [HttpGet("public")]
+        public JsonResult GetPublicArticle()
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where Status = '" + true + "' and Visibility = '1'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+
+        // draft API
+        [AllowAnonymous]
+        [HttpGet("draft")]
+        public JsonResult GetArticlebyDraft()
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where Draft = '" + true + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+
+        // draft API
+        [AllowAnonymous]
+        [HttpGet("archive")]
+        public JsonResult GetArticlebyArchive()
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where Archive = '" + true + "' and Status = '" + true + "'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -254,29 +404,29 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
-
+        [AllowAnonymous]
         [HttpPut]
         // GET: ProductMasterController/Edit/5
         public ActionResult Edit(ArticleMaster article)
         {
             try
             {
-                string query = @"Update ProductMaster set 
+                string query = @"Update ArticleMaster set 
                 Article_Title ='" + article.ArticleTitle + "', " +
                         "Category_Id = '" + article.CategoryId +
-                        "Section_Id = '" + article.SectionId +
-                        "User_Id = '" + article.Id +
-                        "Reviewer_Id = '" + article.ReviewerId +
-                        "Product_Id = '" + article.ProductId +
-                        "Description = '" + article.ArticleDescription +
-                        "Visibility = '" + article.Visible +
-                        "Status = '" + article.Status +
-                        "CommentAllow = '" + article.CommentAllow +
-                        "UseFullTotal = '" + article.UseFullTotal +
-                        "UseFullCount = '" + article.UseFullCount +
-                        "Draft = '" + article.Draft +
-                        "Archive = '" + article.Archive +
-                        "' where Article_Id = " + article.ArticleId;
+                        "',Section_Id = '" + article.SectionId +
+                        "',User_Id = '" + article.Id +
+                        "',Reviewer_Id = '" + article.ReviewerId +
+                        "',Product_Id = '" + article.ProductId +
+                        "',Description = '" + article.ArticleDescription +
+                        "',Visibility = '" + article.Visible +
+                        "',Status = '" + article.Status +
+                        "',CommentAllow = '" + article.CommentAllow +
+                        "',UseFullTotal = '" + article.UseFullTotal +
+                        "',UseFullCount = '" + article.UseFullCount +
+                        "',Draft = '" + article.Draft +
+                        "',Archive = '" + article.Archive +
+                        "' where Article_Id = '" + article.ArticleId + "'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -362,36 +512,6 @@ namespace WebAPI.Controllers
             catch (Exception)
             {
                 Response.StatusCode = 204;
-            }
-        }
-
-        // Visibility API
-        [AllowAnonymous]
-        [HttpGet("article/visible/{id}")]
-        public JsonResult GetArticlebyvisible(string id)
-        {
-            try
-            {
-                string query = @"select * from ArticleMaster where visible = '" + id + "'";
-                DataTable table = new DataTable();
-                string sqlDataSource = configuration.GetConnectionString("DataConnection");
-                SqlDataReader dataReader;
-                using (SqlConnection connection = new SqlConnection(sqlDataSource))
-                {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        dataReader = command.ExecuteReader();
-                        table.Load(dataReader);
-                        dataReader.Close();
-                        connection.Close();
-                    }
-                }
-                return new JsonResult(table);
-            }
-            catch (Exception e)
-            {
-                return new JsonResult(e.Message);
             }
         }
     }

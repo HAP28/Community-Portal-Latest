@@ -166,6 +166,9 @@ export class UserService {
         sid
     );
   }
+  getPublicArticles() {
+    return this.http.get(this.APIURL + '/ArticleMaster/public');
+  }
   postArticle(article: any) {
     return this.http.post(this.APIURL + '/ArticleMaster', article);
   }
@@ -231,5 +234,15 @@ export class UserService {
   }
   updateSection(section: any) {
     return this.http.put(this.APIURL + '/SectionMaster', section);
+  }
+  //comment
+  getCommentsByArticleId(Aid) {
+    return this.http.get(this.APIURL + '/Comment/article/' + Aid);
+  }
+  postComment(model) {
+    return this.http.post(this.APIURL + '/Comment', model);
+  }
+  deleteComments(id) {
+    return this.http.delete(this.APIURL + '/Comment/' + id);
   }
 }

@@ -140,7 +140,7 @@ export class ArticlePostsComponent implements OnInit {
       }
     );
 
-    this.service.getAllArticles().subscribe(
+    this.service.getPublicArticles().subscribe(
       (res) => {
         this.Articles = res;
         console.log(this.Articles);
