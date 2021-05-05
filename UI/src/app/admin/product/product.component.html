@@ -20,7 +20,7 @@
           class="btn btn-primary"
           value="Add New Product"
           data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
+          data-bs-target="#addproduct"
           data-bs-whatever="@getbootstrap"
           id="add_button"
           disabled
@@ -50,12 +50,68 @@
       Add New Product
     </button>
   </div> -->
+  <!-- View Product Details -->
 
   <div
     class="modal fade"
-    id="exampleModal"
+    id="viewproduct"
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div
+      class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+      role="document"
+    >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5
+            class="modal-title"
+            id="viewproductname"
+            style="justify-content: center"
+          >
+            ANC
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <h5 id="username"></h5>
+            </div>
+
+            <h6 style="text-decoration: underline; font-style: italic">
+              Product Desciption
+            </h6>
+            <div class="form-group">
+              <p class="col-form-label" id="productdescription"></p>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            id="closewindow"
+          >
+            Cancle
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade"
+    id="addproduct"
+    tabindex="-1"
+    aria-labelledby="addproductLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog">
@@ -127,7 +183,7 @@
                 class="link button"
                 (click)="populateProduct(item.Product_Id)"
                 data-bs-toggle="modal"
-                data-bs-target="#exampleModal1"
+                data-bs-target="#editproduct"
                 >Edit <fa-icon [icon]="faArrowRight"></fa-icon
               ></a>
             </div>
@@ -153,9 +209,9 @@
 <!-- Modal -->
 <div
   class="modal fade"
-  id="exampleModal1"
+  id="editproduct"
   tabindex="-1"
-  aria-labelledby="exampleModalLabel"
+  aria-labelledby="editproductlabel"
   aria-hidden="true"
   data-bs-backdrop="static"
   data-bs-keyboard="false"
@@ -217,63 +273,6 @@
           (click)="updateProduct(this.editProduct[0].Product_Id)"
         >
           Edit
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- View Product Details -->
-
-<div
-  class="modal fade"
-  id="viewproduct"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
-  <div
-    class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
-    role="document"
-  >
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5
-          class="modal-title"
-          id="viewproductname"
-          style="justify-content: center"
-        >
-          ANC
-        </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <h5 id="username"></h5>
-          </div>
-
-          <h6 style="text-decoration: underline; font-style: italic">
-            Product Desciption
-          </h6>
-          <div class="form-group">
-            <p class="col-form-label" id="productdescription"></p>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-          id="closewindow"
-        >
-          Cancle
         </button>
       </div>
     </div>

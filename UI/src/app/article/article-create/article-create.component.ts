@@ -68,12 +68,13 @@ export class ArticleCreateComponent implements OnInit {
   ) {}
   url: any;
   msg = '';
-  product:any;
+  product: any;
   category: any;
   section: any;
+  commentonoff: any;
   ngOnInit(): void {
     this.refreshList();
-    $('#header-frame').css('display','none');
+    $('#header-frame').css('display', 'none');
     this.service.getUserProfile().subscribe(
       (res) => {
         this.userDetails = res;
@@ -151,14 +152,12 @@ export class ArticleCreateComponent implements OnInit {
       getValue();
     });
 
-    
-
     const getValue = () => {
-      let visibility = "";
-      $.each($("input[name='visibility']:checked"), function(){
+      let visibility = '';
+      $.each($("input[name='visibility']:checked"), function () {
         visibility += $(this).val();
       });
-      
+
       let form = document.getElementById('form-element') as HTMLFormElement;
       let formData = new FormData(form);
       let rteValue = formData.get('defaultRTE');
@@ -171,6 +170,7 @@ export class ArticleCreateComponent implements OnInit {
       this.x['status'] = false;
       this.x['draft'] = true;
       this.x['archive'] = false;
+      this.x['commentAllow'] = this.commentonoff;
       this.x['id'] = this.userDetails.Id;
       console.log(this.x);
       this.service.postArticle(this.x).subscribe(
@@ -186,7 +186,6 @@ export class ArticleCreateComponent implements OnInit {
           console.log(err);
         }
       );
-      
     };
 
     //   let hostUrl: string = 'https://ej2-aspcore-service.azurewebsites.net/';
@@ -260,56 +259,54 @@ export class ArticleCreateComponent implements OnInit {
     //   }
   }
 
-  clearProductList(){
+  clearProductList() {
     $('#product')
-          .find('option')
-          .remove()
-          .end()
-          .append('<option value="">Choose Product</option>')
-          .val('');
+      .find('option')
+      .remove()
+      .end()
+      .append('<option value="">Choose Product</option>')
+      .val('');
   }
-  clearCategoryList(){
+  clearCategoryList() {
     $('#category')
-    .find('option')
-    .remove()
-    .end()
-    .append('<option value="">Choose Category</option>')
-    .val('');
+      .find('option')
+      .remove()
+      .end()
+      .append('<option value="">Choose Category</option>')
+      .val('');
   }
-  clearSectionList(){
+  clearSectionList() {
     $('#section')
-    .find('option')
-    .remove()
-    .end()
-    .append('<option value="">Choose Section</option>')
-    .val('');
+      .find('option')
+      .remove()
+      .end()
+      .append('<option value="">Choose Section</option>')
+      .val('');
   }
 
-  refreshList(){
+  refreshList() {
     //disable dropdown
-    $('#category').prop('disabled',true);
-    $('#section').prop('disabled',true);
+    $('#category').prop('disabled', true);
+    $('#section').prop('disabled', true);
     // fetch all products
-    
-    this.service.getProducts().subscribe(
-      (res) => {
-        this.clearProductList();
-        this.clearCategoryList()
-        this.clearSectionList();
-        this.product = res;
-        for (var i = 0; i < this.product.length; i++) {
-          //creates option tag
-          console.log(this.product[i]);
-          $('<option/>')
-            .val(this.product[i].Product_Id)
-            .html(this.product[i].Product_Name)
-            .appendTo('#product');
-        }
+
+    this.service.getProducts().subscribe((res) => {
+      this.clearProductList();
+      this.clearCategoryList();
+      this.clearSectionList();
+      this.product = res;
+      for (var i = 0; i < this.product.length; i++) {
+        //creates option tag
+        console.log(this.product[i]);
+        $('<option/>')
+          .val(this.product[i].Product_Id)
+          .html(this.product[i].Product_Name)
+          .appendTo('#product');
       }
-    )
+    });
   }
 
-  fetchCategory(){
+  fetchCategory() {
     this.clearCategoryList();
     this.clearSectionList();
     var productSelected = $('#product').val();
@@ -324,14 +321,15 @@ export class ArticleCreateComponent implements OnInit {
             .html(this.category[i].Category_Name)
             .appendTo('#category');
         }
-        $('#category').prop('disabled',false);
-      },(err) => {
+        $('#category').prop('disabled', false);
+      },
+      (err) => {
         console.log(err);
       }
-    )
+    );
   }
 
-  fetchSection(){
+  fetchSection() {
     this.clearSectionList();
     var categorySelected = $('#category').val();
     this.service.getSectionByCategory(categorySelected).subscribe(
@@ -345,22 +343,23 @@ export class ArticleCreateComponent implements OnInit {
             .html(this.section[i].Section_Name)
             .appendTo('#section');
         }
-        $('#section').prop('disabled',false);
-      },(err) => {
+        $('#section').prop('disabled', false);
+      },
+      (err) => {
         console.log(err);
       }
-    )
+    );
   }
 
-  checkBoxValidation(){
-    if($('#public').prop("checked")){
-      $('#applicationuser').prop("checked",false);
-      $('#signedinuser').prop("checked",false);
-      $('#applicationuser').attr("disabled",true);
-      $('#signedinuser').attr("disabled",true);
-    }else{
-      $('#applicationuser').attr("disabled",false);
-      $('#signedinuser').attr("disabled",false);
+  checkBoxValidation() {
+    if ($('#public').prop('checked')) {
+      $('#applicationuser').prop('checked', false);
+      $('#signedinuser').prop('checked', false);
+      $('#applicationuser').attr('disabled', true);
+      $('#signedinuser').attr('disabled', true);
+    } else {
+      $('#applicationuser').attr('disabled', false);
+      $('#signedinuser').attr('disabled', false);
     }
   }
 
@@ -369,5 +368,12 @@ export class ArticleCreateComponent implements OnInit {
     localStorage.removeItem('token');
     this._router.navigate(['/']);
   }
-  
+  commentallow() {
+    if ($('#togglecomment').prop('checked')) {
+      this.commentonoff = true;
+    }
+    if (!$('#togglecomment').prop('checked')) {
+      this.commentonoff = false;
+    }
+  }
 }

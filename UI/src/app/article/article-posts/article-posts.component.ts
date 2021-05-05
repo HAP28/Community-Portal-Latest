@@ -27,8 +27,10 @@ export class ArticlePostsComponent implements OnInit {
     this.refreshList();
     // $('#categoryList').prop('disabled',true);
     // $('#sectionList').prop('disabled',true);
-
     document.getElementById('header-frame').style.display = 'none';
+  }
+  toogleswitch() {
+    console.log('status', $('#toggle-one').prop('checked'));
   }
   readMore(article_id) {
     this.router.navigateByUrl('/article?articleid=' + article_id);

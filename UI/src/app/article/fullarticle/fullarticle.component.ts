@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { UserService } from 'src/app/shared/user.service';
 import { ActivatedRoute } from '@angular/router';
-import * as $ from 'jquery'
+import * as $ from 'jquery';
 @Component({
   selector: 'app-fullarticle',
   templateUrl: './fullarticle.component.html',
@@ -16,13 +16,13 @@ export class FullarticleComponent implements OnInit {
   categoryName: any;
   sectionName: any;
   comment = {};
-  user : any;
-  commentsList : any;
-  cmtHeading = "Comments..";
+  user: any;
+  commentsList: any;
+  cmtHeading = 'Comments..';
   loggedInUser = false;
   currentUser = false;
   admin = false;
-  userName = ''
+  userName = '';
 
   constructor(
     private service: UserService,
@@ -55,17 +55,15 @@ export class FullarticleComponent implements OnInit {
   ngOnInit(): void {
     this.getFullArticle();
     this.refreshComments();
-    if(this.service.currentUser == null){
+    if (this.service.currentUser == null) {
       this.loggedInUser = true;
-      $("#cmtbtn").prop('disabled',true);
-    }else{
+      $('#cmtbtn').prop('disabled', true);
+    } else {
       this.currentUser = true;
-      this.service.getUserProfile().subscribe(
-        (res) => {
-          this.user = res;
-        }
-      )
-      if(this.service.currentUser.Role == "Admin"){
+      this.service.getUserProfile().subscribe((res) => {
+        this.user = res;
+      });
+      if (this.service.currentUser.Role == 'Admin') {
         this.admin = true;
       }
     }
@@ -79,6 +77,13 @@ export class FullarticleComponent implements OnInit {
       (res) => {
         this.fullarticle = res;
         console.log('article response by id : ', this.fullarticle[0]);
+        if (!this.fullarticle[0].CommentAllow) {
+          $('#cmtbtn').prop('disabled', true);
+          $('#openclosecomment').css('visibility', 'visible');
+        }
+        if (this.fullarticle[0].CommentAllow) {
+          $('#cmtbtn').prop('disabled', false);
+        }
         this.getProductName();
         this.getCategoryName();
         this.getSectionName();
@@ -121,8 +126,8 @@ export class FullarticleComponent implements OnInit {
       }
     );
   }
-  postComment(){
-    if($('#comment').val() != ""){      
+  postComment() {
+    if ($('#comment').val() != '') {
       this.comment['Comment_text'] = $('#comment').val();
       this.comment['id'] = this.user.Id;
       this.comment['ArticleId'] = this.article_id;
@@ -131,53 +136,55 @@ export class FullarticleComponent implements OnInit {
         (res) => {
           console.log(res);
           this.refreshComments();
-        },(err) => {
+        },
+        (err) => {
           console.log(err);
         }
-      )
+      );
     }
-    
   }
 
-  refreshComments(){
-    $('#comment').val("");
+  refreshComments() {
+    $('#comment').val('');
     this.service.getCommentsByArticleId(this.article_id).subscribe(
       (res) => {
         this.commentsList = res;
-        if(this.commentsList.length == 0){
-          this.cmtHeading = "Be the first to comment";
-        }else{
-          this.cmtHeading = "Comments.."
-          this.commentsList.forEach(element => {
+        if (this.commentsList.length == 0) {
+          this.cmtHeading = 'Be the first to comment';
+        } else {
+          this.cmtHeading = 'Comments..';
+          this.commentsList.forEach((element) => {
             this.service.getUserById(element.User_Id).subscribe(
               (res) => {
                 var response = res;
-                element['user'] = response['FirstName'] + ' ' + response['LastName'];
-                
-              },(err) => {
+                element['user'] =
+                  response['FirstName'] + ' ' + response['LastName'];
+              },
+              (err) => {
                 console.log(err);
               }
-            )
+            );
           });
         }
-        
+
         console.log(this.commentsList);
-        
-      },(err) => {
+      },
+      (err) => {
         console.log(err);
       }
-    )
+    );
   }
 
-  deleteComment(id){
+  deleteComment(id) {
     // alert(id);
     this.service.deleteComments(id).subscribe(
-      (res) =>{
+      (res) => {
         console.log(res);
         this.refreshComments();
-      },(err) => {
+      },
+      (err) => {
         console.log(err);
       }
-    )
+    );
   }
 }

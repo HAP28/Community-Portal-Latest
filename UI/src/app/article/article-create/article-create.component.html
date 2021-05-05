@@ -1,91 +1,204 @@
 <app-header></app-header>
 
-
 <div class="container">
   <h1 class="text-center">Create Article</h1>
   <form #rteForm="ngForm" id="form-element">
-      <div class="mb-3">
-      <label class="form-label">Title</label> 
-      <small class="text-danger" id="titlered" style="visibility: hidden; float: right;">this field is required*</small>
-      <input type="text" #Title ngModel class="form-control" id="title" placeholder="Title.." name="title" autocomplete="off">
-      </div>
-      
-      <div class="row">
-        <div class="col-md-4">
-          <label for="product" class="form-label">Select Product</label>
-          <small class="text-danger" id="productred" style="visibility: hidden; float: right;">this field is required*</small>
-          <select class="form-select" aria-label="Default select example" name="product" aria-placeholder="Choose Product" id="product" (change) = "fetchCategory()">
-            <option value="" selected>Choose Product</option>
-          </select>  
-        </div>
-        <div class="col-md-4">
-          <label for="category" class="form-label">Select Category</label>
-          <small class="text-danger" id="categoryred" style="visibility: hidden; float: right;">this field is required*</small>
-          <select class="form-select" aria-label="Default select example" name="category" aria-placeholder="Choose Category" id="category" (change) = "fetchSection()">
-            <option value="" selected>Choose Category</option>
-          </select>
-        </div>
-        <div class="col-md-4">
-          <label for="section" style="display: inline-block;" class="form-label">Select Section</label>
-          <small class="text-danger" id="sectionred" style="visibility: hidden; float: right;">this field is required*</small>
-          <select class="form-select" aria-label="Default select example" name="section" aria-placeholder="Choose Section" id="section">
-            <option value="" selected>Choose Section</option>
-          </select>
-        </div>
+    <div class="mb-3">
+      <label class="form-label">Title</label>
+      <small
+        class="text-danger"
+        id="titlered"
+        style="visibility: hidden; float: right"
+        >this field is required*</small
+      >
+      <input
+        type="text"
+        #Title
+        ngModel
+        class="form-control"
+        id="title"
+        placeholder="Title.."
+        name="title"
+        autocomplete="off"
+      />
     </div>
 
-        
-      <div class="form-group mt-3">
-        <textarea id="defaultRTE" required name="defaultRTE" class="form-control"></textarea>
-        <div id="dateError" style="padding-top: 10px"></div>
+    <div class="row">
+      <div class="col-md-4">
+        <label for="product" class="form-label">Select Product</label>
+        <small
+          class="text-danger"
+          id="productred"
+          style="visibility: hidden; float: right"
+          >this field is required*</small
+        >
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          name="product"
+          aria-placeholder="Choose Product"
+          id="product"
+          (change)="fetchCategory()"
+        >
+          <option value="" selected>Choose Product</option>
+        </select>
       </div>
-      <div class="form-group">
-          <div class="col-sm-3 control-label"></div>
-          <div class="col-sm-6">
-              <div id='error'></div>
-          </div>
+      <div class="col-md-4">
+        <label for="category" class="form-label">Select Category</label>
+        <small
+          class="text-danger"
+          id="categoryred"
+          style="visibility: hidden; float: right"
+          >this field is required*</small
+        >
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          name="category"
+          aria-placeholder="Choose Category"
+          id="category"
+          (change)="fetchSection()"
+        >
+          <option value="" selected>Choose Category</option>
+        </select>
       </div>
+      <div class="col-md-4">
+        <label for="section" style="display: inline-block" class="form-label"
+          >Select Section</label
+        >
+        <small
+          class="text-danger"
+          id="sectionred"
+          style="visibility: hidden; float: right"
+          >this field is required*</small
+        >
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          name="section"
+          aria-placeholder="Choose Section"
+          id="section"
+        >
+          <option value="" selected>Choose Section</option>
+        </select>
+      </div>
+    </div>
 
-      <label class="my-3"><b>Visibility :</b></label><small class="text-danger" id="chackboxred" style="visibility: hidden; float: right;">Please Choose at least one field*</small>
-    <br>
-      <div class="form-check form-check-inline">
-          <input class="form-check-input" type="checkbox" id="public" value="1" name="visibility" (change) = "checkBoxValidation()">
-          <label class="form-check-label" for="inlineCheckbox1">Public/Everyone</label>
+    <div class="form-group mt-3">
+      <textarea
+        id="defaultRTE"
+        required
+        name="defaultRTE"
+        class="form-control"
+      ></textarea>
+      <div id="dateError" style="padding-top: 10px"></div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-3 control-label"></div>
+      <div class="col-sm-6">
+        <div id="error"></div>
       </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="applicationuser" name="visibility" value="2">
-        <label class="form-check-label" for="inlineCheckbox2">Application Users</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="signedinuser" name="visibility" value="3">
-        <label class="form-check-label" for="inlineCheckbox3">Signed in Users</label>
-      </div>
+    </div>
 
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button type="reset" class="btn btn-danger me-md-2">Reset</button>
-          <button class="btn btn-primary" type="submit" id="validateSubmit" ejs-button [disabled]="!rteForm.valid">Publish Live</button>
+    <label class="my-3"><b>Visibility :</b></label
+    ><small
+      class="text-danger"
+      id="chackboxred"
+      style="visibility: hidden; float: right"
+      >Please Choose at least one field*</small
+    >
+    <br />
+    <div class="form-check form-check-inline">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="public"
+        value="1"
+        name="visibility"
+        (change)="checkBoxValidation()"
+      />
+      <label class="form-check-label" for="inlineCheckbox1"
+        >Public/Everyone</label
+      >
+    </div>
+    <div class="form-check form-check-inline">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="applicationuser"
+        name="visibility"
+        value="2"
+      />
+      <label class="form-check-label" for="inlineCheckbox2"
+        >Application Users</label
+      >
+    </div>
+    <div class="form-check form-check-inline">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="signedinuser"
+        name="visibility"
+        value="3"
+      />
+      <label class="form-check-label" for="inlineCheckbox3"
+        >Signed in Users</label
+      >
+    </div>
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button type="reset" class="btn btn-danger me-md-2">Reset</button>
+      <button
+        class="btn btn-primary"
+        type="submit"
+        id="validateSubmit"
+        ejs-button
+        [disabled]="!rteForm.valid"
+      >
+        Publish Live
+      </button>
+    </div>
+    <div>
+      <label><b>Comments Allowed :</b></label
+      ><small
+        class="text-danger"
+        id="chackboxred"
+        style="visibility: hidden; float: right"
+        >Please Choose at least one field</small
+      >
+      <div
+        class="form-check form-switch"
+        style="display: inline; margin-left: 40px"
+      >
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="togglecomment"
+          (change)="commentallow()"
+        />
       </div>
+    </div>
   </form>
 </div>
 <style>
-  .e-rte-content body{
-      color: black;
-      background-color: white;
+  .e-rte-content body {
+    color: black;
+    background-color: white;
   }
 
   .sb-header {
-      z-index: 100;
+    z-index: 100;
   }
 
   .sb-content.e-view.hide-header {
-      top: 0 !important;
+    top: 0 !important;
   }
 
   .sb-header.e-view.hide-header {
-      display: none;
+    display: none;
   }
 </style>
 
-<br><br><br>
+<br /><br /><br />
 
 <app-footer></app-footer>

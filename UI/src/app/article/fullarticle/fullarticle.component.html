@@ -8,15 +8,23 @@
 <div class="container">
   <p class="article mb-5">
     <span class="mb-3">
-        <!-- class="d-grid gap-2 d-md-flex justify-content-md-end" -->
-      <div style="display: flex;">
-        <h5 style="margin-right: auto;">{{ this.productName }} / {{ this.categoryName }} / {{ this.sectionName }}</h5>
-        <div style="float: right; text-align: right;">
-          <a class="btn btn-primary btn-sm" style="float: right;" href="/article-posts" type="button">Back</a>
+      <!-- class="d-grid gap-2 d-md-flex justify-content-md-end" -->
+      <div style="display: flex">
+        <h5 style="margin-right: auto">
+          {{ this.productName }} / {{ this.categoryName }} /
+          {{ this.sectionName }}
+        </h5>
+        <div style="float: right; text-align: right">
+          <a
+            class="btn btn-primary btn-sm"
+            style="float: right"
+            href="/article-posts"
+            type="button"
+            >Back</a
+          >
         </div>
       </div>
       <div [innerHTML]="this.fullarticle[0].Description"></div>
-
     </span>
   </p>
 
@@ -30,16 +38,22 @@
     id="cmtbtn"
   >
     Comment
-  </button> <p class="text-danger" *ngIf="loggedInUser">Please Login to Comment</p>
+  </button>
+  <p class="text-danger" *ngIf="loggedInUser">Please Login to Comment</p>
+  <div>
+    <p id="openclosecomment" style="visibility: hidden" class="text-danger">
+      This article is closed for comments
+    </p>
+  </div>
 
   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <label
       ><i>Was this Article Useful ?</i>
       <div class="btn-group">
-        <a class="btn btn-sm btn-default" href="#"
+        <a class="btn btn-lg btn-default" href="#"
           ><i class="fa fa-thumbs-up"></i
         ></a>
-        <a class="btn btn-sm btn-default" href="#"
+        <a class="btn btn-lg btn-default" href="#"
           ><i class="fa fa-thumbs-down"></i
         ></a>
       </div>
@@ -50,21 +64,28 @@
   </div>
   <br />
   <div class="collapse" id="collapseExample">
-      <textarea
-        placeholder="What's on your mind ?"
-        id="comment"
-        cols="150"
-        rows="3"
-        [(ngModel)]="userName"
-        required
-      ></textarea>
-      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <button class="btn btn-primary" type="button" (click) = "postComment()" [disabled]="userName === ''">Post</button>
-      </div>
+    <textarea
+      placeholder="What's on your mind ?"
+      id="comment"
+      cols="150"
+      rows="3"
+      [(ngModel)]="userName"
+      required
+    ></textarea>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button
+        class="btn btn-primary"
+        type="button"
+        (click)="postComment()"
+        [disabled]="userName === ''"
+      >
+        Post
+      </button>
+    </div>
   </div>
 
   <div class="comments">
-    <h4 class="mb-3">{{cmtHeading}}</h4>
+    <h4 class="mb-3">{{ cmtHeading }}</h4>
     <div class="media-block" *ngFor="let item of commentsList">
       <a class="media-left" href="#"
         ><img
@@ -74,27 +95,29 @@
       /></a>
       <div class="media-body">
         <div class="mar-btm">
-          <a class="btn-link text-semibold media-heading box-inline"
-            >{{item.user}}</a
-          >
-          <p class="text-muted text-sm user">{{item.PostedOn}}</p>
+          <a class="btn-link text-semibold media-heading box-inline">{{
+            item.user
+          }}</a>
+          <p class="text-muted text-sm user">{{ item.PostedOn }}</p>
         </div>
         <p>
-          {{item.Comment_Text}}
+          {{ item.Comment_Text }}
         </p>
         <div class="pad-ver">
           <ng-container *ngIf="this.currentUser">
-          <div class="btn-group" *ngIf="item.User_Id === user.Id || this.admin">
-            <form (ngSubmit) = "deleteComment(item.Comment_Id)">
-              <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
-          </div>
-        </ng-container>
+            <div
+              class="btn-group"
+              *ngIf="item.User_Id === user.Id || this.admin"
+            >
+              <form (ngSubmit)="deleteComment(item.Comment_Id)">
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+            </div>
+          </ng-container>
         </div>
       </div>
-    <hr />
+      <hr />
     </div>
-
   </div>
   <br /><br />
 </div>

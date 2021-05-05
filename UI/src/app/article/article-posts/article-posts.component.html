@@ -32,14 +32,35 @@
               </select>
             </div>
             <div class="form-group col-sm-3">
-              <button type="submit" class="btn btn-primary size">Search</button>
-              <button
-                type="reset"
-                class="btn btn-danger size1"
-                (click)="refreshList()"
-              >
-                Reset
-              </button>
+              <table>
+                <tr>
+                  <td>
+                    <button type="submit" class="btn btn-primary size">
+                      Search
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      type="reset"
+                      class="btn btn-danger size1"
+                      (click)="refreshList()"
+                    >
+                      Reset
+                    </button>
+                  </td>
+                  <td><br /><span class="ml-3">Mode</span></td>
+                  <td>
+                    <div class="form-check form-switch">
+                      <input
+                        class="form-check-input mt-3 ml-1"
+                        type="checkbox"
+                        id="toggle-one"
+                        (change)="toogleswitch()"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </table>
             </div>
           </div>
         </form>
