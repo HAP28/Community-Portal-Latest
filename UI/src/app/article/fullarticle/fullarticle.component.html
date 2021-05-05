@@ -32,21 +32,21 @@
     Comment
   </button> <p class="text-danger" *ngIf="loggedInUser">Please Login to Comment</p>
 
-  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end" *ngIf="this.currentUser">
     <label
       ><i>Was this Article Useful ?</i>
       <div class="btn-group">
-        <a class="btn btn-sm btn-default" href="#"
-          ><i class="fa fa-thumbs-up"></i
+        <a class="btn btn-lg btn-default" (click) = "like()"
+          ><i class="fa fa-thumbs-up" id="like"></i
         ></a>
-        <a class="btn btn-sm btn-default" href="#"
-          ><i class="fa fa-thumbs-down"></i
+        <a class="btn btn-lg btn-default" (click) = "dislike()"
+          ><i class="fa fa-thumbs-down" id="dislike"></i
         ></a>
       </div>
     </label>
   </div>
-  <div class="text-muted1 d-grid gap-2 d-md-flex justify-content-md-end">
-    5 out of 2 found helpful
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end text-weight-bold">
+    {{this.usefull}} out of {{this.total}} found helpful
   </div>
   <br />
   <div class="collapse" id="collapseExample">
@@ -84,7 +84,7 @@
         </p>
         <div class="pad-ver">
           <ng-container *ngIf="this.currentUser">
-          <div class="btn-group" *ngIf="item.User_Id === user.Id || this.admin">
+          <div class="btn-group" *ngIf="item.User_Id === this.user.Id || this.admin">
             <form (ngSubmit) = "deleteComment(item.Comment_Id)">
               <button type="submit" class="btn btn-danger">Delete</button>
             </form>
