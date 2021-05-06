@@ -62,6 +62,7 @@ export class UserComponent implements OnInit {
           this.toastr.success('Success', 'User Deleted');
           this.refreshList();
         } else {
+          console.log(err)
           this.toastr.error(err.toString(), 'User Failed to Delete');
         }
       }

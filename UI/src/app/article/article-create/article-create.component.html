@@ -145,20 +145,7 @@
         >Signed in Users</label
       >
     </div>
-
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <button type="reset" class="btn btn-danger me-md-2">Reset</button>
-      <button
-        class="btn btn-primary"
-        type="submit"
-        id="validateSubmit"
-        ejs-button
-        [disabled]="!rteForm.valid"
-      >
-        Publish Live
-      </button>
-    </div>
-    <div>
+    <div class="mt-2">
       <label><b>Comments Allowed :</b></label
       ><small
         class="text-danger"
@@ -177,6 +164,18 @@
           (change)="commentallow()"
         />
       </div>
+    </div>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button type="reset" class="btn btn-danger me-md-2">Reset</button>
+      <button
+        class="btn btn-primary"
+        type="submit"
+        id="validateSubmit"
+        ejs-button
+        [disabled]="!rteForm.valid"
+      >
+        Save to Draft
+      </button>
     </div>
   </form>
 </div>

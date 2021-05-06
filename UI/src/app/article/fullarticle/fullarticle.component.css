@@ -108,3 +108,7 @@ a.text-muted:focus {
 .mar-top {
   margin-top: 15px;
 }
+
+#approve {
+  visibility: hidden;
+}

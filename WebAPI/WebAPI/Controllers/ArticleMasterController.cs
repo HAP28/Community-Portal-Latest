@@ -331,6 +331,34 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
+        [AllowAnonymous]
+        [HttpGet("articlesforreviewer")]
+        public JsonResult GetArticleForReview()
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where Draft = '" + true + "' and Status = '" + false + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
 
         // draft API
         [AllowAnonymous]
@@ -513,6 +541,64 @@ namespace WebAPI.Controllers
             {
                 Response.StatusCode = 204;
             }
+        }
+        [AllowAnonymous]
+        [HttpPatch("approve/{articleid}")]
+        public async Task<IActionResult> approvearticle(string articleid, bool s, bool d)
+        {
+            try
+            {
+                string query = @"Update ArticleMaster set Status = '" + s + "', Draft = '" + d + "' where Article_Id = '" + articleid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult("Data Updated");
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message); ;
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPatch("unapprove/{articleid}")]
+        public async Task<IActionResult> approvearticle(string articleid)
+        {
+            try
+            {
+                string query = @"Update ArticleMaster set Draft = '" + false + "', Archive = '" + true + "' where Article_Id = '" + articleid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult("Data Updated");
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message); ;
+            }
+
         }
     }
 }

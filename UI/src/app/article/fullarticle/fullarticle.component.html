@@ -27,6 +27,38 @@
       <div [innerHTML]="this.fullarticle[0].Description"></div>
     </span>
   </p>
+  <div style="display: inline-flex; float: right">
+    <div id="approve">
+      <button type="button" class="btn btn-success" (click)="approvearticle()">
+        Approve
+      </button>
+      <button
+        type="button"
+        class="btn btn-warning"
+        style="margin-left: 20px"
+        (click)="editarticle()"
+      >
+        Edit
+      </button>
+      <button
+        type="button"
+        class="btn btn-danger"
+        style="margin-left: 20px"
+        (click)="disapprovearticle()"
+      >
+        Unapprove
+      </button>
+    </div>
+    <button
+      type="button"
+      class="btn btn-danger"
+      style="margin-left: 20px"
+      id="unpublish"
+      (click)="unpublisharticle()"
+    >
+      Unpublish
+    </button>
+  </div>
 
   <button
     class="btn btn-primary"
@@ -46,21 +78,24 @@
     </p>
   </div>
 
-  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+  <div
+    class="d-grid gap-2 d-md-flex justify-content-md-end"
+    *ngIf="this.currentUser"
+  >
     <label
       ><i>Was this Article Useful ?</i>
       <div class="btn-group">
-        <a class="btn btn-lg btn-default" href="#"
-          ><i class="fa fa-thumbs-up"></i
+        <a class="btn btn-lg btn-default" (click)="like()"
+          ><i class="fa fa-thumbs-up" id="like"></i
         ></a>
-        <a class="btn btn-lg btn-default" href="#"
-          ><i class="fa fa-thumbs-down"></i
+        <a class="btn btn-lg btn-default" (click)="dislike()"
+          ><i class="fa fa-thumbs-down" id="dislike"></i
         ></a>
       </div>
     </label>
   </div>
-  <div class="text-muted1 d-grid gap-2 d-md-flex justify-content-md-end">
-    5 out of 2 found helpful
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end text-weight-bold">
+    {{ this.usefull }} out of {{ this.total }} found helpful
   </div>
   <br />
   <div class="collapse" id="collapseExample">
@@ -107,7 +142,7 @@
           <ng-container *ngIf="this.currentUser">
             <div
               class="btn-group"
-              *ngIf="item.User_Id === user.Id || this.admin"
+              *ngIf="item.User_Id === this.user.Id || this.admin"
             >
               <form (ngSubmit)="deleteComment(item.Comment_Id)">
                 <button type="submit" class="btn btn-danger">Delete</button>

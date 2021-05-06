@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'src/app/shared/user.service';
 import * as $ from 'jquery';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-article-posts',
@@ -21,16 +22,59 @@ export class ArticlePostsComponent implements OnInit {
   response: any;
   FullName: any;
   isDataAvailable: boolean = false;
-  constructor(private service: UserService, private router: Router) {}
+  constructor(
+    private service: UserService,
+    private router: Router,
+    private toast: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.refreshList();
+    this.validateAdminReviewer();
+    localStorage.setItem('mode', 'viewer');
     // $('#categoryList').prop('disabled',true);
     // $('#sectionList').prop('disabled',true);
     document.getElementById('header-frame').style.display = 'none';
   }
+  validateAdminReviewer() {
+    if (this.service.currentUser != null) {
+      if (
+        this.service.currentUser.Role == 'Admin' ||
+        this.service.currentUser.Role == 'Reviewer'
+      ) {
+        $('.feku').css('visibility', 'visible');
+      }
+    }
+  }
   toogleswitch() {
     console.log('status', $('#toggle-one').prop('checked'));
+    if ($('#toggle-one').prop('checked')) {
+      this.toast.success('You are switch to review mode', 'Reviewer Mode', {
+        positionClass: 'toast-bottom-right',
+      });
+      localStorage['mode'] = 'reviewer';
+
+      // $('toggle-one')
+      this.service.getarticlesforreviewer().subscribe(
+        (res) => {
+          console.log(res);
+          //this.getreviewarticles();
+          this.Articles = res;
+          this.commoncode(this.Articles);
+          console.log('Review articles', this.Articles);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
+    if (!$('#toggle-one').prop('checked')) {
+      this.toast.success('You are switch to Viewer mode', 'Viewer Mode', {
+        positionClass: 'toast-bottom-right',
+      });
+      localStorage['mode'] = 'viewer';
+      this.getpublicArticles();
+    }
   }
   readMore(article_id) {
     this.router.navigateByUrl('/article?articleid=' + article_id);
@@ -104,6 +148,61 @@ export class ArticlePostsComponent implements OnInit {
     }
   }
 
+  commoncode(articles: any) {
+    this.Articles = articles;
+    this.Articles.forEach((element) => {
+      this.service.getUserById(element.User_Id).subscribe(
+        (res) => {
+          var response = res;
+          element.user = response['FirstName'] + ' ' + response['LastName'];
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+      this.service.getProductsById(element.Product_Id).subscribe(
+        (res) => {
+          var responseP = res;
+          element.product = responseP[0]['Product_Name'];
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+      this.service.getCategoryById(element.Category_Id).subscribe(
+        (res) => {
+          var response = res;
+          element.category = response[0]['Category_Name'];
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+      this.service.getSectionById(element.Section_Id).subscribe(
+        (res) => {
+          var response = res;
+          element.section = response[0]['Section_Name'];
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    });
+    this.isDataAvailable = true;
+  }
+  getpublicArticles() {
+    this.service.getPublicArticles().subscribe(
+      (res) => {
+        this.Articles = res;
+        this.commoncode(this.Articles);
+        console.log('public articles', this.Articles);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
   refreshList() {
     $('#categoryList').prop('disabled', true);
     $('#sectionList').prop('disabled', true);
@@ -141,55 +240,7 @@ export class ArticlePostsComponent implements OnInit {
         console.log(err);
       }
     );
-
-    this.service.getPublicArticles().subscribe(
-      (res) => {
-        this.Articles = res;
-        console.log(this.Articles);
-        this.Articles.forEach((element) => {
-          this.service.getUserById(element.User_Id).subscribe(
-            (res) => {
-              var response = res;
-              element.user = response['FirstName'] + ' ' + response['LastName'];
-            },
-            (err) => {
-              console.log(err);
-            }
-          );
-          this.service.getProductsById(element.Product_Id).subscribe(
-            (res) => {
-              var responseP = res;
-              element.product = responseP[0]['Product_Name'];
-            },
-            (err) => {
-              console.log(err);
-            }
-          );
-          this.service.getCategoryById(element.Category_Id).subscribe(
-            (res) => {
-              var response = res;
-              element.category = response[0]['Category_Name'];
-            },
-            (err) => {
-              console.log(err);
-            }
-          );
-          this.service.getSectionById(element.Section_Id).subscribe(
-            (res) => {
-              var response = res;
-              element.section = response[0]['Section_Name'];
-            },
-            (err) => {
-              console.log(err);
-            }
-          );
-        });
-        this.isDataAvailable = true;
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    this.getpublicArticles();
   }
 
   searchArticle() {

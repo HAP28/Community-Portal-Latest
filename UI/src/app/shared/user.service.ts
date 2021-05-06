@@ -166,11 +166,45 @@ export class UserService {
         sid
     );
   }
+  //Articles
   getPublicArticles() {
     return this.http.get(this.APIURL + '/ArticleMaster/public');
   }
   postArticle(article: any) {
     return this.http.post(this.APIURL + '/ArticleMaster', article);
+  }
+  getarticlesforreviewer() {
+    return this.http.get(this.APIURL + '/ArticleMaster/articlesforreviewer');
+  }
+  patch_approve_article(id) {
+    return this.http.patch(
+      this.APIURL +
+        '/ArticleMaster/approve/' +
+        id +
+        '?s=' +
+        true +
+        '&d=' +
+        false,
+      null
+    );
+  }
+  patch_disapprove_article(id) {
+    return this.http.patch(
+      this.APIURL + '/ArticleMaster/unapprove/' + id,
+      null
+    );
+  }
+  unpublish_article(id) {
+    return this.http.patch(
+      this.APIURL +
+        '/ArticleMaster/approve/' +
+        id +
+        '?s=' +
+        false +
+        '&d=' +
+        true,
+      null
+    );
   }
 
   //get products
@@ -244,5 +278,25 @@ export class UserService {
   }
   deleteComments(id) {
     return this.http.delete(this.APIURL + '/Comment/' + id);
+  }
+
+  //likes dislikes
+  getarticleusefullmaster() {
+    return this.http.get(this.APIURL + '/ArticleUseFullMaster');
+  }
+  getarticlefullmasterbyarticle(aid) {
+    return this.http.get(this.APIURL + '/ArticleUseFullMaster/' + aid);
+  }
+  getarticleusefullmasterbyarticleanduser(aid, uid) {
+    return this.http.get(
+      this.APIURL + '/ArticleUseFullMaster/' + aid + '/' + uid
+    );
+  }
+
+  postarticleusefullmaster(model) {
+    return this.http.post(this.APIURL + '/ArticleUseFullMaster/', model);
+  }
+  putarticleusefullmaster(model) {
+    return this.http.put(this.APIURL + '/ArticleUseFullMaster/', model);
   }
 }

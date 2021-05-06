@@ -16,7 +16,7 @@ import {
 } from '@syncfusion/ej2-richtexteditor';
 import { FormValidator } from '@syncfusion/ej2-inputs';
 import { UserService } from 'src/app/shared/user.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   ToolbarService,
   LinkService,
@@ -64,7 +64,8 @@ export class ArticleCreateComponent implements OnInit {
   constructor(
     private _router: Router,
     private service: UserService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private activatedRoute: ActivatedRoute
   ) {}
   url: any;
   msg = '';
@@ -72,8 +73,22 @@ export class ArticleCreateComponent implements OnInit {
   category: any;
   section: any;
   commentonoff: any;
+  article_id: any;
+  editmode: boolean = false;
+  currentarticle: any;
+  defaultRTE: RichTextEditor;
   ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe((params) => {
+      if (params['mode'] == 'edit') {
+        this.editmode = true;
+
+        this.article_id = params['id'];
+        console.log('Clicked Article: ', this.article_id);
+      }
+    });
+
     this.refreshList();
+
     $('#header-frame').css('display', 'none');
     this.service.getUserProfile().subscribe(
       (res) => {
@@ -84,7 +99,7 @@ export class ArticleCreateComponent implements OnInit {
       }
     );
 
-    let defaultRTE: RichTextEditor = new RichTextEditor({
+    this.defaultRTE = new RichTextEditor({
       showCharCount: true,
       placeholder: 'Type something',
       height: 300,
@@ -145,7 +160,7 @@ export class ArticleCreateComponent implements OnInit {
         },
       },
     });
-    defaultRTE.appendTo('#defaultRTE');
+    this.defaultRTE.appendTo('#defaultRTE');
     let formObject = new FormValidator('#form-element');
 
     $('#validateSubmit').click(() => {
@@ -304,6 +319,35 @@ export class ArticleCreateComponent implements OnInit {
           .appendTo('#product');
       }
     });
+    if (this.editmode) {
+      // $('#category').prop('disabled', false);
+      this.service.getArticleById(this.article_id).subscribe(
+        (res) => {
+          this.currentarticle = res;
+          console.log(this.currentarticle[0]);
+          $('#title').val(this.currentarticle[0].Article_Title);
+          $('#product').val(this.currentarticle[0].Product_Id).change();
+          //this.clearCategoryList();
+          this.fetchCategory();
+          //$('#category option[value="2"]').change();
+          console.log(this.currentarticle[0].Category_Id);
+          $("select[name='category']")
+            .find("option[value='2']")
+            .attr('selected', true);
+          //$('#category').val(this.currentarticle[0].Category_Id).change();
+          $('#section').val(this.currentarticle[0].Section_Id).change();
+
+          console.log(this.currentarticle[0].Description);
+          document.getElementById(
+            'defaultRTE'
+          ).innerHTML = this.currentarticle[0].Description;
+          this.defaultRTE.appendTo('#defaultRTE');
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
   }
 
   fetchCategory() {
@@ -368,6 +412,7 @@ export class ArticleCreateComponent implements OnInit {
     localStorage.removeItem('token');
     this._router.navigate(['/']);
   }
+
   commentallow() {
     if ($('#togglecomment').prop('checked')) {
       this.commentonoff = true;

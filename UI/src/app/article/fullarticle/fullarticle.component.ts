@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { UserService } from 'src/app/shared/user.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as $ from 'jquery';
 @Component({
   selector: 'app-fullarticle',
@@ -11,6 +11,7 @@ export class FullarticleComponent implements OnInit {
   isShow: boolean;
   topPosToStartShowing = 100;
   article_id: any;
+  user_id: any;
   fullarticle: any;
   productName: any;
   categoryName: any;
@@ -23,10 +24,16 @@ export class FullarticleComponent implements OnInit {
   currentUser = false;
   admin = false;
   userName = '';
+  total = 0;
+  usefull = 0;
+  articleFullMaster: any;
+  articleMasterByuser: any;
+  articleMasterPost = {};
 
   constructor(
     private service: UserService,
-    private activateroute: ActivatedRoute
+    private activateroute: ActivatedRoute,
+    private router: Router
   ) {}
   @HostListener('window:scroll')
   checkScroll() {
@@ -53,19 +60,63 @@ export class FullarticleComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+    this.validateadminreviewer();
     this.getFullArticle();
     this.refreshComments();
+    this.refreshList();
     if (this.service.currentUser == null) {
       this.loggedInUser = true;
       $('#cmtbtn').prop('disabled', true);
     } else {
-      this.currentUser = true;
-      this.service.getUserProfile().subscribe((res) => {
-        this.user = res;
-      });
+      this.service.getUserProfile().subscribe(
+        (res) => {
+          this.currentUser = true;
+          this.user = res;
+          console.log(this.user);
+          this.user_id = this.user.Id;
+          this.service
+            .getarticleusefullmasterbyarticleanduser(
+              this.article_id,
+              this.user.Id
+            )
+            .subscribe((res) => {
+              console.log(res);
+              this.articleMasterByuser = res;
+              if (this.articleMasterByuser.length != 0) {
+                if (this.articleMasterByuser[0].likes) {
+                  $('#like').addClass('text-primary');
+                }
+                if (this.articleMasterByuser[0].dislikes) {
+                  $('#dislike').addClass('text-danger');
+                }
+              }
+            });
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
       if (this.service.currentUser.Role == 'Admin') {
         this.admin = true;
       }
+    }
+  }
+  validateadminreviewer() {
+    if (this.service.currentUser != null) {
+      if (
+        (this.service.currentUser.Role == 'Admin' ||
+          this.service.currentUser.Role == 'Reviewer') &&
+        localStorage.getItem('mode') == 'reviewer'
+      ) {
+        $('#approve').css('visibility', 'visible');
+        $('#unpublish').css('display', 'none');
+      }
+      if (this.service.currentUser.Role != 'Admin') {
+        $('#unpublish').css('display', 'none');
+      }
+    } else {
+      $('#approve').css('display', 'none');
+      $('#unpublish').css('display', 'none');
     }
   }
   getFullArticle() {
@@ -81,9 +132,13 @@ export class FullarticleComponent implements OnInit {
           $('#cmtbtn').prop('disabled', true);
           $('#openclosecomment').css('visibility', 'visible');
         }
-        if (this.fullarticle[0].CommentAllow) {
+        if (
+          this.fullarticle[0].CommentAllow &&
+          this.service.currentUser != null
+        ) {
           $('#cmtbtn').prop('disabled', false);
         }
+
         this.getProductName();
         this.getCategoryName();
         this.getSectionName();
@@ -92,6 +147,38 @@ export class FullarticleComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+  refreshList() {
+    this.service
+      .getarticleusefullmasterbyarticleanduser(this.article_id, this.user_id)
+      .subscribe((res) => {
+        console.log(res);
+        this.articleMasterByuser = res;
+        if (this.articleMasterByuser.length != 0) {
+          if (this.articleMasterByuser[0].likes) {
+            $('#like').addClass('text-primary');
+          }
+          if (this.articleMasterByuser[0].dislikes) {
+            $('#dislike').addClass('text-danger');
+          }
+        }
+      });
+    this.service
+      .getarticlefullmasterbyarticle(this.article_id)
+      .subscribe((res) => {
+        console.log(res);
+        this.articleFullMaster = res;
+        this.usefull = 0;
+        this.total = 0;
+        this.articleFullMaster.forEach((element) => {
+          if (element.likes) {
+            this.usefull += 1;
+            this.total += 1;
+          } else if (element.dislikes) {
+            this.total += 1;
+          }
+        });
+      });
   }
   getProductName() {
     this.service.getProductsById(this.fullarticle[0].Product_Id).subscribe(
@@ -185,6 +272,150 @@ export class FullarticleComponent implements OnInit {
       (err) => {
         console.log(err);
       }
+    );
+  }
+
+  like() {
+    if (this.articleMasterByuser.length == 0) {
+      this.articleMasterPost['article_id'] = this.article_id;
+      this.articleMasterPost['user_id'] = this.user.Id;
+      this.articleMasterPost['likes'] = true;
+      this.articleMasterPost['dislikes'] = false;
+
+      this.service.postarticleusefullmaster(this.articleMasterPost).subscribe(
+        (res) => {
+          console.log(res);
+          this.refreshList();
+          $('#like').toggleClass('text-primary');
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    } else {
+      if ($('#like').hasClass('text-primary')) {
+        this.articleMasterPost['article_id'] = this.article_id;
+        this.articleMasterPost['user_id'] = this.user.Id;
+        this.articleMasterPost['likes'] = false;
+        this.articleMasterPost['dislikes'] = false;
+        this.service.putarticleusefullmaster(this.articleMasterPost).subscribe(
+          (res) => {
+            console.log(res);
+            this.refreshList();
+            $('#like').removeClass('text-primary');
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      } else {
+        this.articleMasterPost['article_id'] = this.article_id;
+        this.articleMasterPost['user_id'] = this.user.Id;
+        this.articleMasterPost['likes'] = true;
+        this.articleMasterPost['dislikes'] = false;
+        this.service.putarticleusefullmaster(this.articleMasterPost).subscribe(
+          (res) => {
+            console.log(res);
+            this.refreshList();
+            $('#like').addClass('text-primary');
+            $('#dislike').removeClass('text-danger');
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      }
+    }
+  }
+  dislike() {
+    if (this.articleMasterByuser.length == 0) {
+      this.articleMasterPost['article_id'] = this.article_id;
+      this.articleMasterPost['user_id'] = this.user.Id;
+      this.articleMasterPost['likes'] = false;
+      this.articleMasterPost['dislikes'] = true;
+
+      this.service.postarticleusefullmaster(this.articleMasterPost).subscribe(
+        (res) => {
+          console.log(res);
+          this.refreshList();
+          $('#dislike').toggleClass('text-danger');
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    } else {
+      if ($('#dislike').hasClass('text-danger')) {
+        this.articleMasterPost['article_id'] = this.article_id;
+        this.articleMasterPost['user_id'] = this.user.Id;
+        this.articleMasterPost['likes'] = false;
+        this.articleMasterPost['dislikes'] = false;
+        this.service.putarticleusefullmaster(this.articleMasterPost).subscribe(
+          (res) => {
+            console.log(res);
+            this.refreshList();
+            $('#dislike').removeClass('text-danger');
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      } else {
+        this.articleMasterPost['article_id'] = this.article_id;
+        this.articleMasterPost['user_id'] = this.user.Id;
+        this.articleMasterPost['likes'] = false;
+        this.articleMasterPost['dislikes'] = true;
+        this.service.putarticleusefullmaster(this.articleMasterPost).subscribe(
+          (res) => {
+            console.log(res);
+            this.refreshList();
+            $('#dislike').addClass('text-danger');
+            $('#like').removeClass('text-primary');
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      }
+    }
+  }
+  approvearticle() {
+    console.log('Approve');
+    this.service.patch_approve_article(this.article_id).subscribe(
+      (res) => {
+        this.router.navigateByUrl('/article-posts');
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+  disapprovearticle() {
+    console.log('DisApprove');
+    this.service.patch_disapprove_article(this.article_id).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+  unpublisharticle() {
+    this.service.unpublish_article(this.article_id).subscribe(
+      (res) => {
+        console.log(res);
+        this.router.navigateByUrl('/article-posts');
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+  editarticle() {
+    this.router.navigateByUrl(
+      '/article-create?mode=edit&id=' + this.article_id
     );
   }
 }
