@@ -25,6 +25,7 @@ import {
   QuickToolbarService,
   FileManagerService,
 } from '@syncfusion/ej2-angular-richtexteditor';
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 RichTextEditor.Inject(Toolbar, Link, Image, HtmlEditor, Count, QuickToolbar);
 
 @Component({
@@ -81,13 +82,14 @@ export class ArticleCreateComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((params) => {
       if (params['mode'] == 'edit') {
         this.editmode = true;
-
+        $('#validateSubmit').css('display','none');
         this.article_id = params['id'];
         console.log('Clicked Article: ', this.article_id);
       }
     });
 
     this.refreshList();
+
 
     $('#header-frame').css('display', 'none');
     this.service.getUserProfile().subscribe(
@@ -200,21 +202,36 @@ export class ArticleCreateComponent implements OnInit {
 
       this.x['commentAllow'] = this.commentonoff;
       this.x['id'] = this.userDetails.Id;
-      console.log(this.x);
-      this.service.postArticle(this.x).subscribe(
-        (res) => {
-          this.toast.success('Article Published', 'Success');
-          console.log(res);
-          // $('#title').text('');
-          // $('#category').text('Choose Category');
-          // $('#defaultRTE').text('');
-        },
-        (err) => {
-          this.toast.error('Article Failed to Publish', 'Error');
-          console.log(err);
-        }
-      );
-    };
+     // console.log(this.x);
+
+      if(this.editmode){
+        console.log("article to update :",this.x);
+        this.service.updateArticle(this.x,this.article_id).subscribe(
+          (res)=>{
+            console.log(res);
+          },(err)=>{
+            console.log(err);
+          }
+          );
+      }
+      if(this.editmode == false){
+        console.log(this.editmode);
+        this.service.postArticle(this.x).subscribe(
+          (res) => {
+            this.toast.success('Article Published', 'Success');
+            console.log(res);
+            // $('#title').text('');
+            // $('#category').text('Choose Category');
+            // $('#defaultRTE').text('');
+          },
+          (err) => {
+            this.toast.error('Article Failed to Publish', 'Error');
+            console.log(err);
+          }
+        );
+      }
+
+    }
 
     //   let hostUrl: string = 'https://ej2-aspcore-service.azurewebsites.net/';
 
@@ -343,10 +360,9 @@ export class ArticleCreateComponent implements OnInit {
           $('#title').val(this.currentarticle[0].Article_Title);
           $('#product').val(this.currentarticle[0].Product_Id).change();
 
-          // this.fetchCategory();
-          console.log('cat id ', this.currentarticle[0].Category_Id);
+          this.fetchCategory();
 
-          console.log('visible', this.currentarticle[0].Visibility);
+          console.log(this.category);
 
           if (this.currentarticle[0].CommentAllow == true) {
             $('#togglecomment').prop('checked', true);
@@ -362,15 +378,13 @@ export class ArticleCreateComponent implements OnInit {
             $('#signedinuser').attr('disabled', true);
           } else if (this.currentarticle[0].Visibility == '2') {
             $('#applicationuser').prop('checked', true);
-          } else {
+          }else if (this.currentarticle[0].Visibility == '23') {
+            $('#applicationuser').prop('checked', true);
             $('#signedinuser').prop('checked', true);
           }
-
-          //  .val(this.currentarticle[0].Category_Id)
-          //.trigger('change');
-          //$('#section').val(this.currentarticle[0].Section_Id).change();
-
-          //console.log(this.currentarticle[0].Description);
+          else{
+            $('#signedinuser').prop('checked', true);
+          }
           document.getElementById(
             'defaultRTE'
           ).innerHTML = this.currentarticle[0].Description;
@@ -384,6 +398,7 @@ export class ArticleCreateComponent implements OnInit {
   }
 
   fetchCategory() {
+    //console.log(this.currentarticle[0]);
     this.clearCategoryList();
     this.clearSectionList();
     var productSelected = $('#product').val();
@@ -400,7 +415,14 @@ export class ArticleCreateComponent implements OnInit {
             .html(this.category[i].Category_Name)
             .appendTo('#category');
         }
-        console.log('hello');
+        if(this.editmode){
+          for(var i=0;i<this.category.length;i++){
+                  if(this.category[i].Category_Id == this.currentarticle[0].Category_Id){
+                      $('#category')[0].selectedIndex = i+1;
+                  }
+               }
+               this.fetchSection();
+        }
       },
       (err) => {
         console.log(err);
@@ -410,6 +432,7 @@ export class ArticleCreateComponent implements OnInit {
 
   fetchSection() {
     this.clearSectionList();
+
     var categorySelected = $('#category').val();
     this.service.getSectionByCategory(categorySelected).subscribe(
       (res) => {
@@ -422,7 +445,15 @@ export class ArticleCreateComponent implements OnInit {
             .html(this.section[i].Section_Name)
             .appendTo('#section');
         }
-        $('#section').prop('disabled', false);
+       $('#section').prop('disabled', false);
+        if(this.editmode){
+        for(var i=0;i<this.section.length;i++){
+                    if(this.section[i].Section_Id == this.currentarticle[0].Section_Id){
+                        $('#section')[0].selectedIndex = i+1;
+                    }
+                  }
+
+                }
       },
       (err) => {
         console.log(err);

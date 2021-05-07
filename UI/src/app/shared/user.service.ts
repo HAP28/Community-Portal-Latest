@@ -181,6 +181,9 @@ export class UserService {
   postArticle(article: any) {
     return this.http.post(this.APIURL + '/ArticleMaster', article);
   }
+  updateArticle(article: any,aid) {
+    return this.http.put(this.APIURL + '/ArticleMaster/'+aid, article);
+  }
   getdraftarticleforuser(uid) {
     return this.http.get(
       this.APIURL +

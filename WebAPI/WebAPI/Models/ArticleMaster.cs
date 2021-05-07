@@ -45,10 +45,7 @@ namespace WebAPI.Models
         public bool Status { get; set; }
         [Column("CommentAllow")]
         public bool CommentAllow { get; set; }
-        [Column("UseFullTotal")]
-        public int UseFullTotal { get; set; }
-        [Column("UseFullCount")]
-        public int UseFullCount { get; set; }
+ 
         [Required]
         [Column("Draft")]
         public bool Draft { get; set; }

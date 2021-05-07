@@ -215,11 +215,11 @@ namespace WebAPI.Controllers
         // Visibility API
         [AllowAnonymous]
         [HttpGet("articlegetvisibility/{visibility}/{status}/{draft}/{archive}")]
-        public JsonResult GetArticlebyvisible(string visibility,bool status,bool draft,bool archive)
+        public JsonResult GetArticlebyvisible(string visibility, bool status, bool draft, bool archive)
         {
             try
             {
-                string query = @"select * from ArticleMaster where Status='"+status+"'and Draft='"+draft+"'and Archive = '"+archive+"'and Visibility = '" + visibility + "'";
+                string query = @"select * from ArticleMaster where Status='" + status + "'and Draft='" + draft + "'and Archive = '" + archive + "'and Visibility = '" + visibility + "'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -245,7 +245,7 @@ namespace WebAPI.Controllers
 
         [AllowAnonymous]
         [HttpGet("articleget/{status}/{draft}/{archive}")]
-        public JsonResult GetArticle( bool status, bool draft, bool archive)
+        public JsonResult GetArticle(bool status, bool draft, bool archive)
         {
             try
             {
@@ -274,11 +274,11 @@ namespace WebAPI.Controllers
 
         [AllowAnonymous]
         [HttpGet("articlegetforuser/{uid}/{status}/{draft}/{archive}")]
-        public JsonResult GetArticleforuser(bool status, bool draft, bool archive,string uid)
+        public JsonResult GetArticleforuser(bool status, bool draft, bool archive, string uid)
         {
             try
             {
-                string query = @"select * from ArticleMaster where Status='" + status + "' and Draft='" + draft + "'and Archive = '" + archive + "' and User_Id = '"+uid+"' ";
+                string query = @"select * from ArticleMaster where Status='" + status + "' and Draft='" + draft + "'and Archive = '" + archive + "' and User_Id = '" + uid + "' ";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -318,7 +318,7 @@ namespace WebAPI.Controllers
                 + article.Visible + "','"
                 + article.Status + "','"
                 + article.CommentAllow + "','"
-          
+
                 + article.Draft + "','"
                 + article.Archive + "')";
 
@@ -344,9 +344,9 @@ namespace WebAPI.Controllers
             }
         }
         [AllowAnonymous]
-        [HttpPut]
+        [HttpPut("{aid}")]
         // GET: ProductMasterController/Edit/5
-        public ActionResult Edit(ArticleMaster article)
+        public ActionResult Edit(ArticleMaster article,int aid)
         {
             try
             {
@@ -363,7 +363,7 @@ namespace WebAPI.Controllers
                         "',CommentAllow = '" + article.CommentAllow +
                         "',Draft = '" + article.Draft +
                         "',Archive = '" + article.Archive +
-                        "' where Article_Id = '" + article.ArticleId + "'";
+                        "' where Article_Id = '" + aid + "'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -382,7 +382,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return new JsonResult(e.Message); ;
+                return new JsonResult(e.Message); 
             }
         }
 
