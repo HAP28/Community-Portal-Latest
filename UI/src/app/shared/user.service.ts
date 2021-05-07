@@ -167,42 +167,89 @@ export class UserService {
     );
   }
   //Articles
-  getPublicArticles() {
-    return this.http.get(this.APIURL + '/ArticleMaster/public');
+  getPubishArticles() {
+    return this.http.get(
+      this.APIURL +
+        '/ArticleMaster/articlegetvisibility/1/' +
+        true +
+        '/' +
+        false +
+        '/' +
+        false
+    );
   }
   postArticle(article: any) {
     return this.http.post(this.APIURL + '/ArticleMaster', article);
   }
+  getdraftarticleforuser(uid) {
+    return this.http.get(
+      this.APIURL +
+        '/ArticleMaster/articlegetforuser/' +uid+'/'+false +'/' +true +'/' +false
+    );
+  }
+  getarchivearticleforuser(uid) {
+    return this.http.get(
+      this.APIURL +
+        '/ArticleMaster/articlegetforuser/' +uid+'/'+false +'/' +false +'/' +true
+    );
+  }
+  getpublisharticleforuser(uid) {
+    return this.http.get(
+      this.APIURL +
+        '/ArticleMaster/articlegetforuser/' +uid+'/'+true +'/' +false +'/' +false
+    );
+  }
+
   getarticlesforreviewer() {
-    return this.http.get(this.APIURL + '/ArticleMaster/articlesforreviewer');
+    return this.http.get(
+      this.APIURL +
+        '/ArticleMaster/articleget/' +
+        true +
+        '/' +
+        true +
+        '/' +
+        false
+    );
   }
   patch_approve_article(id) {
     return this.http.patch(
       this.APIURL +
-        '/ArticleMaster/approve/' +
+        '/ArticleMaster/articlepatch/' +
         id +
-        '?s=' +
+        '/' +
         true +
-        '&d=' +
+        '/' +
+        false +
+        '/' +
         false,
       null
     );
   }
   patch_disapprove_article(id) {
     return this.http.patch(
-      this.APIURL + '/ArticleMaster/unapprove/' + id,
+      this.APIURL +
+        '/ArticleMaster/articlepatch/' +
+        id +
+        '/' +
+        false +
+        '/' +
+        false +
+        '/' +
+        true,
       null
     );
   }
   unpublish_article(id) {
     return this.http.patch(
       this.APIURL +
-        '/ArticleMaster/approve/' +
+        '/ArticleMaster/articlepatch/' +
         id +
-        '?s=' +
-        false +
-        '&d=' +
-        true,
+        '/' +
+        true +
+        '/' +
+        true +
+        '/' +
+        false,
       null
     );
   }

@@ -191,9 +191,10 @@ export class ArticlePostsComponent implements OnInit {
     this.isDataAvailable = true;
   }
   getpublicArticles() {
-    this.service.getPublicArticles().subscribe(
+    this.service.getPubishArticles().subscribe(
       (res) => {
         this.Articles = res;
+        console.log(res);
         this.commoncode(this.Articles);
         console.log('public articles', this.Articles);
       },

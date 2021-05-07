@@ -164,10 +164,14 @@ export class ArticleCreateComponent implements OnInit {
     let formObject = new FormValidator('#form-element');
 
     $('#validateSubmit').click(() => {
-      getValue();
+      getValue(1);
     });
 
-    const getValue = () => {
+    $('#publishforreview').click(() => {
+      getValue(2);
+    });
+
+    const getValue = (id) => {
       let visibility = '';
       $.each($("input[name='visibility']:checked"), function () {
         visibility += $(this).val();
@@ -182,9 +186,18 @@ export class ArticleCreateComponent implements OnInit {
       this.x['productId'] = $('#product').val();
       this.x['sectionId'] = $('#section').val();
       this.x['visible'] = visibility;
+
+      if(id==1){
       this.x['status'] = false;
       this.x['draft'] = true;
       this.x['archive'] = false;
+      }
+      if(id==2){
+      this.x['status'] = true;
+      this.x['draft'] = true;
+      this.x['archive'] = false;
+      }
+
       this.x['commentAllow'] = this.commentonoff;
       this.x['id'] = this.userDetails.Id;
       console.log(this.x);
@@ -319,25 +332,45 @@ export class ArticleCreateComponent implements OnInit {
           .appendTo('#product');
       }
     });
+
     if (this.editmode) {
       // $('#category').prop('disabled', false);
       this.service.getArticleById(this.article_id).subscribe(
         (res) => {
           this.currentarticle = res;
-          console.log(this.currentarticle[0]);
+
+          console.log('Current Article Response :', this.currentarticle[0]);
           $('#title').val(this.currentarticle[0].Article_Title);
           $('#product').val(this.currentarticle[0].Product_Id).change();
-          //this.clearCategoryList();
-          this.fetchCategory();
-          //$('#category option[value="2"]').change();
-          console.log(this.currentarticle[0].Category_Id);
-          $("select[name='category']")
-            .find("option[value='2']")
-            .attr('selected', true);
-          //$('#category').val(this.currentarticle[0].Category_Id).change();
-          $('#section').val(this.currentarticle[0].Section_Id).change();
 
-          console.log(this.currentarticle[0].Description);
+          // this.fetchCategory();
+          console.log('cat id ', this.currentarticle[0].Category_Id);
+
+          console.log('visible', this.currentarticle[0].Visibility);
+
+          if (this.currentarticle[0].CommentAllow == true) {
+            $('#togglecomment').prop('checked', true);
+          } else {
+            $('#togglecomment').prop('checked', false);
+          }
+
+          if (this.currentarticle[0].Visibility == '1') {
+            $('#public').prop('checked', true);
+            $('#applicationuser').prop('checked', false);
+            $('#signedinuser').prop('checked', false);
+            $('#applicationuser').attr('disabled', true);
+            $('#signedinuser').attr('disabled', true);
+          } else if (this.currentarticle[0].Visibility == '2') {
+            $('#applicationuser').prop('checked', true);
+          } else {
+            $('#signedinuser').prop('checked', true);
+          }
+
+          //  .val(this.currentarticle[0].Category_Id)
+          //.trigger('change');
+          //$('#section').val(this.currentarticle[0].Section_Id).change();
+
+          //console.log(this.currentarticle[0].Description);
           document.getElementById(
             'defaultRTE'
           ).innerHTML = this.currentarticle[0].Description;
@@ -354,8 +387,10 @@ export class ArticleCreateComponent implements OnInit {
     this.clearCategoryList();
     this.clearSectionList();
     var productSelected = $('#product').val();
+    console.log(productSelected);
     this.service.getCategoryByProducts(productSelected).subscribe(
       (res) => {
+        $('#category').prop('disabled', false);
         this.category = res;
         for (var i = 0; i < this.category.length; i++) {
           //creates option tag
@@ -365,7 +400,7 @@ export class ArticleCreateComponent implements OnInit {
             .html(this.category[i].Category_Name)
             .appendTo('#category');
         }
-        $('#category').prop('disabled', false);
+        console.log('hello');
       },
       (err) => {
         console.log(err);

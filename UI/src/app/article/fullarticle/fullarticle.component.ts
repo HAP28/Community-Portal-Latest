@@ -396,6 +396,7 @@ export class FullarticleComponent implements OnInit {
     this.service.patch_disapprove_article(this.article_id).subscribe(
       (res) => {
         console.log(res);
+        this.router.navigateByUrl('/article-posts');
       },
       (err) => {
         console.log(err);

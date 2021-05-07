@@ -214,12 +214,12 @@ namespace WebAPI.Controllers
 
         // Visibility API
         [AllowAnonymous]
-        [HttpGet("visible/{visibility}")]
-        public JsonResult GetArticlebyvisible(string visibility)
+        [HttpGet("articlegetvisibility/{visibility}/{status}/{draft}/{archive}")]
+        public JsonResult GetArticlebyvisible(string visibility,bool status,bool draft,bool archive)
         {
             try
             {
-                string query = @"select * from ArticleMaster where Visibility = '" + visibility + "'";
+                string query = @"select * from ArticleMaster where Status='"+status+"'and Draft='"+draft+"'and Archive = '"+archive+"'and Visibility = '" + visibility + "'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -242,14 +242,14 @@ namespace WebAPI.Controllers
             }
         }
 
-        // status API
+
         [AllowAnonymous]
-        [HttpGet("status/{status}")]
-        public JsonResult GetArticlebyStatus(string status)
+        [HttpGet("articleget/{status}/{draft}/{archive}")]
+        public JsonResult GetArticle( bool status, bool draft, bool archive)
         {
             try
             {
-                string query = @"select * from ArticleMaster where Status = '" + status + "'";
+                string query = @"select * from ArticleMaster where Status='" + status + "' and Draft='" + draft + "'and Archive = '" + archive + "'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -272,14 +272,13 @@ namespace WebAPI.Controllers
             }
         }
 
-        // status API
         [AllowAnonymous]
-        [HttpGet("public")]
-        public JsonResult GetPublicArticle()
+        [HttpGet("articlegetforuser/{uid}/{status}/{draft}/{archive}")]
+        public JsonResult GetArticleforuser(bool status, bool draft, bool archive,string uid)
         {
             try
             {
-                string query = @"select * from ArticleMaster where Status = '" + true + "' and Visibility = '1'";
+                string query = @"select * from ArticleMaster where Status='" + status + "' and Draft='" + draft + "'and Archive = '" + archive + "' and User_Id = '"+uid+"' ";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -302,100 +301,13 @@ namespace WebAPI.Controllers
             }
         }
 
-        // draft API
-        [AllowAnonymous]
-        [HttpGet("draft")]
-        public JsonResult GetArticlebyDraft()
-        {
-            try
-            {
-                string query = @"select * from ArticleMaster where Draft = '" + true + "'";
-                DataTable table = new DataTable();
-                string sqlDataSource = configuration.GetConnectionString("DataConnection");
-                SqlDataReader dataReader;
-                using (SqlConnection connection = new SqlConnection(sqlDataSource))
-                {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        dataReader = command.ExecuteReader();
-                        table.Load(dataReader);
-                        dataReader.Close();
-                        connection.Close();
-                    }
-                }
-                return new JsonResult(table);
-            }
-            catch (Exception e)
-            {
-                return new JsonResult(e.Message);
-            }
-        }
-        [AllowAnonymous]
-        [HttpGet("articlesforreviewer")]
-        public JsonResult GetArticleForReview()
-        {
-            try
-            {
-                string query = @"select * from ArticleMaster where Draft = '" + true + "' and Status = '" + false + "'";
-                DataTable table = new DataTable();
-                string sqlDataSource = configuration.GetConnectionString("DataConnection");
-                SqlDataReader dataReader;
-                using (SqlConnection connection = new SqlConnection(sqlDataSource))
-                {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        dataReader = command.ExecuteReader();
-                        table.Load(dataReader);
-                        dataReader.Close();
-                        connection.Close();
-                    }
-                }
-                return new JsonResult(table);
-            }
-            catch (Exception e)
-            {
-                return new JsonResult(e.Message);
-            }
-        }
-
-        // draft API
-        [AllowAnonymous]
-        [HttpGet("archive")]
-        public JsonResult GetArticlebyArchive()
-        {
-            try
-            {
-                string query = @"select * from ArticleMaster where Archive = '" + true + "' and Status = '" + true + "'";
-                DataTable table = new DataTable();
-                string sqlDataSource = configuration.GetConnectionString("DataConnection");
-                SqlDataReader dataReader;
-                using (SqlConnection connection = new SqlConnection(sqlDataSource))
-                {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        dataReader = command.ExecuteReader();
-                        table.Load(dataReader);
-                        dataReader.Close();
-                        connection.Close();
-                    }
-                }
-                return new JsonResult(table);
-            }
-            catch (Exception e)
-            {
-                return new JsonResult(e.Message);
-            }
-        }
         // POST api/<ArticleMasterController>
         [HttpPost]
         public JsonResult Create(ArticleMaster article)
         {
             try
             {
-                string query = @"insert into ArticleMaster (Article_Title,Category_Id,Section_Id,User_Id,Reviewer_Id,Product_Id,Description,Visibility,Status,CommentAllow,UseFullTotal,UseFullCount,Draft,Archive) values
+                string query = @"insert into ArticleMaster (Article_Title,Category_Id,Section_Id,User_Id,Reviewer_Id,Product_Id,Description,Visibility,Status,CommentAllow,Draft,Archive) values
                 ('" + article.ArticleTitle + "','"
                 + article.CategoryId + "','"
                 + article.SectionId + "','"
@@ -406,8 +318,7 @@ namespace WebAPI.Controllers
                 + article.Visible + "','"
                 + article.Status + "','"
                 + article.CommentAllow + "','"
-                + article.UseFullTotal + "','"
-                + article.UseFullCount + "','"
+          
                 + article.Draft + "','"
                 + article.Archive + "')";
 
@@ -450,8 +361,6 @@ namespace WebAPI.Controllers
                         "',Visibility = '" + article.Visible +
                         "',Status = '" + article.Status +
                         "',CommentAllow = '" + article.CommentAllow +
-                        "',UseFullTotal = '" + article.UseFullTotal +
-                        "',UseFullCount = '" + article.UseFullCount +
                         "',Draft = '" + article.Draft +
                         "',Archive = '" + article.Archive +
                         "' where Article_Id = '" + article.ArticleId + "'";
@@ -542,42 +451,15 @@ namespace WebAPI.Controllers
                 Response.StatusCode = 204;
             }
         }
-        [AllowAnonymous]
-        [HttpPatch("approve/{articleid}")]
-        public async Task<IActionResult> approvearticle(string articleid, bool s, bool d)
-        {
-            try
-            {
-                string query = @"Update ArticleMaster set Status = '" + s + "', Draft = '" + d + "' where Article_Id = '" + articleid + "'";
-                DataTable table = new DataTable();
-                string sqlDataSource = configuration.GetConnectionString("DataConnection");
-                SqlDataReader dataReader;
-                using (SqlConnection connection = new SqlConnection(sqlDataSource))
-                {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        dataReader = command.ExecuteReader();
-                        table.Load(dataReader);
-                        dataReader.Close();
-                        connection.Close();
-                    }
-                }
-                return new JsonResult("Data Updated");
-            }
-            catch (Exception e)
-            {
-                return new JsonResult(e.Message); ;
-            }
-        }
+       
 
         [AllowAnonymous]
-        [HttpPatch("unapprove/{articleid}")]
-        public async Task<IActionResult> approvearticle(string articleid)
+        [HttpPatch("articlepatch/{articleid}/{s}/{d}/{a}")]
+        public async Task<IActionResult> articlepatch(string articleid,bool s,bool d,bool a)
         {
             try
             {
-                string query = @"Update ArticleMaster set Draft = '" + false + "', Archive = '" + true + "' where Article_Id = '" + articleid + "'";
+                string query = @"Update ArticleMaster set Status ='"+ s +"', Draft = '" + d + "', Archive = '" + a + "' where Article_Id = '" + articleid + "'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
