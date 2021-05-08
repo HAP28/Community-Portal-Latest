@@ -18,6 +18,7 @@ import { SectionComponent } from './admin/section/section.component';
 import { PermissionComponent } from './admin/permission/permission.component';
 import { ManageRolesComponent } from './admin/manage-roles/manage-roles.component';
 import { FullarticleComponent } from './article/fullarticle/fullarticle.component';
+import {ProfileComponent} from './profile/profile.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'registration', component: RegistrationComponent },
   { path: 'app', component: AppComponent },
   { path: 'user-profile', component: UserProfileComponent },
+  {path:  'profile',component:ProfileComponent},
   {
     path: 'article-create',
     component: ArticleCreateComponent,

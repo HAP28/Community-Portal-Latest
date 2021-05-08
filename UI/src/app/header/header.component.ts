@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit {
   userDetails : any;
 
   constructor(private _router : Router,private service:UserService) { }
-  
+
   ngOnInit(): void {
     if(localStorage.getItem('loggedUser')!= null){
       this.loggedIn = true;
@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit {
           console.log(err);
         }
       );
-    }    
+    }
   }
   login(){
     if(localStorage.getItem('loggedUser')==null)
@@ -45,11 +45,14 @@ export class HeaderComponent implements OnInit {
     this._router.navigate(['/']);
     this.loggedIn = false;
   }
-  
+
   createarticle(){
     this._router.navigate(['article-create'])
   }
   dashboard(){
     this._router.navigate(['/dashboard']);
+  }
+  profile(){
+    this._router.navigate(['/profile']);
   }
 }

@@ -32,6 +32,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { ManageRolesComponent } from './admin/manage-roles/manage-roles.component';
 import { FullarticleComponent } from './article/fullarticle/fullarticle.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { FullarticleComponent } from './article/fullarticle/fullarticle.componen
     PermissionComponent,
     ManageRolesComponent,
     FullarticleComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

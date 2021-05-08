@@ -40,7 +40,7 @@
             </a>
             <ul class="dropdown-menu colour-me" aria-labelledby="navbarDropdown">
               <li><button class="dropdown-item drop"  (click) = "createarticle()"><i class="fa fa-plus-square"></i>&nbsp;Create Article</button></li>
-              <li><button class="dropdown-item drop" href="#"><i class="fa fa-user" ></i>&nbsp;Profile</button></li>
+              <li><button class="dropdown-item drop" (click)="profile()"><i class="fa fa-user" ></i>&nbsp;Profile</button></li>
               <li><button class="dropdown-item drop" id="dashboard" (click) = "dashboard()"><i class="fa fa-user"></i>&nbsp;Dashboard</button></li>
               <li><button class="dropdown-item drop" href="#" (click)="logout()"><i class="fa fa-sign-out"></i>&nbsp;Logout</button></li>
             </ul>
