@@ -1,0 +1,55 @@
+<app-navbar></app-navbar>
+<div class="container mt-3">
+    <div class="header" style="display: flex;">
+        <h1 class="mr-3">Article List</h1>
+        <select class="form-select" id="dropdown" style="width: 200px; height: 50px; position: absolute; right: 134px;" (change) = "fetchArticle($event)">
+            <option *ngFor="let x of dropdown" value="{{x.value}}">{{x.name}}</option>
+        </select>
+    </div>
+  <br />
+  <hr />
+  <table class="table table-striped" *ngIf="data">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Publisher</th>
+        <th scope="col">Date Of Publish</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of articles; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ item.Article_Title }}</td>
+        <td>{{ item.user }}</td>
+        <td>{{ item.PostedOn }}</td>
+        <td>
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Action
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li>
+                <a class="dropdown-item" href="/article?page=dashboard&articleid={{item.Article_Id}}"
+                  >View</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="deleteArticle(item.Article_Id)"
+                  >Delete</a
+                >
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

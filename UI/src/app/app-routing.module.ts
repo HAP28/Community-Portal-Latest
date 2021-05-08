@@ -19,6 +19,7 @@ import { PermissionComponent } from './admin/permission/permission.component';
 import { ManageRolesComponent } from './admin/manage-roles/manage-roles.component';
 import { FullarticleComponent } from './article/fullarticle/fullarticle.component';
 import {ProfileComponent} from './profile/profile.component';
+import { ArticleComponent } from './admin/article/article.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -81,6 +82,12 @@ const routes: Routes = [
   {
     path: 'manageroles',
     component: ManageRolesComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['Admin'] },
+  },
+  {
+    path: 'managearticles',
+    component: ArticleComponent,
     canActivate: [AuthGuard],
     data: { roles: ['Admin'] },
   },

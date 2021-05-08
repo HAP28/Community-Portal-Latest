@@ -29,6 +29,9 @@ export class FullarticleComponent implements OnInit {
   articleFullMaster: any;
   articleMasterByuser: any;
   articleMasterPost = {};
+  data = false;
+  likeVisibility = true;
+  page: any;
 
   constructor(
     private service: UserService,
@@ -108,6 +111,7 @@ export class FullarticleComponent implements OnInit {
           this.service.currentUser.Role == 'Reviewer') &&
         localStorage.getItem('mode') == 'reviewer'
       ) {
+        this.likeVisibility = false;
         $('#approve').css('visibility', 'visible');
         $('#unpublish').css('display', 'none');
       }
@@ -126,6 +130,7 @@ export class FullarticleComponent implements OnInit {
     });
     this.service.getArticleById(this.article_id).subscribe(
       (res) => {
+        this.data = true;
         this.fullarticle = res;
         console.log('article response by id : ', this.fullarticle[0]);
         if (!this.fullarticle[0].CommentAllow) {
@@ -418,5 +423,17 @@ export class FullarticleComponent implements OnInit {
     this.router.navigateByUrl(
       '/article-create?mode=edit&id=' + this.article_id
     );
+  }
+  navigate(){
+    this.activateroute.queryParams.subscribe(
+      (params) =>{
+        this.page = params['page'];
+        if(this.page == 'dashboard'){
+          this.router.navigateByUrl('/managearticles');
+        }else{
+          this.router.navigateByUrl('/article-posts');
+        }
+      }
+    )
   }
 }

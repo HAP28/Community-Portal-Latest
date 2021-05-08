@@ -221,5 +221,32 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
+        [HttpDelete("{aid}")]
+        public ActionResult Delete(int aid)
+        {
+            try
+            {
+                string query = @"Delete from ArticleUsefullMaster where article_id = '" + aid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult("Data Updated");
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
     }
 }
