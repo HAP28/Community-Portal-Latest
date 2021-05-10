@@ -36,6 +36,12 @@ export class ArticlePostsComponent implements OnInit {
     // $('#sectionList').prop('disabled',true);
     document.getElementById('header-frame').style.display = 'none';
   }
+  formatdate(articles) {
+    for (var i = 0; i < articles.length; i++) {
+      var date = new Date(articles[i].PostedOn);
+      articles[i].PostedOn = date.toDateString();
+    }
+  }
   validateAdminReviewer() {
     if (this.service.currentUser != null) {
       if (
@@ -60,6 +66,7 @@ export class ArticlePostsComponent implements OnInit {
           console.log(res);
           //this.getreviewarticles();
           this.Articles = res;
+          this.formatdate(this.Articles);
           this.commoncode(this.Articles);
           console.log('Review articles', this.Articles);
         },
@@ -150,6 +157,7 @@ export class ArticlePostsComponent implements OnInit {
 
   commoncode(articles: any) {
     this.Articles = articles;
+    this.formatdate(this.Articles);
     this.Articles.forEach((element) => {
       this.service.getUserById(element.User_Id).subscribe(
         (res) => {
@@ -195,6 +203,7 @@ export class ArticlePostsComponent implements OnInit {
       (res) => {
         this.Articles = res;
         console.log(res);
+        this.formatdate(this.Articles);
         this.commoncode(this.Articles);
         console.log('public articles', this.Articles);
       },
@@ -257,6 +266,7 @@ export class ArticlePostsComponent implements OnInit {
         this.service.getArticleByProduct(product).subscribe(
           (res) => {
             this.Articles = res;
+            this.formatdate(this.Articles);
             this.Articles.forEach((element) => {
               this.service.getUserById(element.User_Id).subscribe(
                 (res) => {
@@ -311,7 +321,7 @@ export class ArticlePostsComponent implements OnInit {
           .subscribe(
             (res) => {
               this.Articles = res;
-
+              this.formatdate(this.Articles);
               console.log(this.Articles);
               this.Articles.forEach((element) => {
                 this.service.getUserById(element.User_Id).subscribe(
@@ -364,7 +374,7 @@ export class ArticlePostsComponent implements OnInit {
           .subscribe(
             (res) => {
               this.Articles = res;
-
+              this.formatdate(this.Articles);
               console.log(this.Articles);
               this.Articles.forEach((element) => {
                 this.service.getUserById(element.User_Id).subscribe(

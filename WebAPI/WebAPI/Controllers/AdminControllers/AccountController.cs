@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -28,7 +31,7 @@ namespace WebAPI.Controllers.AdminControllers
         private readonly ApplicationSettings appSettings;
         readonly private IConfiguration configuration;
 
-        public AccountController(IConfiguration _configuration,UserManager<UserRegistrationDto> _userManager, SignInManager<UserRegistrationDto> _signInManager, IOptions<ApplicationSettings> _appSettings)
+        public AccountController(IConfiguration _configuration, UserManager<UserRegistrationDto> _userManager, SignInManager<UserRegistrationDto> _signInManager, IOptions<ApplicationSettings> _appSettings)
         {
             this.appSettings = _appSettings.Value;
             this.userManager = _userManager;
@@ -70,7 +73,7 @@ namespace WebAPI.Controllers.AdminControllers
                             {
                                 return BadRequest("Locha");
                             }
-                            
+
                         }
                     }
                     catch (Exception e)
@@ -93,8 +96,52 @@ namespace WebAPI.Controllers.AdminControllers
             }
             return BadRequest(request);
         }
+        [AllowAnonymous]
+        [HttpPatch("updateprofile/{uid}")]
+        public async Task<IActionResult> updateprofile(UserRegistrationDto user,string uid)
+        {
+            try
+            {
+                var data = new UserRegistrationDto
+                {
+                    FirstName = user.FirstName,
+                    LastName  = user.LastName,
+                    Email = user.Email,
+                    Profession = user.Profession,
+                    user_bio = user.user_bio,
+                    Country = user.Country,
+                    State = user.State,
+                    City = user.City,
+                    PhoneNumber = user.PhoneNumber,
+                    fb_link = user.fb_link,
+                    ln_link = user.ln_link,
+                    tw_link = user.tw_link
+                };
 
-        
+                string query = @"Update AspNetUsers set Profession = '"+data.Profession+ "', FirstName = '" + data.FirstName + "', LastName = '"+data.LastName+"', user_bio = '"+data.user_bio+"',Country = '"+data.Country+"', State = '"+data.State+"', City = '"+data.City+"', fb_link = '"+data.fb_link+"',tw_link = '"+data.tw_link+"', ln_link = '"+data.ln_link+"', PhoneNumber = '"+data.PhoneNumber+"' where Id = '" + uid+"'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(data);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
         private string GetToken(ClaimsIdentity claimsIdentity)
         {
             var configReference = configuration.GetSection("ApplicationSettings");
@@ -171,11 +218,12 @@ namespace WebAPI.Controllers.AdminControllers
             {
                 await signInManager.SignOutAsync();
                 return Ok("Successfully Logout");
-            }catch(Exception e)
+            } catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-           
+
         }
+        
     }
 }

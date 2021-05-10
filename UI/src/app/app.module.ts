@@ -34,6 +34,8 @@ import { ManageRolesComponent } from './admin/manage-roles/manage-roles.componen
 import { FullarticleComponent } from './article/fullarticle/fullarticle.component';
 import { ProfileComponent } from './profile/profile.component';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,

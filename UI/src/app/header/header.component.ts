@@ -53,6 +53,9 @@ export class HeaderComponent implements OnInit {
     this._router.navigate(['/dashboard']);
   }
   profile(){
-    this._router.navigate(['/profile']);
+    if(localStorage.getItem('loggedUser')!= null){
+      this.loggedIn = true;
+      this._router.navigate(['/profile']);
+    }
   }
 }

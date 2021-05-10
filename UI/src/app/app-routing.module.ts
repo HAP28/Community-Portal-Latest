@@ -28,7 +28,7 @@ const routes: Routes = [
   { path: 'registration', component: RegistrationComponent },
   { path: 'app', component: AppComponent },
   { path: 'user-profile', component: UserProfileComponent },
-  {path:  'profile',component:ProfileComponent},
+  {path:  'profile',component:ProfileComponent, canActivate: [AuthGuard]},
   {
     path: 'article-create',
     component: ArticleCreateComponent,

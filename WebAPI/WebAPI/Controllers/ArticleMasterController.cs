@@ -482,5 +482,89 @@ namespace WebAPI.Controllers
             }
 
         }
+        [AllowAnonymous]
+        [HttpGet("getarticlecounts")]
+        public async Task<IActionResult> getArticleCount()
+        {
+            try
+            {
+                string query = @"Select Count(*) from dbo.ArticleMaster";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return Ok(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+        [AllowAnonymous]
+        [HttpGet("usertotalarticle/{uid}")]
+        public JsonResult Gettotalarticleuser(string uid)
+        {
+            try
+            {
+                string query = @"select count(*) from dbo.ArticleMaster where User_Id = '" + uid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+        [AllowAnonymous]
+        [HttpGet("userarticlecount/{uid}/{s}/{d}/{a}")]
+        public async Task<IActionResult> getArticleCountForUser(string uid,bool s,bool d,bool a)
+        {
+            try
+            {
+                string query = @"Select Count(*) from dbo.ArticleMaster where User_Id = '" + uid + "' and Status = '"+s+"' and Draft = '"+d+"' and Archive = '"+a+"' ";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return Ok(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
     }
 }

@@ -95,6 +95,12 @@ export class UserService {
       observe: 'response',
     });
   }
+  updateuserprofile(uid, model) {
+    return this.http.patch(
+      this.APIURL + '/Account/updateprofile/' + uid,
+      model
+    );
+  }
 
   getUserProfile() {
     // console.log(this.APIURL + '/UserProfile');
@@ -123,6 +129,9 @@ export class UserService {
   //delete User by Id
   deleteUserById(uid) {
     return this.http.delete(this.APIURL + '/Users/userdelete/' + uid);
+  }
+  countTotalUsers() {
+    return this.http.get(this.APIURL + '/Users/count');
   }
   //get user roles
   getUserRoles(userId) {
@@ -181,25 +190,49 @@ export class UserService {
   postArticle(article: any) {
     return this.http.post(this.APIURL + '/ArticleMaster', article);
   }
-  updateArticle(article: any,aid) {
-    return this.http.put(this.APIURL + '/ArticleMaster/'+aid, article);
+  updateArticle(article: any, aid) {
+    return this.http.put(this.APIURL + '/ArticleMaster/' + aid, article);
+  }
+  getarticleforuser(uid) {
+    return this.http.get(this.APIURL + '/ArticleMaster/user/' + uid);
   }
   getdraftarticleforuser(uid) {
     return this.http.get(
       this.APIURL +
-        '/ArticleMaster/articlegetforuser/' +uid+'/'+false +'/' +true +'/' +false
+        '/ArticleMaster/articlegetforuser/' +
+        uid +
+        '/' +
+        false +
+        '/' +
+        true +
+        '/' +
+        false
     );
   }
   getarchivearticleforuser(uid) {
     return this.http.get(
       this.APIURL +
-        '/ArticleMaster/articlegetforuser/' +uid+'/'+false +'/' +false +'/' +true
+        '/ArticleMaster/articlegetforuser/' +
+        uid +
+        '/' +
+        false +
+        '/' +
+        false +
+        '/' +
+        true
     );
   }
   getpublisharticleforuser(uid) {
     return this.http.get(
       this.APIURL +
-        '/ArticleMaster/articlegetforuser/' +uid+'/'+true +'/' +false +'/' +false
+        '/ArticleMaster/articlegetforuser/' +
+        uid +
+        '/' +
+        true +
+        '/' +
+        false +
+        '/' +
+        false
     );
   }
 
@@ -256,6 +289,28 @@ export class UserService {
       null
     );
   }
+  // Count
+  getCountArticles() {
+    return this.http.get(this.APIURL + '/ArticleMaster/getarticlecounts');
+  }
+  getUserArticlesCount(uid: string) {
+    return this.http.get(
+      this.APIURL + '/ArticleMaster/usertotalarticle/' + uid
+    );
+  }
+  getUserArticlesCountForAll(uid, s, d, a) {
+    return this.http.get(
+      this.APIURL +
+        '/ArticleMaster/userarticlecount/' +
+        uid +
+        '/' +
+        s +
+        '/' +
+        d +
+        '/' +
+        a
+    );
+  }
 
   //get products
   getProducts() {
@@ -272,6 +327,9 @@ export class UserService {
   }
   deleteProductbyid(productid) {
     return this.http.delete(this.APIURL + '/ProductMaster/' + productid);
+  }
+  getCountProducts() {
+    return this.http.get(this.APIURL + '/ProductMaster/productcount');
   }
 
   //get Categories
