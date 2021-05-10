@@ -70,6 +70,7 @@ export class ArticleComponent implements OnInit {
         }
       )
     } else{
+      localStorage['mode'] = 'viewer';
       this.refreshList();
     }
   }
