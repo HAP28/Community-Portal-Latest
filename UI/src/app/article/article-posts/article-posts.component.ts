@@ -84,7 +84,7 @@ export class ArticlePostsComponent implements OnInit {
     }
   }
   readMore(article_id) {
-    this.router.navigateByUrl('/article?articleid=' + article_id);
+    this.router.navigateByUrl('/article?page=article-posts&articleid=' + article_id);
     //this._router.navigateByUrl('/permission?id=' + id);
   }
   fetchCategory() {

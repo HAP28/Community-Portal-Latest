@@ -33,6 +33,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { ManageRolesComponent } from './admin/manage-roles/manage-roles.component';
 import { FullarticleComponent } from './article/fullarticle/fullarticle.component';
 import { ProfileComponent } from './profile/profile.component';
+import { ArticleComponent } from './admin/article/article.component';
 
 
 
@@ -59,6 +60,7 @@ import { ProfileComponent } from './profile/profile.component';
     ManageRolesComponent,
     FullarticleComponent,
     ProfileComponent,
+    ArticleComponent,
   ],
   imports: [
     BrowserModule,

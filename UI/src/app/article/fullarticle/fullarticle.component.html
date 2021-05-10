@@ -3,7 +3,7 @@
   rel="stylesheet"
 />
 
-<h1 class="text-center header">{{ this.fullarticle[0].Article_Title }}</h1>
+<h1 class="text-center header" *ngIf="data">{{ this.fullarticle[0].Article_Title }}</h1>
 
 <div class="container">
   <p class="article mb-5">
@@ -18,13 +18,13 @@
           <a
             class="btn btn-primary btn-sm"
             style="float: right"
-            href="/article-posts"
+            (click) ="navigate()"
             type="button"
             >Back</a
           >
         </div>
       </div>
-      <div [innerHTML]="this.fullarticle[0].Description"></div>
+      <div *ngIf="data" [innerHTML]="this.fullarticle[0].Description"></div>
     </span>
   </p>
   <div style="display: inline-flex; float: right">
@@ -80,7 +80,7 @@
 
   <div
     class="d-grid gap-2 d-md-flex justify-content-md-end"
-    *ngIf="this.currentUser"
+    *ngIf="this.currentUser && likeVisibility"
   >
     <label
       ><i>Was this Article Useful ?</i>

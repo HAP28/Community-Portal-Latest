@@ -13,19 +13,20 @@ export class HeaderComponent implements OnInit {
   loggedIn : boolean = false;
   title = 'user-profile';
   userDetails : any;
-
+  admin = false;
   constructor(private _router : Router,private service:UserService) { }
 
   ngOnInit(): void {
     if(localStorage.getItem('loggedUser')!= null){
-      this.loggedIn = true;
       this.service.getUserProfile().subscribe(
         (res) => {
           this.userDetails = res;
           console.log(this.userDetails);
           if(this.service.currentUser.Role == "Admin"){
-            $('#dashboard').show();
+            // $('#dashboard').show();
+            this.admin = true;
           }
+          this.loggedIn = true;
         }, (err) => {
           console.log(err);
         }

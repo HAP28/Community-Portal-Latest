@@ -311,6 +311,9 @@ export class UserService {
         a
     );
   }
+  deletearticle(id) {
+    return this.http.delete(this.APIURL + '/ArticleMaster/' + id);
+  }
 
   //get products
   getProducts() {
@@ -406,5 +409,8 @@ export class UserService {
   }
   putarticleusefullmaster(model) {
     return this.http.put(this.APIURL + '/ArticleUseFullMaster/', model);
+  }
+  deletearticlefullmaster(aid) {
+    return this.http.delete(this.APIURL + '/ArticleUseFullMaster/' + aid);
   }
 }
