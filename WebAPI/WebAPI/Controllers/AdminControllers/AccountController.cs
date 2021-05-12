@@ -224,6 +224,29 @@ namespace WebAPI.Controllers.AdminControllers
             }
 
         }
-        
+        [HttpPatch("changepassword/{id}")]
+        public async Task<IActionResult> ChangePassword(string id, [FromBody] ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await userManager.FindByIdAsync(id);
+                if (user.Id != id)
+                    return Forbid();
+                else
+                {
+                    //var user = await this.userManager.GetUserAsync(User);
+                    if (user == null)
+                        return BadRequest();
+                    var result = await this.userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                    if (result.Succeeded)
+                        return Ok("Success");
+                    else
+                        return Conflict();
+                }
+            }
+            else
+                return BadRequest();
+        }
+
     }
 }

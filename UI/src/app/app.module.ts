@@ -34,8 +34,7 @@ import { ManageRolesComponent } from './admin/manage-roles/manage-roles.componen
 import { FullarticleComponent } from './article/fullarticle/fullarticle.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ArticleComponent } from './admin/article/article.component';
-
-
+import { SafeHtmlPipe } from './article/article-posts/pipe';
 
 @NgModule({
   declarations: [
@@ -61,6 +60,7 @@ import { ArticleComponent } from './admin/article/article.component';
     FullarticleComponent,
     ProfileComponent,
     ArticleComponent,
+    SafeHtmlPipe,
   ],
   imports: [
     BrowserModule,
