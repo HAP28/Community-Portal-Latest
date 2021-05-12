@@ -196,5 +196,33 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
+        [AllowAnonymous]
+        [HttpGet("productcount")]
+        public async Task<IActionResult> getProductCount()
+        {
+            try
+            {
+                string query = @"Select Count(*) from dbo.ProductMaster";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return Ok(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
     }
 }

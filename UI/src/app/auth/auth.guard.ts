@@ -18,8 +18,9 @@ export class AuthGuard implements CanActivate {
       const currentUser = this.service.currentUser;
       if (currentUser == null){
           alert("You don't have a permission to access this page.");
+          this.router.navigate(['/home']);
           return false;
-      } 
+      }
       else{
           if(route.data.roles && route.data.roles.indexOf(currentUser.Role)===-1){
               alert("You don't have a permission to access this page.");
@@ -29,5 +30,5 @@ export class AuthGuard implements CanActivate {
           return true;
       }
   }
-  
+
 }

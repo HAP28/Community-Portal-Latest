@@ -2,10 +2,10 @@
   href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
   rel="stylesheet"
 />
-
-<h1 class="text-center header" *ngIf="data">{{ this.fullarticle[0].Article_Title }}</h1>
+<app-header [display] = "display"></app-header>
 
 <div class="container">
+<h1 class="text-center header" *ngIf="data">{{ this.fullarticle[0].Article_Title }}</h1>
   <p class="article mb-5">
     <span class="mb-3">
       <!-- class="d-grid gap-2 d-md-flex justify-content-md-end" -->
@@ -24,12 +24,12 @@
           >
         </div>
       </div>
-      <div *ngIf="data" [innerHTML]="this.fullarticle[0].Description"></div>
+      <div class="my-5" *ngIf="data" [innerHTML]="this.fullarticle[0].Description | safeHtml"></div>
     </span>
   </p>
   <div style="display: inline-flex; float: right">
-    <div id="approve">
-      <button type="button" class="btn btn-success" (click)="approvearticle()">
+    <div>
+      <button type="button" class="btn btn-success" (click)="approvearticle()" *ngIf="Status && !Archive && Draft && (admin || reviewer)">
         Approve
       </button>
       <button
@@ -37,6 +37,7 @@
         class="btn btn-warning"
         style="margin-left: 20px"
         (click)="editarticle()"
+        *ngIf="(!Status && !Archive && Draft) || Status && !Archive && Draft && (admin || reviewer)"
       >
         Edit
       </button>
@@ -45,6 +46,7 @@
         class="btn btn-danger"
         style="margin-left: 20px"
         (click)="disapprovearticle()"
+        *ngIf="Status && !Archive && Draft && (admin || reviewer)"
       >
         Unapprove
       </button>
@@ -55,7 +57,9 @@
       style="margin-left: 20px"
       id="unpublish"
       (click)="unpublisharticle()"
+      *ngIf="Status && !Archive && !Draft && (admin || reviewer)"
     >
+    <!-- && !this.Draft && !this.Archive  && (admin || reviewer) -->
       Unpublish
     </button>
   </div>
@@ -67,20 +71,21 @@
     data-bs-target="#collapseExample"
     aria-expanded="false"
     aria-controls="collapseExample"
-    id="cmtbtn"
+    id = "cmtbtn"
+    *ngIf="Status && !Draft && currentUser"
   >
     Comment
   </button>
   <p class="text-danger" *ngIf="loggedInUser">Please Login to Comment</p>
   <div>
-    <p id="openclosecomment" style="visibility: hidden" class="text-danger">
+    <p id="openclosecomment" style="visibility: hidden" class="text-danger" *ngIf="Status && !Draft && currentUser">
       This article is closed for comments
     </p>
   </div>
 
+  <ng-container *ngIf="this.currentUser && Status && !Draft && !Archive">
   <div
     class="d-grid gap-2 d-md-flex justify-content-md-end"
-    *ngIf="this.currentUser && likeVisibility"
   >
     <label
       ><i>Was this Article Useful ?</i>
@@ -97,6 +102,7 @@
   <div class="d-grid gap-2 d-md-flex justify-content-md-end text-weight-bold">
     {{ this.usefull }} out of {{ this.total }} found helpful
   </div>
+  </ng-container>
   <br />
   <div class="collapse" id="collapseExample">
     <textarea
@@ -119,7 +125,7 @@
     </div>
   </div>
 
-  <div class="comments">
+  <div class="comments" *ngIf="this.currentUser && Status && !Draft && !Archive">
     <h4 class="mb-3">{{ cmtHeading }}</h4>
     <div class="media-block" *ngFor="let item of commentsList">
       <a class="media-left" href="#"

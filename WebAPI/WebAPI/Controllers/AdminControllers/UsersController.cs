@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPI.Models.AdminUserModels;
@@ -16,10 +20,12 @@ namespace WebAPI.Controllers.AdminControllers
     public class UsersController : Controller
     {
         private readonly UserManager<UserRegistrationDto> _userManager;
+        readonly private IConfiguration configuration;
 
-        public UsersController(UserManager<UserRegistrationDto> userManager)
+        public UsersController(IConfiguration _configuration,UserManager<UserRegistrationDto> userManager)
         {
             _userManager = userManager;
+            this.configuration = _configuration;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -53,6 +59,34 @@ namespace WebAPI.Controllers.AdminControllers
             else
             {
                 return BadRequest("Failed");
+            }
+        }
+        [AllowAnonymous]
+        [HttpGet("count")]
+        public async Task<IActionResult> getUserCount()
+        {
+            try
+            {
+                string query = @"Select Count(*) from dbo.AspNetUsers";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return Ok(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
             }
         }
     }

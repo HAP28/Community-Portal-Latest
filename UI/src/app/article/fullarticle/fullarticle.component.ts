@@ -32,6 +32,11 @@ export class FullarticleComponent implements OnInit {
   data = false;
   likeVisibility = true;
   page: any;
+  Status: boolean;
+  Draft: boolean;
+  Archive = false;
+  reviewer = false;
+  display = false;
 
   constructor(
     private service: UserService,
@@ -63,6 +68,12 @@ export class FullarticleComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+    this.activateroute.queryParams.subscribe((params) => {
+      this.Status = JSON.parse(params['s']);
+      this.Draft = JSON.parse(params['d']);
+      this.Archive = JSON.parse(params['a']);
+      console.log('Clicked Article: ',this.Draft,this.Status,this.Archive);
+    });
     this.validateadminreviewer();
     this.getFullArticle();
     this.refreshComments();
@@ -101,6 +112,9 @@ export class FullarticleComponent implements OnInit {
       );
       if (this.service.currentUser.Role == 'Admin') {
         this.admin = true;
+      }
+      else if (this.service.currentUser.Role == 'Reviewer') {
+        this.reviewer = true;
       }
     }
   }
@@ -388,8 +402,15 @@ export class FullarticleComponent implements OnInit {
     console.log('Approve');
     this.service.patch_approve_article(this.article_id).subscribe(
       (res) => {
-        this.router.navigateByUrl('/article-posts');
         console.log(res);
+        this.service.setreviewer(this.user_id,this.article_id).subscribe(
+          (res) => {
+            console.log((res));
+            this.router.navigateByUrl('/article-posts');            
+          },(err) => {
+            console.log(err);
+          }
+        )
       },
       (err) => {
         console.log(err);
@@ -430,6 +451,8 @@ export class FullarticleComponent implements OnInit {
         this.page = params['page'];
         if(this.page == 'dashboard'){
           this.router.navigateByUrl('/managearticles');
+        }else if(this.page == 'profile'){
+          this.router.navigateByUrl('/profile');
         }else{
           this.router.navigateByUrl('/article-posts');
         }

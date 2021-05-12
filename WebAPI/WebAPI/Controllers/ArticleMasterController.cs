@@ -12,6 +12,8 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using WebAPI.Models;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.StaticFiles;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,11 +26,14 @@ namespace WebAPI.Controllers
     {
         readonly private IConfiguration configuration;
         private IHostingEnvironment hostingEnv;
-        public ArticleMasterController(IConfiguration _configuration, IHostingEnvironment environment)
+        private readonly IFileService _fileService;
+        public ArticleMasterController(IConfiguration _configuration, IHostingEnvironment environment,IFileService fileService)
         {
             this.configuration = _configuration;
-            hostingEnv = environment;
+            this.hostingEnv = environment;
+            this._fileService = fileService;
         }
+       
         public class FileUploadAPI
         {
             public IFormFile files { get; set; }
@@ -300,7 +305,34 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
-
+        [AllowAnonymous]
+        [HttpPatch("reviewer")]
+        public JsonResult changeReviewerid(string rid,int aid)
+        {
+            try
+            {
+                string query = @"Update ArticleMaster set Reviewer_Id = '" + rid + "' where Article_Id = '" + aid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
         // POST api/<ArticleMasterController>
         [HttpPost]
         public JsonResult Create(ArticleMaster article)
@@ -414,6 +446,122 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
+               
+
+        [AllowAnonymous]
+        [HttpPatch("articlepatch/{articleid}/{s}/{d}/{a}")]
+        public async Task<IActionResult> articlepatch(string articleid,bool s,bool d,bool a)
+        {
+            try
+            {
+                string query = @"Update ArticleMaster set Status ='"+ s +"', Draft = '" + d + "', Archive = '" + a + "' where Article_Id = '" + articleid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult("Data Updated");
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message); ;
+            }
+
+        }
+        [AllowAnonymous]
+        [HttpGet("getarticlecounts")]
+        public async Task<IActionResult> getArticleCount()
+        {
+            try
+            {
+                string query = @"Select Count(*) from dbo.ArticleMaster";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return Ok(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+        [AllowAnonymous]
+        [HttpGet("usertotalarticle/{uid}")]
+        public JsonResult Gettotalarticleuser(string uid)
+        {
+            try
+            {
+                string query = @"select count(*) from dbo.ArticleMaster where User_Id = '" + uid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+        [AllowAnonymous]
+        [HttpGet("userarticlecount/{uid}/{s}/{d}/{a}")]
+        public async Task<IActionResult> getArticleCountForUser(string uid,bool s,bool d,bool a)
+        {
+            try
+            {
+                string query = @"Select Count(*) from dbo.ArticleMaster where User_Id = '" + uid + "' and Status = '"+s+"' and Draft = '"+d+"' and Archive = '"+a+"' ";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return Ok(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+
         [AllowAnonymous]
         [Route("image")]
         [AcceptVerbs("Post")]
@@ -451,36 +599,90 @@ namespace WebAPI.Controllers
                 Response.StatusCode = 204;
             }
         }
-       
-
         [AllowAnonymous]
-        [HttpPatch("articlepatch/{articleid}/{s}/{d}/{a}")]
-        public async Task<IActionResult> articlepatch(string articleid,bool s,bool d,bool a)
+        //file upload
+        [HttpPost(nameof(Upload))]
+        public IActionResult Upload([Required] List<IFormFile> formFiles, [Required] string subDirectory)
         {
             try
             {
-                string query = @"Update ArticleMaster set Status ='"+ s +"', Draft = '" + d + "', Archive = '" + a + "' where Article_Id = '" + articleid + "'";
-                DataTable table = new DataTable();
-                string sqlDataSource = configuration.GetConnectionString("DataConnection");
-                SqlDataReader dataReader;
-                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                _fileService.UploadFile(formFiles, subDirectory);
+
+                return Ok(new { formFiles.Count, Size = _fileService.SizeConverter(formFiles.Sum(f => f.Length)) });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [AllowAnonymous]
+        [HttpGet("Download"), DisableRequestSizeLimit]
+        public async Task<IActionResult> Download(string folder,[FromQuery] string fileUrl)
+        {
+            var filePath = Path.Combine(hostingEnv.WebRootPath, folder, fileUrl);
+            if (!System.IO.File.Exists(filePath))
+                return NotFound();
+            var memory = new MemoryStream();
+            await using (var stream = new FileStream(filePath, FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            return File(memory, GetContentType(filePath), filePath);
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("files")]
+        public IActionResult Files(string folder)
+        {
+            var result = new List<string>();
+
+            var uploads = Path.Combine(hostingEnv.WebRootPath, folder);
+            if (Directory.Exists(uploads))
+            {
+                var provider = hostingEnv.ContentRootFileProvider;
+                foreach (string fileName in Directory.GetFiles(uploads))
                 {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        dataReader = command.ExecuteReader();
-                        table.Load(dataReader);
-                        dataReader.Close();
-                        connection.Close();
-                    }
+                    //var fileInfo = fileName;
+                    var filename = Path.GetFileName(fileName);
+                    result.Add(filename);
                 }
-                return new JsonResult("Data Updated");
+            }
+            return Ok(result);
+        }
+
+        private string GetContentType(string path)
+        {
+            var provider = new FileExtensionContentTypeProvider();
+            string contentType;
+
+            if (!provider.TryGetContentType(path, out contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            return contentType;
+        }
+        [AllowAnonymous]
+        [HttpDelete("deletefile")]
+        public IActionResult delete(string folder,string filename)
+        {
+            try
+            {
+                filename = Path.Combine(hostingEnv.WebRootPath, folder, filename);
+                FileInfo f = new FileInfo(filename);
+                if (f != null)
+                {
+                    System.IO.File.Delete(filename);
+                    f.Delete();
+                }
+                return Ok("Success");
             }
             catch (Exception e)
             {
-                return new JsonResult(e.Message); ;
+                return BadRequest(e.Message);
+                throw;
             }
-
         }
     }
 }

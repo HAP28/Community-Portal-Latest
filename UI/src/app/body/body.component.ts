@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { UserService } from '../shared/user.service';
 declare var jQuery: any;
+import * as $ from 'jquery';
 
 @Component({
   selector: 'app-body',
@@ -9,7 +10,9 @@ declare var jQuery: any;
 })
 export class BodyComponent implements OnInit {
   isShow: boolean;
-
+  countuser : any;
+  countProducts :any;
+  countarticles : any;
   topPosToStartShowing = 100;
   categoryList: any;
   constructor(private service: UserService) {}
@@ -39,26 +42,27 @@ export class BodyComponent implements OnInit {
   }
   ngOnInit(): void {
     this.refreshList();
+    this.getAllCounts();
     (function ($) {
-      $(document).ready(function () {
-        console.log('Counter Working!');
-        $('.counter-count').each(function () {
-          $(this)
-            .prop('Counter', 0)
-            .animate(
-              {
-                Counter: $(this).text(),
-              },
-              {
-                duration: 5000,
-                easing: 'swing',
-                step: function (now) {
-                  $(this).text(Math.ceil(now));
-                },
-              }
-            );
-        });
-      });
+      // $(document).ready(function () {
+      //   console.log('Counter Working!');
+      //   $('.counter-count').each(function () {
+      //     $(this)
+      //       .prop('Counter', 0)
+      //       .animate(
+      //         {
+      //           Counter: $(this).text(),
+      //         },
+      //         {
+      //           duration: 7000,
+      //           easing: 'swing',
+      //           step: function (now) {
+      //             $(this).text(Math.ceil(now));
+      //           },
+      //         }
+      //       );
+      //   });
+      // });
       $('.card').hover(
         function () {
           $(this).addClass('shadow-lg').css('cursor', 'pointer');
@@ -80,5 +84,31 @@ export class BodyComponent implements OnInit {
         console.log(err);
       }
     );
+  }
+  getAllCounts(){
+    this.service.getCountProducts().subscribe(
+    (res)=>{
+      this.countProducts = res[0].Column1;
+      console.log("Product count ",this.countProducts);
+    },(err)=>{
+      console.log(err);
+    }
+    );
+    this.service.getCountArticles().subscribe(
+      (res)=>{
+        this.countarticles = res[0].Column1;
+        console.log("Article count ",this.countarticles);
+      },(err)=>{
+        console.log(err);
+      }
+      );
+      this.service.countTotalUsers().subscribe(
+        (res)=>{
+          this.countuser = res[0].Column1;
+          console.log("Product count ",this.countuser);
+        },(err)=>{
+          console.log(err);
+        }
+        );
   }
 }

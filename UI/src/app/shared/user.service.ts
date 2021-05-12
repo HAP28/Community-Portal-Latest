@@ -3,11 +3,14 @@ import { FormBuilder, Validators } from '@angular/forms';
 import {
   HttpClient,
   HttpClientModule,
+  HttpEvent,
   HttpHeaderResponse,
   HttpHeaders,
+  HttpRequest,
 } from '@angular/common/http';
 import { ConfirmedValidator } from '../custom-validators';
 import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -95,6 +98,12 @@ export class UserService {
       observe: 'response',
     });
   }
+  updateuserprofile(uid, model) {
+    return this.http.patch(
+      this.APIURL + '/Account/updateprofile/' + uid,
+      model
+    );
+  }
 
   getUserProfile() {
     // console.log(this.APIURL + '/UserProfile');
@@ -123,6 +132,9 @@ export class UserService {
   //delete User by Id
   deleteUserById(uid) {
     return this.http.delete(this.APIURL + '/Users/userdelete/' + uid);
+  }
+  countTotalUsers() {
+    return this.http.get(this.APIURL + '/Users/count');
   }
   //get user roles
   getUserRoles(userId) {
@@ -181,25 +193,49 @@ export class UserService {
   postArticle(article: any) {
     return this.http.post(this.APIURL + '/ArticleMaster', article);
   }
-  updateArticle(article: any,aid) {
-    return this.http.put(this.APIURL + '/ArticleMaster/'+aid, article);
+  updateArticle(article: any, aid) {
+    return this.http.put(this.APIURL + '/ArticleMaster/' + aid, article);
+  }
+  getarticleforuser(uid) {
+    return this.http.get(this.APIURL + '/ArticleMaster/user/' + uid);
   }
   getdraftarticleforuser(uid) {
     return this.http.get(
       this.APIURL +
-        '/ArticleMaster/articlegetforuser/' +uid+'/'+false +'/' +true +'/' +false
+        '/ArticleMaster/articlegetforuser/' +
+        uid +
+        '/' +
+        false +
+        '/' +
+        true +
+        '/' +
+        false
     );
   }
   getarchivearticleforuser(uid) {
     return this.http.get(
       this.APIURL +
-        '/ArticleMaster/articlegetforuser/' +uid+'/'+false +'/' +false +'/' +true
+        '/ArticleMaster/articlegetforuser/' +
+        uid +
+        '/' +
+        false +
+        '/' +
+        false +
+        '/' +
+        true
     );
   }
   getpublisharticleforuser(uid) {
     return this.http.get(
       this.APIURL +
-        '/ArticleMaster/articlegetforuser/' +uid+'/'+true +'/' +false +'/' +false
+        '/ArticleMaster/articlegetforuser/' +
+        uid +
+        '/' +
+        true +
+        '/' +
+        false +
+        '/' +
+        false
     );
   }
 
@@ -227,6 +263,9 @@ export class UserService {
         false,
       null
     );
+  }
+  setreviewer(rid,aid){
+    return this.http.patch(this.APIURL + '/ArticleMaster/reviewer?rid='+rid+'&aid='+aid,null);
   }
   patch_disapprove_article(id) {
     return this.http.patch(
@@ -256,7 +295,29 @@ export class UserService {
       null
     );
   }
-  deletearticle(id){
+  // Count
+  getCountArticles() {
+    return this.http.get(this.APIURL + '/ArticleMaster/getarticlecounts');
+  }
+  getUserArticlesCount(uid: string) {
+    return this.http.get(
+      this.APIURL + '/ArticleMaster/usertotalarticle/' + uid
+    );
+  }
+  getUserArticlesCountForAll(uid, s, d, a) {
+    return this.http.get(
+      this.APIURL +
+        '/ArticleMaster/userarticlecount/' +
+        uid +
+        '/' +
+        s +
+        '/' +
+        d +
+        '/' +
+        a
+    );
+  }
+  deletearticle(id) {
     return this.http.delete(this.APIURL + '/ArticleMaster/' + id);
   }
 
@@ -275,6 +336,9 @@ export class UserService {
   }
   deleteProductbyid(productid) {
     return this.http.delete(this.APIURL + '/ProductMaster/' + productid);
+  }
+  getCountProducts() {
+    return this.http.get(this.APIURL + '/ProductMaster/productcount');
   }
 
   //get Categories
@@ -352,7 +416,40 @@ export class UserService {
   putarticleusefullmaster(model) {
     return this.http.put(this.APIURL + '/ArticleUseFullMaster/', model);
   }
-  deletearticlefullmaster(aid){
+  deletearticlefullmaster(aid) {
     return this.http.delete(this.APIURL + '/ArticleUseFullMaster/' + aid);
+  }
+
+  public uploadFile(file){
+    const formData: FormData = new FormData();
+    file.forEach(f => formData.append('formFiles',f))
+    // formData.append('formFiles', file);
+
+    console.log(formData);
+    const req = new HttpRequest('POST', `${this.APIURL}/ArticleMaster/Upload?subDirectory=first`, formData, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+
+    return this.http.request(req);
+  }
+
+  public getFiles(): Observable<string[]> {
+    return this.http.get<string[]>(this.APIURL + '/ArticleMaster/files?folder=first');
+  }
+
+  public downloadFile(folder:string,file: string): Observable<HttpEvent<Blob>> {
+    return this.http.request(new HttpRequest(
+      'GET',
+      `${this.APIURL}/ArticleMaster/Download?folder=${folder}&fileUrl=${file}`,
+      null,
+      {
+        reportProgress: true,
+        responseType: 'blob'
+      }));
+  }
+
+  public deleteFilesFromArticle(folder:string,filename:string){
+    return this.http.delete(this.APIURL + '/ArticleMaster/deletefile?folder='+folder+'&filename='+filename);
   }
 }

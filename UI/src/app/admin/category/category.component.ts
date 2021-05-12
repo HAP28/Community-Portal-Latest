@@ -24,6 +24,8 @@ export class CategoryComponent implements OnInit {
   fullname: any;
   viewcategory: any;
   faArrowRight = faArrowRight;
+  sameCategoryList = [];
+  categoryByproduct: any;
   constructor(private service: UserService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
@@ -69,20 +71,37 @@ export class CategoryComponent implements OnInit {
             this.product = res;
             console.log('All products ', this.product);
             this.CategoryForm['productId'] = $('#productselection').val();
-            this.service.postCategory(this.CategoryForm).subscribe(
+            console.log(this.CategoryForm);
+            this.service.getCategoryByProducts($('#productselection').val()).subscribe(
               (res) => {
                 console.log(res);
-                document.getElementById('closecategory').click();
-                document.getElementById('cat_name').textContent = '';
-                $('#productselection').text('Select Product');
-                this.refreshList();
-                this.toastr.success('Category Successfully Added', 'Success');
-              },
-              (err) => {
+                this.categoryByproduct = res;
+                this.categoryByproduct.forEach(element => {
+                  this.sameCategoryList.push(element.Category_Name);
+                });
+                if(this.sameCategoryList.includes($('#cat_name').val())){
+                  alert("Same Name in same product is not valid");
+                } else{
+                  this.service.postCategory(this.CategoryForm).subscribe(
+                    (res) => {
+                      console.log(res);
+                      document.getElementById('closecategory').click();
+                      document.getElementById('cat_name').textContent = '';
+                      $('#productselection').text('Select Product');
+                      this.refreshList();
+                      this.toastr.success('Category Successfully Added', 'Success');
+                    },
+                    (err) => {
+                      console.log(err);
+                      this.toastr.error('Category Add Failed', 'Error');
+                    }
+                  );
+                }
+              },(err) => {
                 console.log(err);
-                this.toastr.error('Category Add Failed', 'Error');
               }
-            );
+            )
+            
           },
           (err) => {
             console.log(err);

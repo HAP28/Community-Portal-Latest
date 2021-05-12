@@ -4,6 +4,7 @@ import { UserService } from 'src/app/shared/user.service';
 import * as $ from 'jquery';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+// import * as safeHtml from './pipe';
 
 @Component({
   selector: 'app-article-posts',
@@ -12,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
   encapsulation: ViewEncapsulation.Emulated,
 })
 export class ArticlePostsComponent implements OnInit {
-  //   butDisabled = "disabled";
+  display = false;
   Articles: any;
   searching: any;
   product: any;
@@ -32,9 +33,12 @@ export class ArticlePostsComponent implements OnInit {
     this.refreshList();
     this.validateAdminReviewer();
     localStorage.setItem('mode', 'viewer');
-    // $('#categoryList').prop('disabled',true);
-    // $('#sectionList').prop('disabled',true);
-    document.getElementById('header-frame').style.display = 'none';
+  }
+  formatdate(articles) {
+    for (var i = 0; i < articles.length; i++) {
+      var date = new Date(articles[i].PostedOn);
+      articles[i].PostedOn = date.toDateString();
+    }
   }
   validateAdminReviewer() {
     if (this.service.currentUser != null) {
@@ -60,6 +64,7 @@ export class ArticlePostsComponent implements OnInit {
           console.log(res);
           //this.getreviewarticles();
           this.Articles = res;
+          this.formatdate(this.Articles);
           this.commoncode(this.Articles);
           console.log('Review articles', this.Articles);
         },
@@ -76,8 +81,8 @@ export class ArticlePostsComponent implements OnInit {
       this.getpublicArticles();
     }
   }
-  readMore(article_id) {
-    this.router.navigateByUrl('/article?page=article-posts&articleid=' + article_id);
+  readMore(article_id,s,d,a) {
+    this.router.navigateByUrl('/article?page=article-posts&articleid=' + article_id + '&s='+ s + '&d=' + d + '&a=' + a);
     //this._router.navigateByUrl('/permission?id=' + id);
   }
   fetchCategory() {
@@ -150,11 +155,21 @@ export class ArticlePostsComponent implements OnInit {
 
   commoncode(articles: any) {
     this.Articles = articles;
+    this.formatdate(this.Articles);
     this.Articles.forEach((element) => {
       this.service.getUserById(element.User_Id).subscribe(
         (res) => {
           var response = res;
           element.user = response['FirstName'] + ' ' + response['LastName'];
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+      this.service.getUserById(element.Reviewer_Id).subscribe(
+        (res) => {
+          var response = res;
+          element.reviewer = response['FirstName'] + ' ' + response['LastName'];
         },
         (err) => {
           console.log(err);
@@ -195,6 +210,7 @@ export class ArticlePostsComponent implements OnInit {
       (res) => {
         this.Articles = res;
         console.log(res);
+        this.formatdate(this.Articles);
         this.commoncode(this.Articles);
         console.log('public articles', this.Articles);
       },
@@ -257,6 +273,7 @@ export class ArticlePostsComponent implements OnInit {
         this.service.getArticleByProduct(product).subscribe(
           (res) => {
             this.Articles = res;
+            this.formatdate(this.Articles);
             this.Articles.forEach((element) => {
               this.service.getUserById(element.User_Id).subscribe(
                 (res) => {
@@ -311,7 +328,7 @@ export class ArticlePostsComponent implements OnInit {
           .subscribe(
             (res) => {
               this.Articles = res;
-
+              this.formatdate(this.Articles);
               console.log(this.Articles);
               this.Articles.forEach((element) => {
                 this.service.getUserById(element.User_Id).subscribe(
@@ -364,7 +381,7 @@ export class ArticlePostsComponent implements OnInit {
           .subscribe(
             (res) => {
               this.Articles = res;
-
+              this.formatdate(this.Articles);
               console.log(this.Articles);
               this.Articles.forEach((element) => {
                 this.service.getUserById(element.User_Id).subscribe(
