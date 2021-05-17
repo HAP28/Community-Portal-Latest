@@ -450,4 +450,18 @@ export class ProfileComponent implements OnInit {
     this.router.navigateByUrl('/article?page=profile&articleid=' + article_id + '&s='+ s + '&d=' + d + '&a=' + a);
     //this._router.navigateByUrl('/permission?id=' + id);
   }
+  changePassword(){
+    var body = {
+      OldPassword: $('#old_password').val(),
+      NewPassword: $('#new_password').val()
+    }
+    this.service.changePassword(this.uid,body).subscribe(
+      (res) => {
+        $('#close').click();
+        alert('password changed')
+      },(err) => {
+        console.log(err);
+      }
+    )
+  }
 }

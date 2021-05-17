@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import {
   HttpClient,
   HttpClientModule,
+  HttpErrorResponse,
   HttpEvent,
   HttpHeaderResponse,
   HttpHeaders,
@@ -11,13 +12,27 @@ import {
 import { ConfirmedValidator } from '../custom-validators';
 import { Observable } from 'rxjs';
 
+interface ForgotPasswordDto {
+  email: string;
+  clientURI: string;
+}
+interface ResetPasswordDto {
+  password: string;
+  confirmPassword: string;
+  email: string;
+  token: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
+
 export class UserService {
   constructor(private fb: FormBuilder, private http: HttpClient) {}
 
   readonly APIURL = 'http://localhost:65241/api';
+  // readonly ClientURL = 'http://localhost:4200';
+  
   formModel = this.fb.group(
     {
       FirstName: [
@@ -447,5 +462,16 @@ export class UserService {
 
   public deleteFilesFromArticle(folder:string,filename:string){
     return this.http.delete(this.APIURL + '/ArticleMaster/deletefile?folder='+folder+'&filename='+filename);
+  }
+
+  //password 
+  public forgotPassword = (body: ForgotPasswordDto) => {
+    return this.http.post(this.APIURL + '/Account/ForgotPassword', body);
+  }
+  public resetPassword = (body: ResetPasswordDto) => {
+    return this.http.post(this.APIURL + '/Account/ResetPassword', body);
+  }
+  public changePassword = (id,body) => {
+    return this.http.post(this.APIURL + '/Account/ChangePassword?id='+id, body);
   }
 }

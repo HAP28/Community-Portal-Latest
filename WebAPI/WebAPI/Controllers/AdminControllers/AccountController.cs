@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -15,6 +16,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using WebAPI.Constants;
+using WebAPI.EmailService;
 using WebAPI.Models;
 using WebAPI.Models.AdminUserModels;
 
@@ -30,13 +32,15 @@ namespace WebAPI.Controllers.AdminControllers
         private SignInManager<UserRegistrationDto> signInManager;
         private readonly ApplicationSettings appSettings;
         readonly private IConfiguration configuration;
+        private readonly IEmailSender _emailSender;
 
-        public AccountController(IConfiguration _configuration, UserManager<UserRegistrationDto> _userManager, SignInManager<UserRegistrationDto> _signInManager, IOptions<ApplicationSettings> _appSettings)
+        public AccountController(IConfiguration _configuration, UserManager<UserRegistrationDto> _userManager, SignInManager<UserRegistrationDto> _signInManager, IOptions<ApplicationSettings> _appSettings, IEmailSender emailSender)
         {
             this.appSettings = _appSettings.Value;
             this.userManager = _userManager;
             this.signInManager = _signInManager;
             this.configuration = _configuration;
+            this._emailSender = emailSender;
         }
 
         [HttpPost, AllowAnonymous]
@@ -224,6 +228,71 @@ namespace WebAPI.Controllers.AdminControllers
             }
 
         }
-        
+
+        [AllowAnonymous]
+        [HttpPost("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto forgotPasswordDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+            var user = await userManager.FindByEmailAsync(forgotPasswordDto.Email);
+            if (user == null)
+                return BadRequest("Invalid Request");
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            var param = new Dictionary<string, string>
+    {
+        {"token", token },
+        {"email", forgotPasswordDto.Email }
+    };
+            var callback = QueryHelpers.AddQueryString(forgotPasswordDto.ClientURI, param);
+            var message = new Message(new string[] { user.Email }, "Reset password token", callback, null);
+            await _emailSender.SendEmailAsync(message);
+            return Ok();
+        }
+
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPasswordDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var user = await userManager.FindByEmailAsync(resetPasswordDto.Email);
+            if (user == null)
+                return BadRequest("Invalid Request");
+
+            var resetPassResult = await userManager.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.Password);
+            if (!resetPassResult.Succeeded)
+            {
+                var errors = resetPassResult.Errors.Select(e => e.Description);
+
+                return BadRequest(new { Errors = errors });
+            }
+
+            return Ok();
+        }
+        [Authorize]
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(string id, [FromBody] ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string userId = User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+                if (userId != id)
+                    return Forbid();
+                else
+                {
+                    var user = await this.userManager.GetUserAsync(User);
+                    if (user == null)
+                        return BadRequest();
+                    var result = await this.userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                    if (result.Succeeded)
+                        return NoContent();
+                    else
+                        return Conflict();
+                }
+            }
+            else
+                return BadRequest();
+        }
     }
 }

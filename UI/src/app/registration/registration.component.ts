@@ -15,7 +15,11 @@ export class RegistrationComponent implements OnInit {
 
   constructor(public service: UserService,private formBuilder: FormBuilder, private _router: Router) { }
   
-  ngOnInit(): void {  }
+  ngOnInit(): void { 
+    if(this.service.currentUser !== null){
+      this._router.navigate(['/home']);
+    }
+   }
   
   onSubmit() {
     this.submitted = true;

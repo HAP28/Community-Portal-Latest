@@ -16,6 +16,7 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Http;
 using WebAPI.Models.AdminUserModels;
 using WebAPI.Controllers;
+using WebAPI.EmailService;
 
 namespace WebAPI
 {
@@ -95,6 +96,13 @@ namespace WebAPI
                 };
             });
             services.AddTransient<IFileService, FileService>();
+
+            //Mail service
+            var emailConfig = Configuration
+               .GetSection("EmailConfiguration")
+               .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailSender, EmailSender>();
 
         }
 

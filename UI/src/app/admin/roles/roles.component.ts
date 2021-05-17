@@ -22,10 +22,6 @@ export class RolesComponent implements OnInit {
     this.refreshList();
   }
 
-  permission(id) {
-    this._router.navigateByUrl('/permission?id=' + id);
-  }
-
   refreshList() {
     this.service.getRoles().subscribe(
       (res) => {

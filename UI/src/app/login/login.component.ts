@@ -23,6 +23,9 @@ export class LoginComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private _router : Router,private service: UserService) { }
   
   ngOnInit(): void {
+    if(this.service.currentUser !== null){
+      this._router.navigate(['/home']);
+    }
     // //Add User form validations
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],

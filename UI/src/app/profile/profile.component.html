@@ -310,9 +310,10 @@
                               ><i class="fa fa-lock" aria-hidden="true"></i
                             ></span>
                             <input
-                              type="text"
+                              type="password"
                               class="form-control"
-                              placeholder="New Password"
+                              placeholder="Old Password"
+                              id="old_password"
                             />
                           </div>
                           <div class="input-group mb-3">
@@ -320,9 +321,10 @@
                               ><i class="fa fa-lock" aria-hidden="true"></i
                             ></span>
                             <input
-                              type="text"
+                              type="password"
                               class="form-control"
-                              placeholder="Confirm Password"
+                              placeholder="New Password"
+                              id="new_password"
                             />
                           </div>
                         </div>
@@ -331,11 +333,12 @@
                             type="button"
                             class="btn btn-secondary"
                             data-bs-dismiss="modal"
+                            id="close"
                           >
                             Close
                           </button>
-                          <button type="button" class="btn btn-primary">
-                            Save changes
+                          <button type="button" class="btn btn-primary" (click) = "changePassword()">
+                            Change Password
                           </button>
                         </div>
                       </div>
