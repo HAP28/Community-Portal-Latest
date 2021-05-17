@@ -19,6 +19,8 @@ export class ProfileComponent implements OnInit {
   country_arr: any;
   getuserarticles: any;
   editpersonaldata = {};
+  display = false;
+  mode: any;
 
   constructor(private service: UserService, private router: Router) {}
   s_a: any;
@@ -88,6 +90,7 @@ export class ProfileComponent implements OnInit {
     }
   }
   getallarticles(uid) {
+    this.mode = 'publish';
     this.service.getarticleforuser(uid).subscribe(
       (res) => {
         this.getuserarticles = res;
@@ -401,6 +404,7 @@ export class ProfileComponent implements OnInit {
     }
   }
   userpublisharticles() {
+    this.mode = 'publish';
     this.service.getpublisharticleforuser(this.uid).subscribe(
       (res) => {
         this.getuserarticles = res;
@@ -436,8 +440,8 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
-  readMore(article_id) {
-    this.router.navigateByUrl('/article?articleid=' + article_id);
+  readMore(article_id,s,d,a) {
+    this.router.navigateByUrl('/article?page=profile&articleid=' + article_id + '&s='+ s + '&d=' + d + '&a=' + a);
     //this._router.navigateByUrl('/permission?id=' + id);
   }
 }

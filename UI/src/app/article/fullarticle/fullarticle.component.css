@@ -1,10 +1,12 @@
 .header {
-  background-color: #16a596;
-  padding: 40px;
-  color: white;
+  /* background-color: #16a596; */
+  padding: 20px;
+  color: black;
 }
 .container {
   margin-top: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 5px #333;
 }
 .top {
   position: fixed;
@@ -26,7 +28,7 @@
   font-style: italic;
 }
 .article {
-  background-color: #e1f1dd;
+  /* background-color: #e1f1dd; */
   padding: 20px;
   border-radius: 20px;
 }

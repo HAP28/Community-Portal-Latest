@@ -34,7 +34,10 @@ import { ManageRolesComponent } from './admin/manage-roles/manage-roles.componen
 import { FullarticleComponent } from './article/fullarticle/fullarticle.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ArticleComponent } from './admin/article/article.component';
-import { SafeHtmlPipe } from './article/article-posts/pipe';
+import { FileManagerComponent } from './file-upload/file-manager/file-manager.component';
+import { DownloadComponent } from './file-upload/download/download.component';
+import { UploadComponent } from './file-upload/upload/upload.component';
+import { SafeHtmlPipe } from './shared/pipe';
 
 @NgModule({
   declarations: [
@@ -61,6 +64,9 @@ import { SafeHtmlPipe } from './article/article-posts/pipe';
     ProfileComponent,
     ArticleComponent,
     SafeHtmlPipe,
+    FileManagerComponent,
+    DownloadComponent,
+    UploadComponent,
   ],
   imports: [
     BrowserModule,

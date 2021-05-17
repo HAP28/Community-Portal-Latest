@@ -3,11 +3,14 @@ import { FormBuilder, Validators } from '@angular/forms';
 import {
   HttpClient,
   HttpClientModule,
+  HttpEvent,
   HttpHeaderResponse,
   HttpHeaders,
+  HttpRequest,
 } from '@angular/common/http';
 import { ConfirmedValidator } from '../custom-validators';
 import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -261,6 +264,9 @@ export class UserService {
       null
     );
   }
+  setreviewer(rid,aid){
+    return this.http.patch(this.APIURL + '/ArticleMaster/reviewer?rid='+rid+'&aid='+aid,null);
+  }
   patch_disapprove_article(id) {
     return this.http.patch(
       this.APIURL +
@@ -412,5 +418,38 @@ export class UserService {
   }
   deletearticlefullmaster(aid) {
     return this.http.delete(this.APIURL + '/ArticleUseFullMaster/' + aid);
+  }
+
+  public uploadFile(file){
+    const formData: FormData = new FormData();
+    file.forEach(f => formData.append('formFiles',f))
+    // formData.append('formFiles', file);
+
+    console.log(formData);
+    const req = new HttpRequest('POST', `${this.APIURL}/ArticleMaster/Upload?subDirectory=first`, formData, {
+      reportProgress: true,
+      responseType: 'json'
+    });
+
+    return this.http.request(req);
+  }
+
+  public getFiles(): Observable<string[]> {
+    return this.http.get<string[]>(this.APIURL + '/ArticleMaster/files?folder=first');
+  }
+
+  public downloadFile(folder:string,file: string): Observable<HttpEvent<Blob>> {
+    return this.http.request(new HttpRequest(
+      'GET',
+      `${this.APIURL}/ArticleMaster/Download?folder=${folder}&fileUrl=${file}`,
+      null,
+      {
+        reportProgress: true,
+        responseType: 'blob'
+      }));
+  }
+
+  public deleteFilesFromArticle(folder:string,filename:string){
+    return this.http.delete(this.APIURL + '/ArticleMaster/deletefile?folder='+folder+'&filename='+filename);
   }
 }

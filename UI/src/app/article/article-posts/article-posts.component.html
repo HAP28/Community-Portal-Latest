@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-header [display] = "display"></app-header>
 <div class="searching my-3">
   <div class="container">
     <div class="card">
@@ -85,12 +85,13 @@
       ></p>
 
       <!-- <a href="/fullarticle">Read More..</a> -->
-      <a (click)="readMore(item.Article_Id)">Read More</a>
+      <a (click)="readMore(item.Article_Id,item.Status,item.Draft,item.Archive)">Read More</a>
 
       <footer class="blockquote-footer m-3">
         Posted On <cite title="Source Title">{{ item.PostedOn }}</cite>
       </footer>
       <small style="text-align: right">Posted By : {{ item.user }}</small>
+      <small style="float: right" *ngIf="item.Status && !item.Draft && !item.Archive">Reviewed By : {{ item.reviewer }}</small>
     </div>
     <hr />
   </div>

@@ -65,11 +65,19 @@ export class ArticleComponent implements OnInit {
       this.service.getarticlesforreviewer().subscribe(
         (res) => {
           this.articles = res;
+          this.articles.forEach((element) => {
+            this.service.getUserById(element.User_Id).subscribe((res) => {
+              this.user = res;
+              element.user = this.user.FirstName + ' ' + this.user.LastName;
+              this.data = true;
+            });
+          });
         },(err) => {
           console.log(err);
         }
       )
     } else{
+      localStorage['mode'] = 'viewer';
       this.refreshList();
     }
   }

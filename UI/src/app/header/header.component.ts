@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../shared/user.service';
 import * as $ from 'jquery';
@@ -9,6 +9,7 @@ import * as $ from 'jquery';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  @Input() display: boolean;
 
   loggedIn : boolean = false;
   title = 'user-profile';
@@ -21,12 +22,12 @@ export class HeaderComponent implements OnInit {
       this.service.getUserProfile().subscribe(
         (res) => {
           this.userDetails = res;
+          this.loggedIn = true;
           console.log(this.userDetails);
           if(this.service.currentUser.Role == "Admin"){
             // $('#dashboard').show();
             this.admin = true;
           }
-          this.loggedIn = true;
         }, (err) => {
           console.log(err);
         }

@@ -4,6 +4,7 @@ import { UserService } from 'src/app/shared/user.service';
 import * as $ from 'jquery';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+// import * as safeHtml from './pipe';
 
 @Component({
   selector: 'app-article-posts',
@@ -12,7 +13,7 @@ import { ToastrService } from 'ngx-toastr';
   encapsulation: ViewEncapsulation.Emulated,
 })
 export class ArticlePostsComponent implements OnInit {
-  //   butDisabled = "disabled";
+  display = false;
   Articles: any;
   searching: any;
   product: any;
@@ -32,9 +33,6 @@ export class ArticlePostsComponent implements OnInit {
     this.refreshList();
     this.validateAdminReviewer();
     localStorage.setItem('mode', 'viewer');
-    // $('#categoryList').prop('disabled',true);
-    // $('#sectionList').prop('disabled',true);
-    document.getElementById('header-frame').style.display = 'none';
   }
   formatdate(articles) {
     for (var i = 0; i < articles.length; i++) {
@@ -83,9 +81,22 @@ export class ArticlePostsComponent implements OnInit {
       this.getpublicArticles();
     }
   }
-  readMore(article_id) {
+
+  // readMore(article_id) {
+  //   this.router.navigateByUrl(
+  //     '/article?page=article-posts&articleid=' + article_id
+  //   );
+
+  readMore(article_id, s, d, a) {
     this.router.navigateByUrl(
-      '/article?page=article-posts&articleid=' + article_id
+      '/article?page=article-posts&articleid=' +
+        article_id +
+        '&s=' +
+        s +
+        '&d=' +
+        d +
+        '&a=' +
+        a
     );
     //this._router.navigateByUrl('/permission?id=' + id);
   }
@@ -165,6 +176,15 @@ export class ArticlePostsComponent implements OnInit {
         (res) => {
           var response = res;
           element.user = response['FirstName'] + ' ' + response['LastName'];
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+      this.service.getUserById(element.Reviewer_Id).subscribe(
+        (res) => {
+          var response = res;
+          element.reviewer = response['FirstName'] + ' ' + response['LastName'];
         },
         (err) => {
           console.log(err);

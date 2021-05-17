@@ -22,6 +22,8 @@ export class SectionComponent implements OnInit {
   cat: any;
   viewsection: any;
   faArrowRight = faArrowRight;
+  sectionBycategory: any;
+  sectionNameList = [];
 
   constructor(private service: UserService, private toastr: ToastrService) {}
 
@@ -69,20 +71,43 @@ export class SectionComponent implements OnInit {
             this.category = res;
             console.log(this.category);
             this.sectionForm['categoryId'] = $('#categoryselection').val();
-            this.service.postSection(this.sectionForm).subscribe(
-              (res) => {
-                console.log(res);
-                document.getElementById('closesection').click();
-                document.getElementById('section_name').textContent = '';
-                $('#categoryselection').text('Select Category');
-                this.refreshList();
-                this.toastr.success('Section Successfully Added', 'Success');
-              },
-              (err) => {
-                console.log(err);
-                this.toastr.error('Section Add Failed', 'Error');
-              }
-            );
+            this.sectionNameList = [];
+            this.service
+              .getSectionByCategory($('#categoryselection').val())
+              .subscribe(
+                (res) => {
+                  console.log(res);
+                  this.sectionBycategory = res;
+                  this.sectionBycategory.forEach((element) => {
+                    this.sectionNameList.push(element.Section_Name);
+                  });
+                  if (this.sectionNameList.includes($('#section_name').val())) {
+                    alert('Same Name in same category is not valid');
+                  } else {
+                    this.service.postSection(this.sectionForm).subscribe(
+                      (res) => {
+                        console.log(res);
+                        document.getElementById('closesection').click();
+                        document.getElementById('section_name').textContent =
+                          '';
+                        $('#categoryselection').text('Select Category');
+                        this.refreshList();
+                        this.toastr.success(
+                          'Section Successfully Added',
+                          'Success'
+                        );
+                      },
+                      (err) => {
+                        console.log(err);
+                        this.toastr.error('Section Add Failed', 'Error');
+                      }
+                    );
+                  }
+                },
+                (err) => {
+                  console.log(err);
+                }
+              );
           },
           (err) => {
             console.log(err);

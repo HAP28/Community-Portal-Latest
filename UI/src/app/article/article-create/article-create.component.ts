@@ -1,4 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { enableRipple } from '@syncfusion/ej2-base';
 import * as $ from 'jquery';
 import { ToastrService } from 'ngx-toastr';
@@ -23,7 +31,6 @@ import {
   ImageService,
   HtmlEditorService,
   QuickToolbarService,
-  FileManagerService,
 } from '@syncfusion/ej2-angular-richtexteditor';
 import {
   RichTextEditorComponent,
@@ -31,6 +38,11 @@ import {
 } from '@syncfusion/ej2-angular-richtexteditor';
 
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import {
+  ProgressStatus,
+  ProgressStatusEnum,
+} from 'src/app/models/progress-status';
+import { HttpEventType } from '@angular/common/http';
 RichTextEditor.Inject(Toolbar, Link, Image, HtmlEditor, Count, QuickToolbar);
 
 @Component({
@@ -43,7 +55,6 @@ RichTextEditor.Inject(Toolbar, Link, Image, HtmlEditor, Count, QuickToolbar);
     ImageService,
     HtmlEditorService,
     QuickToolbarService,
-    FileManagerService,
     NodeSelection,
   ],
 })
@@ -52,21 +63,6 @@ export class ArticleCreateComponent implements OnInit {
   userDetails: any;
   submitted = false;
   x: any = {};
-  private toolbarSettings: Object = {
-    items: ['Image'],
-  };
-  private iFrameSettings: Object = {
-    enable: true,
-  };
-  private insertImageSettings: Object = {
-    saveUrl: 'http://localhost:65241/api/Post/image',
-    path: 'http://localhost:65241/Uploads/',
-    removeUrl: 'https://ej2.syncfusion.com/services/api/uploadbox/Remove',
-    maxWidth: '400px',
-    maxHeight: '400px',
-    minWidth: '80px',
-    minHeight: '80px',
-  };
 
   constructor(
     private _router: Router,
@@ -84,11 +80,14 @@ export class ArticleCreateComponent implements OnInit {
   editmode: boolean = false;
   currentarticle: any;
   defaultRTE: RichTextEditor;
+
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params) => {
       if (params['mode'] == 'edit') {
         this.editmode = true;
+
         $('#validateSubmit').css('display', 'none');
+
         this.article_id = params['id'];
         console.log('Clicked Article: ', this.article_id);
       }
@@ -138,7 +137,6 @@ export class ArticleCreateComponent implements OnInit {
           'CreateTable',
           'CreateLink',
           'Image',
-          'FileManager',
           '|',
           'ClearFormat',
           'Print',
@@ -153,8 +151,6 @@ export class ArticleCreateComponent implements OnInit {
         saveUrl: 'http://localhost:65241/api/ArticleMaster/image',
         path: 'http://localhost:65241/Uploads/',
         removeUrl: 'https://ej2.syncfusion.com/services/api/uploadbox/Remove',
-        // maxWidth: '400px',
-        // maxHeight: '400px',
         minWidth: '80px',
         minHeight: '80px',
       },
@@ -237,76 +233,6 @@ export class ArticleCreateComponent implements OnInit {
         );
       }
     };
-
-    //   let hostUrl: string = 'https://ej2-aspcore-service.azurewebsites.net/';
-
-    //   let iframeRTE: RichTextEditor = new RichTextEditor({
-    // height: 300,
-    // iframeSettings: {
-    //     enable: true
-    // },
-    // toolbarSettings: {
-    //   items: ['Bold', 'Italic', 'Underline', 'StrikeThrough',
-    //       'FontName', 'FontSize', 'FontColor', 'BackgroundColor',
-    //       'LowerCase', 'UpperCase', 'SuperScript', 'SubScript', '|',
-    //       'Formats', 'Alignments', 'OrderedList', 'UnorderedList',
-    //       'Outdent', 'Indent', '|',
-    //       'CreateTable', 'CreateLink', 'Image', 'FileManager', '|', 'ClearFormat', 'Print',
-    //       'SourceCode', 'FullScreen', '|', 'Undo', 'Redo'
-    //   ]
-    // },
-    // fileManagerSettings: {
-    //     enable: true,
-    //     path: '/Pictures/Food',
-    //     ajaxSettings: {
-    //         url: hostUrl + 'api/FileManager/FileOperations',
-    //         getImageUrl: hostUrl + 'api/FileManager/GetImage',
-    //         uploadUrl: hostUrl + 'api/FileManager/Upload',
-    //         downloadUrl: hostUrl + 'api/FileManager/Download'
-    //     }
-    // },
-    // actionBegin: handleFullScreen,
-    // actionComplete: actionCompleteHandler
-    //     });
-    //   iframeRTE.appendTo('#iframeRTE');
-
-    //   // let formObject = new FormValidator('#form-element');
-
-    //   function handleFullScreen(e: any): void {
-    //     let sbCntEle: HTMLElement = document.querySelector('.sb-content.e-view');
-    //     let sbHdrEle: HTMLElement = document.querySelector('.sb-header.e-view');
-    //     let leftBar: HTMLElement;
-    //     let transformElement: HTMLElement;
-    //     if (Browser.isDevice) {
-    //         leftBar = document.querySelector('#right-sidebar');
-    //         transformElement = document.querySelector('.sample-browser.e-view.e-content-animation');
-    //     } else {
-    //         leftBar = document.querySelector('#left-sidebar');
-    //         transformElement = document.querySelector('#right-pane');
-    //     }
-    //     if (e.targetItem === 'Maximize') {
-    //         if (Browser.isDevice && Browser.isIos) {
-    //             addClass([sbCntEle, sbHdrEle], ['hide-header']);
-    //         }
-    //         addClass([leftBar], ['e-close']);
-    //         removeClass([leftBar], ['e-open']);
-    //         if (!Browser.isDevice) { transformElement.style.marginLeft = '0px'; }
-    //         transformElement.style.transform = 'inherit';
-    //     } else if (e.targetItem === 'Minimize') {
-    //         if (Browser.isDevice && Browser.isIos) {
-    //             removeClass([sbCntEle, sbHdrEle], ['hide-header']);
-    //         }
-    //         removeClass([leftBar], ['e-close']);
-    //         if (!Browser.isDevice) {
-    //         addClass([leftBar], ['e-open']);
-    //         transformElement.style.marginLeft = leftBar.offsetWidth + 'px'; }
-    //         transformElement.style.transform = 'translateX(0px)';
-    //     }
-    // }
-
-    // function actionCompleteHandler(): void {
-    //     setTimeout(() => { iframeRTE.toolbarModule.refreshToolbarOverflow(); }, 400);
-    //   }
   }
 
   clearProductList() {
@@ -389,9 +315,8 @@ export class ArticleCreateComponent implements OnInit {
           } else {
             $('#signedinuser').prop('checked', true);
           }
-          document.getElementById(
-            'defaultRTE'
-          ).innerHTML = this.currentarticle[0].Description;
+          document.getElementById('defaultRTE').innerHTML =
+            this.currentarticle[0].Description;
           this.defaultRTE.appendTo('#defaultRTE');
         },
         (err) => {

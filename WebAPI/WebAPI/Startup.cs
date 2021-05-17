@@ -15,6 +15,7 @@ using System;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Http;
 using WebAPI.Models.AdminUserModels;
+using WebAPI.Controllers;
 
 
 namespace WebAPI
@@ -44,22 +45,12 @@ namespace WebAPI
                options.UseSqlServer(
                    Configuration.GetConnectionString("DataConnection")).EnableSensitiveDataLogging());
 
-            //services.AddIdentity<UserRegistrationDto, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-            //   .AddEntityFrameworkStores<ApplicationDbContext>();
-
+      
             services.AddIdentity<UserRegistrationDto, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
-            //services.AddIdentity<UserRegistrationDto, IdentityRole>()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>()
-            //    .AddDefaultTokenProviders();
-
-            //services.AddDefaultIdentity<ApplicationUser>()
-            //    .AddRoles<IdentityRole>()
-            //    .AddEntityFrameworkStores<AuthenticationContext>();
-
-
+  
             services.AddCors(c =>
             {
                 c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
@@ -76,10 +67,6 @@ namespace WebAPI
 
             services.Configure<IdentityOptions>(options =>
             {
-                //options.Password.RequireDigit = false;
-                //options.Password.RequireNonAlphanumeric = false;
-                //options.Password.RequireLowercase = false;
-                //options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 8;
             });
 
@@ -109,6 +96,7 @@ namespace WebAPI
                     ValidAudience = jwtConfig["Audience"],
                 };
             });
+            services.AddTransient<IFileService, FileService>();
 
         }
 

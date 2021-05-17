@@ -1,0 +1,30 @@
+<app-upload
+      [disabled]="showProgress"
+      (uploadStatus)="uploadStatus($event)"
+    ></app-upload>
+    <h2>File List</h2>
+    <p *ngIf="showProgress">
+      progress <strong>{{ percentage }}%</strong>
+    </p>
+    <label class="error" [hidden]="!showDownloadError"
+      >ci sono stati errori durante il download</label
+    >
+    <label class="error" [hidden]="!showUploadError"
+      >ci sono stati errori durante l'upload</label
+    >
+    <hr />
+    <div class="container">
+      <ul>
+        <li *ngFor="let file of files">
+          <a>
+            {{ file }}
+            <app-download
+              [disabled]="showProgress"
+              [fileName]="file"
+              (downloadStatus)="downloadStatus($event)"
+            ></app-download>
+          </a>
+          <button class="fas fa-times-circle" (click) = "deleteFile(file)"></button>
+        </li>
+      </ul>
+    </div>

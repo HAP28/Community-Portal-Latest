@@ -2,7 +2,7 @@
   href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
   rel="stylesheet"
 />
-
+<app-header [display] = "display"></app-header>
 <div class="content">
   <div class="container">
     <div class="row">
@@ -554,7 +554,7 @@
             >
               <!-- {{ item.Description }} -->
             </p>
-            <a (click)="readMore(item.Article_Id)" class="readmore"
+            <a (click)="readMore(item.Article_Id,item.Status,item.Draft,item.Archive)" class="readmore"
               >Read More..</a
             >
             <hr />
