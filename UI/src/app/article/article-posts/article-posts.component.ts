@@ -23,6 +23,7 @@ export class ArticlePostsComponent implements OnInit {
   response: any;
   FullName: any;
   isDataAvailable: boolean = false;
+  searchText = '';
   constructor(
     private service: UserService,
     private router: Router,
@@ -51,6 +52,7 @@ export class ArticlePostsComponent implements OnInit {
     }
   }
   toogleswitch() {
+    this.refreshList();
     console.log('status', $('#toggle-one').prop('checked'));
     if ($('#toggle-one').prop('checked')) {
       this.toast.success('You are switch to review mode', 'Reviewer Mode', {
@@ -261,6 +263,14 @@ export class ArticlePostsComponent implements OnInit {
   }
 
   searchArticle() {
+    let visibility = '1';;
+    let draft;
+    let archive = false;
+    if(localStorage.getItem('mode') == "viewer"){
+      draft = false;
+    }else{
+      draft = true;
+    }
     var product = $('#productList').val();
     var category = $('#categoryList').val();
     var section = $('#sectionList').val();
@@ -270,7 +280,7 @@ export class ArticlePostsComponent implements OnInit {
       return;
     } else {
       if (category == '') {
-        this.service.getArticleByProduct(product).subscribe(
+        this.service.getArticleByProduct(product,draft,archive,visibility).subscribe(
           (res) => {
             this.Articles = res;
             this.formatdate(this.Articles);
@@ -324,7 +334,7 @@ export class ArticlePostsComponent implements OnInit {
         );
       } else if (section == '') {
         this.service
-          .getArticleByProductAndCategory(product, category)
+          .getArticleByProductAndCategory(product, category,draft,archive,visibility)
           .subscribe(
             (res) => {
               this.Articles = res;
@@ -377,7 +387,7 @@ export class ArticlePostsComponent implements OnInit {
           );
       } else {
         this.service
-          .getArticleByProductAndCategoryAndSection(product, category, section)
+          .getArticleByProductAndCategoryAndSection(product, category, section,draft,archive,visibility)
           .subscribe(
             (res) => {
               this.Articles = res;

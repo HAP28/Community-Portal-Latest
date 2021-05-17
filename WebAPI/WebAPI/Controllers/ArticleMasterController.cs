@@ -98,14 +98,45 @@ namespace WebAPI.Controllers
             }
         }
 
+
         // GET api/<ArticleMasterController>/product/5
         [AllowAnonymous]
-        [HttpGet("product/{pid}")]
-        public JsonResult GetByProduct(int pid)
+        [HttpGet("articleByProduct")]
+        public JsonResult GetByProductReviewer(int pid,bool draft,bool archive,string visibility)
         {
             try
             {
-                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Status = '" + true + "' and Visibility = '1'";
+                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Status = '" + true + "' and Visibility = '" + visibility + "' and Draft = '" + draft + "' and Archive = '" + archive + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
+        
+
+        [AllowAnonymous]
+        [HttpGet("articleByProductAndCategory")]
+        public JsonResult GetByProductCategoryReviewer(int pid, int cid, bool draft, bool archive, string visibility)
+        {
+            try
+            {
+                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Category_Id = '" + cid + "' and Status = '" + true + "' and Visibility = '" + visibility + "' and Draft = '" + draft + "' and Archive = '" + archive + "'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -128,44 +159,15 @@ namespace WebAPI.Controllers
             }
         }
 
-        // GET api/<ArticleMasterController>/product/5/category/4
-        [AllowAnonymous]
-        [HttpGet("product/{pid}/category/{cid}")]
-        public JsonResult GetByProductCategory(int pid, int cid)
-        {
-            try
-            {
-                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Category_Id = '" + cid + "' and Status = '" + true + "' and Visibility = '1'";
-                DataTable table = new DataTable();
-                string sqlDataSource = configuration.GetConnectionString("DataConnection");
-                SqlDataReader dataReader;
-                using (SqlConnection connection = new SqlConnection(sqlDataSource))
-                {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(query, connection))
-                    {
-                        dataReader = command.ExecuteReader();
-                        table.Load(dataReader);
-                        dataReader.Close();
-                        connection.Close();
-                    }
-                }
-                return new JsonResult(table);
-            }
-            catch (Exception e)
-            {
-                return new JsonResult(e.Message);
-            }
-        }
 
         // GET api/<ArticleMasterController>/product/5/category/4/section/3
         [AllowAnonymous]
-        [HttpGet("product/{pid}/category/{cid}/section/{sid}")]
-        public JsonResult GetByProductCategorySection(int pid, int cid, int sid)
+        [HttpGet("articleByProductCategorySection")]
+        public JsonResult GetByProductCategorySectionReviewer(int pid, int cid, int sid, bool draft, bool archive, string visibility)
         {
             try
             {
-                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Category_Id = '" + cid + "' and Section_Id = '" + sid + "' and Status = '" + true + "' and Visibility = '1'";
+                string query = @"select * from ArticleMaster where Product_Id = '" + pid + "' and Category_Id = '" + cid + "' and Section_Id = '" + sid + "' and Status = '" + true + "' and Visibility = '" + visibility + "' and Draft = '" + draft + "' and Archive = '" + archive + "'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;
@@ -187,7 +189,6 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
-
         // GET api/<ArticleMasterController>/5
         [HttpGet("user/{uid}")]
         public JsonResult Get(string uid)
@@ -339,7 +340,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                string query = @"insert into ArticleMaster (Article_Title,Category_Id,Section_Id,User_Id,Reviewer_Id,Product_Id,Description,Visibility,Status,CommentAllow,Draft,Archive) values
+                string query = @"insert into ArticleMaster (Article_Title,Category_Id,Section_Id,User_Id,Reviewer_Id,Product_Id,Description,Visibility,Status,CommentAllow,Draft,Archive,FolderName) values
                 ('" + article.ArticleTitle + "','"
                 + article.CategoryId + "','"
                 + article.SectionId + "','"
@@ -350,9 +351,9 @@ namespace WebAPI.Controllers
                 + article.Visible + "','"
                 + article.Status + "','"
                 + article.CommentAllow + "','"
-
                 + article.Draft + "','"
-                + article.Archive + "')";
+                + article.Archive + "','"
+                + article.FolderName + "')";
 
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
@@ -395,6 +396,7 @@ namespace WebAPI.Controllers
                         "',CommentAllow = '" + article.CommentAllow +
                         "',Draft = '" + article.Draft +
                         "',Archive = '" + article.Archive +
+                        "',FolderName = '" + article.FolderName +
                         "' where Article_Id = '" + aid + "'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");

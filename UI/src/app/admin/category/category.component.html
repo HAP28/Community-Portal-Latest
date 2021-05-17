@@ -1,6 +1,15 @@
 <app-navbar></app-navbar>
 <div class="container">
   <h1 class="mb-3">Category</h1>
+  <div class="content" role="main">
+      <div class="form-group">
+        <label for="search-text">Search Category</label>
+        <input type="text" class="form-control" id="search-text" aria-describedby="search-text" 
+          [(ngModel)]="searchText" placeholder="Enter text to search" 
+          autofocus>
+      </div>
+      
+  </div>
   <div class="form-group">
     <select class="form-control" id="productselection">
       <option selected>Select Product</option>
@@ -75,9 +84,9 @@
   </div>
 
   <br />
-
+  
   <div class="row row-cols-1 row-cols-md-3 g-4">
-    <div class="col" *ngFor="let item of categoryList">
+    <div class="col" *ngFor="let item of categoryList | appFilter: searchText : 'Category_Name'">
       <div
         class="card shadow p-3 mb-5 bg-body rounded animate"
         data-bs-toggle="modal"
@@ -185,7 +194,7 @@
           data-bs-dismiss="modal"
           id="closewindow"
         >
-          Cancle
+          Cancel
         </button>
         <button
           type="button"
@@ -231,9 +240,10 @@
       <div class="modal-body">
         <form>
           <div class="form-group">
-            <h5 id="username"></h5>
+            <h3 id="username"></h3>
+            <h5 id="productName"></h5>
           </div>
-
+         
           <h6 style="text-decoration: underline; font-style: italic">
             Category Desciption
           </h6>
@@ -249,7 +259,7 @@
           data-bs-dismiss="modal"
           id="closewindow"
         >
-          Cancle
+          Cancel
         </button>
       </div>
     </div>

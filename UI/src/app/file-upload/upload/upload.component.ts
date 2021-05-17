@@ -10,6 +10,7 @@ import { UserService } from 'src/app/shared/user.service';
 
 export class UploadComponent {
   @Input() public disabled: boolean;
+  @Input() display: boolean;
   @Output() public uploadStatus: EventEmitter<ProgressStatus>;
   @ViewChild('inputFile') inputFile: ElementRef;
   selectedFiles = []
@@ -30,9 +31,12 @@ export class UploadComponent {
 
       // const file = event.target.files[0];
       this.uploadStatus.emit( {status: ProgressStatusEnum.START});
-      this.service.uploadFile(this.selectedFiles).subscribe(
+      if(!localStorage.getItem('folder')){
+        let randomString = this.makeRandom();
+        localStorage.setItem('folder',randomString);
+      }
+      this.service.uploadFile(this.selectedFiles,localStorage.getItem('folder')).subscribe(
         data => {
-          console.log(data);
           if (data) {
             switch (data.type) {
               case HttpEventType.UploadProgress:
@@ -53,4 +57,14 @@ export class UploadComponent {
       );
     }
   }
+  makeRandom() {
+    let text = "";
+    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    const lengthOfCode = 10;
+    for (let i = 0; i < lengthOfCode; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+      return text;
+  }
+  
 }

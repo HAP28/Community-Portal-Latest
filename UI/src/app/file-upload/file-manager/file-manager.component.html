@@ -1,6 +1,7 @@
 <app-upload
       [disabled]="showProgress"
       (uploadStatus)="uploadStatus($event)"
+      [display] = "display"
     ></app-upload>
     <h2>File List</h2>
     <p *ngIf="showProgress">
@@ -24,7 +25,7 @@
               (downloadStatus)="downloadStatus($event)"
             ></app-download>
           </a>
-          <button class="fas fa-times-circle" (click) = "deleteFile(file)"></button>
+          <button class="fas fa-times-circle" (click) = "deleteFile(file)" *ngIf="display"></button>
         </li>
       </ul>
     </div>

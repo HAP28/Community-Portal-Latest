@@ -52,5 +52,6 @@ namespace WebAPI.Models
         [Required]
         [Column("Archive")]
         public bool Archive { get; set; }
+        public string FolderName { get; set; }
     }
 }

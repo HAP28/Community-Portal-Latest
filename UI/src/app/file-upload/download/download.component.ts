@@ -11,7 +11,6 @@ import { UserService } from 'src/app/shared/user.service';
 export class DownloadComponent {
   @Input() public disabled: boolean;
   @Input() public fileName: string;
-  @Input() public folderName: string;
   @Output() public downloadStatus: EventEmitter<ProgressStatus>;
 
   constructor(private service: UserService) {
@@ -20,7 +19,7 @@ export class DownloadComponent {
 
   public download() {
     this.downloadStatus.emit( {status: ProgressStatusEnum.START});
-    this.service.downloadFile("first",this.fileName).subscribe(
+    this.service.downloadFile(localStorage.getItem('folder'),this.fileName).subscribe(
       data => {
         switch (data.type) {
           case HttpEventType.DownloadProgress:

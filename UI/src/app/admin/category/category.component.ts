@@ -3,9 +3,7 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from 'src/app/shared/user.service';
 import * as $ from 'jquery';
-import { ThrowStmt } from '@angular/compiler';
-import { concatMapTo } from 'rxjs/operators';
-import { AmdDependency } from 'typescript';
+
 
 @Component({
   selector: 'app-category',
@@ -26,6 +24,8 @@ export class CategoryComponent implements OnInit {
   faArrowRight = faArrowRight;
   sameCategoryList = [];
   categoryByproduct: any;
+
+  searchText = '';
   constructor(private service: UserService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
@@ -228,7 +228,11 @@ export class CategoryComponent implements OnInit {
         console.log(this.viewcategory);
         $('#viewcategoryname').text(this.viewcategory.Category_Name);
         $('#categorydescription').text(this.viewcategory.Category_Description);
-
+        this.service.getProductsById(this.viewcategory.Product_Id).subscribe(
+          (res) => {
+            $("#productName").html("<b>Product Name:</b> " +res[0].Product_Name);
+          }
+        )
         this.service.getUserById(this.viewcategory.User_Id).subscribe(
           (res) => {
             $('#username').text(

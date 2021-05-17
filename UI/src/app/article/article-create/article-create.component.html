@@ -101,7 +101,7 @@
     </div>
 
     <!-- file-manager -->
-    <app-filemanager></app-filemanager>
+    <app-filemanager *ngIf="loadUpload" [display] = "true"></app-filemanager>
 
     <label class="my-3"><b>Visibility :</b></label
     ><small

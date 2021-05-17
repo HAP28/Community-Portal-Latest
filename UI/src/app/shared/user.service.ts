@@ -9,7 +9,6 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { ConfirmedValidator } from '../custom-validators';
-import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -159,24 +158,14 @@ export class UserService {
     return this.http.get(this.APIURL + '/ArticleMaster/article/' + articleid);
   }
   // filter article
-  getArticleByProduct(pid) {
-    return this.http.get(this.APIURL + '/ArticleMaster/product/' + pid);
+  getArticleByProduct(pid,draft,archive,visibility) {
+    return this.http.get(this.APIURL + '/ArticleMaster/articleByProduct?pid=' + pid + "&draft=" + draft + "&archive=" + archive + "&visibility=" + visibility);
   }
-  getArticleByProductAndCategory(pid, cid) {
-    return this.http.get(
-      this.APIURL + '/ArticleMaster/product/' + pid + '/category/' + cid
-    );
+  getArticleByProductAndCategory(pid,cid,draft,archive,visibility) {
+    return this.http.get(this.APIURL + '/ArticleMaster/articleByProductAndCategory?pid=' + pid + "&cid=" + cid + "&draft=" + draft + "&archive=" + archive + "&visibility=" + visibility);
   }
-  getArticleByProductAndCategoryAndSection(pid, cid, sid) {
-    return this.http.get(
-      this.APIURL +
-        '/ArticleMaster/product/' +
-        pid +
-        '/category/' +
-        cid +
-        '/section/' +
-        sid
-    );
+  getArticleByProductAndCategoryAndSection(pid, cid, sid,draft,archive,visibility) {
+    return this.http.get(this.APIURL + '/ArticleMaster/articleByProductCategorySection?pid=' + pid + "&cid=" + cid + "&sid=" + sid + "&draft=" + draft + "&archive=" + archive + "&visibility=" + visibility);
   }
   //Articles
   getPubishArticles() {
@@ -363,6 +352,9 @@ export class UserService {
   updateCategory(category: any) {
     return this.http.put(this.APIURL + '/CategoryMaster', category);
   }
+  countCategory(){
+    return this.http.get(this.APIURL + '/CategoryMaster/count');
+  }
 
   //get Sections
   getSection() {
@@ -386,6 +378,10 @@ export class UserService {
   updateSection(section: any) {
     return this.http.put(this.APIURL + '/SectionMaster', section);
   }
+  countSection(){
+    return this.http.get(this.APIURL + '/SectionMaster/count');
+  }
+
   //comment
   getCommentsByArticleId(Aid) {
     return this.http.get(this.APIURL + '/Comment/article/' + Aid);
@@ -420,13 +416,13 @@ export class UserService {
     return this.http.delete(this.APIURL + '/ArticleUseFullMaster/' + aid);
   }
 
-  public uploadFile(file){
+  public uploadFile(file,folder){
     const formData: FormData = new FormData();
     file.forEach(f => formData.append('formFiles',f))
     // formData.append('formFiles', file);
 
     console.log(formData);
-    const req = new HttpRequest('POST', `${this.APIURL}/ArticleMaster/Upload?subDirectory=first`, formData, {
+    const req = new HttpRequest('POST', `${this.APIURL}/ArticleMaster/Upload?subDirectory=${folder}`, formData, {
       reportProgress: true,
       responseType: 'json'
     });
@@ -434,8 +430,8 @@ export class UserService {
     return this.http.request(req);
   }
 
-  public getFiles(): Observable<string[]> {
-    return this.http.get<string[]>(this.APIURL + '/ArticleMaster/files?folder=first');
+  public getFiles(folder): Observable<string[]> {
+    return this.http.get<string[]>(this.APIURL + '/ArticleMaster/files?folder=' + folder);
   }
 
   public downloadFile(folder:string,file: string): Observable<HttpEvent<Blob>> {

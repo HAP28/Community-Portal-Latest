@@ -7,6 +7,13 @@
         </select>
     </div>
   <br />
+  <div class="content" role="main">
+      <div class="form-group">
+        <label for="search-text">Search Article</label>
+        <input type="text" class="form-control" id="search-text" aria-describedby="search-text" 
+          [(ngModel)]="searchText" placeholder="Enter text to search" 
+          autofocus>
+  </div> 
   <hr />
   <table class="table table-striped" *ngIf="data">
     <thead>
@@ -19,7 +26,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of articles; let i = index">
+      <tr *ngFor="let item of articles | appFilter: searchText : 'Article_Title'; let i = index">
         <th scope="row">{{ i + 1 }}</th>
         <td>{{ item.Article_Title }}</td>
         <td>{{ item.user }}</td>
@@ -52,4 +59,5 @@
       </tr>
     </tbody>
   </table>
+</div>
 </div>

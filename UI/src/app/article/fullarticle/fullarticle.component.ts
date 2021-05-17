@@ -37,6 +37,8 @@ export class FullarticleComponent implements OnInit {
   Archive = false;
   reviewer = false;
   display = false;
+  displayUpload = false;
+  folderfound = false;
 
   constructor(
     private service: UserService,
@@ -68,6 +70,7 @@ export class FullarticleComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+    localStorage.removeItem('folder');
     this.activateroute.queryParams.subscribe((params) => {
       this.Status = JSON.parse(params['s']);
       this.Draft = JSON.parse(params['d']);
@@ -146,6 +149,12 @@ export class FullarticleComponent implements OnInit {
       (res) => {
         this.data = true;
         this.fullarticle = res;
+        if(this.fullarticle[0].FolderName!=null){
+          this.folderfound = true;
+          localStorage.setItem('folder',this.fullarticle[0].FolderName);
+        }else{
+          this.folderfound = false
+        }
         console.log('article response by id : ', this.fullarticle[0]);
         if (!this.fullarticle[0].CommentAllow) {
           $('#cmtbtn').prop('disabled', true);
@@ -456,6 +465,16 @@ export class FullarticleComponent implements OnInit {
         }else{
           this.router.navigateByUrl('/article-posts');
         }
+      }
+    )
+  }
+  deletearticle(){
+    this.service.deletearticle(this.article_id).subscribe(
+      (res) => {
+        console.log(res);
+        this.navigate();
+      },(err) => {
+        console.log(err);
       }
     )
   }

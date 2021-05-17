@@ -38,7 +38,7 @@ import { FileManagerComponent } from './file-upload/file-manager/file-manager.co
 import { DownloadComponent } from './file-upload/download/download.component';
 import { UploadComponent } from './file-upload/upload/upload.component';
 import { SafeHtmlPipe } from './shared/pipe';
-
+import { FilterPipe } from './shared/filter.pipe';
 
 @NgModule({
   declarations: [
@@ -67,7 +67,8 @@ import { SafeHtmlPipe } from './shared/pipe';
     FileManagerComponent,
     DownloadComponent,
     UploadComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    FilterPipe
   ],
   imports: [
     BrowserModule,

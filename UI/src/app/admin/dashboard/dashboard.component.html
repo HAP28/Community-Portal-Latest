@@ -1,2 +1,40 @@
 <app-navbar></app-navbar>
 <h1 class="text-center"> Welcome to Dashboard {{userDetails.FirstName}} !!</h1>
+<div class="container">
+    <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Element</th>
+            <th scope="col">Count</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <th scope="row">1</th>
+            <td>Users</td>
+            <td>{{userCount}}</td>
+          </tr>
+            <tr>
+            <th scope="row">2</th>
+            <td>Articles</td>
+            <td>{{articleCount}}</td>
+          </tr>
+            <tr>
+            <th scope="row">3</th>
+            <td>Products</td>
+            <td>{{productCount}}</td>
+          </tr>
+            <tr>
+            <th scope="row">4</th>
+            <td>Categories</td>
+            <td>{{categoryCount}}</td>
+          </tr>
+            <tr>
+            <th scope="row">5</th>
+            <td>Sections</td>
+            <td>{{sectionCount}}</td>
+          </tr>
+        </tbody>
+      </table>
+</div>

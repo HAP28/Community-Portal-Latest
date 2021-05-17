@@ -1,5 +1,5 @@
 <div class="container-upload">
-    <button [disabled]="disabled" [ngClass]="{'disabled': disabled}" class="button upload" (click)="inputFile.click()">UPLOAD</button>
+    <button *ngIf="display" [disabled]="disabled" [ngClass]="{'disabled': disabled}" class="button upload" (click)="inputFile.click()">UPLOAD</button>
     <input
       name="file"
       id="file"

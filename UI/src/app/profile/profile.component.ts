@@ -21,11 +21,13 @@ export class ProfileComponent implements OnInit {
   editpersonaldata = {};
   display = false;
   mode: any;
-
+  Role:any;
+  atricleNotFound = true;
   constructor(private service: UserService, private router: Router) {}
   s_a: any;
   c_a: any;
   ngOnInit(): void {
+    this.Role = this.service.currentUser.Role;
     this.getUserDetails();
     //this.addCounter();
     this.getCountries();
@@ -93,14 +95,18 @@ export class ProfileComponent implements OnInit {
     this.mode = 'publish';
     this.service.getarticleforuser(uid).subscribe(
       (res) => {
-        this.getuserarticles = res;
-        // this.getuserarticles[0].PostedOn = this.formatdate(
-        //   this.getuserarticles[0].PostedOn
-        // );
+        
+          this.atricleNotFound = false;          
+          this.getuserarticles = res;
         this.formatdate(this.getuserarticles);
         console.log('all user article ', this.getuserarticles);
+        
+        
       },
       (err) => {
+        if(err.status == 403){
+          this.atricleNotFound = true;
+        }
         console.log(err);
       }
     );

@@ -25,6 +25,9 @@ export class SectionComponent implements OnInit {
   sectionBycategory: any;
   sectionNameList = [];
 
+  searchText = '';
+  characters = []
+
   constructor(private service: UserService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
@@ -36,6 +39,9 @@ export class SectionComponent implements OnInit {
       (res) => {
         this.sectionList = res;
         console.log(res);
+        this.sectionList.forEach(element => {
+          this.characters.push({'id':element.Section_Id ,'name' :element.Section_Name});
+        });
       },
       (err) => {
         console.log(err);
@@ -235,7 +241,11 @@ export class SectionComponent implements OnInit {
         console.log(this.viewsection);
         $('#viewsectionname').text(this.viewsection.Section_Name);
         $('#sectiondescription').text(this.viewsection.Section_Description);
-
+        this.service.getCategoryById(this.viewsection.Category_Id).subscribe(
+          (res) => {
+            $("#categoryName").html("<b>Category Name:</b> " +res[0].Category_Name);
+          }
+        )
         this.service.getUserById(this.viewsection.User_Id).subscribe(
           (res) => {
             $('#username').text(

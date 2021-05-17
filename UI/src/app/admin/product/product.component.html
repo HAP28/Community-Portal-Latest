@@ -2,6 +2,21 @@
 <div class="container">
   <h1 class="mb-3">Products</h1>
 
+  <div class="content" role="main">
+    <div class="form-group">
+      <label for="search-text">Search Product</label>
+      <input
+        type="text"
+        class="form-control"
+        id="search-text"
+        aria-describedby="search-text"
+        [(ngModel)]="searchText"
+        placeholder="Enter text to search"
+        autofocus
+      />
+    </div>
+  </div>
+
   <form [formGroup]="productform" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <div class="input-group mb-3">
@@ -100,7 +115,7 @@
             data-bs-dismiss="modal"
             id="closewindow"
           >
-            Cancle
+            Cancel
           </button>
         </div>
       </div>
@@ -165,7 +180,7 @@
   <br />
 
   <div class="row row-cols-1 row-cols-md-3 g-4">
-    <div class="col" *ngFor="let item of productList">
+    <div class="col" *ngFor="let item of productList | appFilter: searchText : 'Product_Name'">
       <div
         class="card shadow p-3 mb-5 bg-body rounded animate"
         data-bs-toggle="modal"
@@ -265,7 +280,7 @@
           data-bs-dismiss="modal"
           id="closewindow"
         >
-          Cancle
+          Cancel
         </button>
         <button
           type="button"
