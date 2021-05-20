@@ -1,6 +1,9 @@
 .header-frame {
   display: none;
 }
+.maindiv{
+  background-color: #eeee;
+}
 .show-less {
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -23,7 +26,7 @@
   /* border-radius: 10px; */
   /* margin-bottom: 30px;
     margin-top: 30px; */
-  background-color: #eeee;
+  background-color: white;
   cursor: pointer;
 }
 .text-custom {

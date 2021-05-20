@@ -34,6 +34,7 @@ export class ArticlePostsComponent implements OnInit {
     this.getpublicArticles();
     this.refreshList();
     this.validateAdminReviewer();
+    this.getpublicArticles();
     localStorage.setItem('mode', 'viewer');
   }
   formatdate(articles) {
@@ -224,18 +225,34 @@ export class ArticlePostsComponent implements OnInit {
     this.isDataAvailable = true;
   }
   getpublicArticles() {
-    this.service.getPubishArticles().subscribe(
-      (res) => {
-        this.Articles = res;
-        console.log(res);
-        this.formatdate(this.Articles);
-        this.commoncode(this.Articles);
-        console.log('public articles', this.Articles);
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    if(this.service.currentUser == null){
+      this.service.getPubishArticles().subscribe(
+        (res) => {
+          this.Articles = res;
+          console.log(res);
+          this.formatdate(this.Articles);
+          this.commoncode(this.Articles);
+          console.log('public articles', this.Articles);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }else{
+      this.service.getLoggedinArticles().subscribe(
+        (res) => {
+          this.Articles = res;
+          console.log(res);
+          this.formatdate(this.Articles);
+          this.commoncode(this.Articles);
+          console.log('public articles', this.Articles);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
+    
   }
 
   refreshList() {

@@ -1,5 +1,6 @@
 <app-header [display]="display"></app-header>
-<div class="searching my-3">
+<div class="maindiv pb-5">
+<div class="searching py-3">
   <div class="container">
     <div class="content" role="main">
       <div class="form-group">
@@ -15,7 +16,7 @@
         />
       </div>
     </div>
-    <div class="card">
+    <div class="card shadow">
       <div class="card-body">
         <form (ngSubmit)="searchArticle()">
           <div class="row">
@@ -62,12 +63,12 @@
                       Reset
                     </button>
                   </td>
-                  <td class="feku"><br /><span class="ml-3">Mode</span></td>
+                  <td class="feku"><br /><span class="ml-2 mr-4">Mode</span></td>
                   <td class="feku">
                     <div class="form-check form-switch">
                       <abbr data-title="Toggle button to switch in Review Mode">
                         <input
-                          class="form-check-input mt-3 ml-1"
+                          class="form-check-input mt-3"
                           type="checkbox"
                           id="toggle-one"
                           (change)="toogleswitch()"
@@ -85,9 +86,9 @@
   </div>
 </div>
 <div class="container" *ngIf="isDataAvailable">
-  <div class="card-box" *ngFor="let item of Articles | appFilter: searchText : 'Article_Title'">
+  <div class="card-box shadow-lg" *ngFor="let item of Articles | appFilter: searchText : 'Article_Title'">
     <div class="py-3" style="display: flex">
-      <h4 class="header-title">{{ item.Article_Title }}</h4>
+      <h4 class="header-title" [innerHTML] ="item.Article_Title | safeHtml"></h4>
     </div>
     <div class="main">
       <h5 class="text-custom">
@@ -118,5 +119,6 @@
     </div>
     <hr />
   </div>
+</div>
 </div>
 <app-footer></app-footer>

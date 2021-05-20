@@ -236,6 +236,17 @@ export class UserService {
         false
     );
   }
+  getLoggedinArticles() {   //public + loggedin
+    return this.http.get(
+      this.APIURL +
+        '/ArticleMaster/userarticleforloggdin/' +
+        true +
+        '/' +
+        false +
+        '/' +
+        false
+    );
+  }
   postArticle(article: any) {
     return this.http.post(this.APIURL + '/ArticleMaster', article);
   }

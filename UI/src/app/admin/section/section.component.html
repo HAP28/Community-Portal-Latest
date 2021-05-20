@@ -119,7 +119,7 @@
             (click)="viewspecificSection(item.Section_Id)"
           >
             <div class="card-body">
-              <h5 class="card-title">{{ item.Section_Name }}</h5>
+              <h5 class="card-title" [innerHTML] = "item.Section_Name | safeHtml"></h5>
               <p class="card-text show-less">{{ item.Section_Description }}</p>
               <div class="buttons" style="display: flex">
                 <div>

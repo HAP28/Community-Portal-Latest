@@ -563,6 +563,34 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
+        [Authorize]
+        [HttpGet("userarticleforloggdin/{s}/{d}/{a}")]
+        public async Task<IActionResult> getpublicandloggedinarticle(bool s, bool d, bool a)
+        {
+            try
+            {
+                string query = @"Select * from dbo.ArticleMaster where Status = '" + s + "' and Draft = '" + d + "' and Archive = '" + a + "' and (Visibility = '1' or Visibility = '3')";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return Ok(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
 
         [AllowAnonymous]
         [Route("image")]

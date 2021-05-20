@@ -188,7 +188,7 @@
         (click)="viewspecificProduct(item.Product_Id)"
       >
         <div class="card-body">
-          <h5 class="card-title">{{ item.Product_Name }}</h5>
+          <h5 class="card-title" [innerHTML] = "item.Product_Name | safeHtml"></h5>
           <p class="card-text" class="show-less">
             {{ item.Product_Description }}
           </p>
