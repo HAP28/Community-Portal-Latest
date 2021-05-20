@@ -120,14 +120,6 @@ namespace WebAPI
                 app.UseHsts();
             }
 
-            //articleContext.Database.EnsureCreated();
-
-            //app.UseCors(builder =>
-            //builder.WithOrigins("http://localhost:4200/")
-            //.AllowAnyMethod()
-            //.AllowAnyHeader()
-            //);
-
             app.UseCors(options =>
             options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
             );

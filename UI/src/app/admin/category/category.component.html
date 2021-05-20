@@ -94,7 +94,7 @@
         (click)="viewspecificCategory(item.Category_Id)"
       >
         <div class="card-body">
-          <h5 class="card-title">{{ item.Category_Name }}</h5>
+          <h5 class="card-title" [innerHTML] = "item.Category_Name | safeHtml"></h5>
           <p class="card-text" class="show-less">
             {{ item.Category_Description }}
           </p>
