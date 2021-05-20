@@ -79,7 +79,35 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
-
+        [AllowAnonymous]
+        [HttpGet("count")]
+        // GET: CategoryMasterController/Category/5
+        public JsonResult GetCount(int id)
+        {
+            try
+            {
+                string query = @"select Count(*) from CategoryMaster";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+        }
         [HttpGet("user/{uid}")]
         // GET: CategoryMasterController/Category/5
         public JsonResult Get(string uid)

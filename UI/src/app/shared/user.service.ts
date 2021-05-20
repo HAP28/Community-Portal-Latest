@@ -3,14 +3,25 @@ import { FormBuilder, Validators } from '@angular/forms';
 import {
   HttpClient,
   HttpClientModule,
+  HttpErrorResponse,
   HttpEvent,
   HttpHeaderResponse,
   HttpHeaders,
   HttpRequest,
 } from '@angular/common/http';
 import { ConfirmedValidator } from '../custom-validators';
-import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
 import { Observable } from 'rxjs';
+
+interface ForgotPasswordDto {
+  email: string;
+  clientURI: string;
+}
+interface ResetPasswordDto {
+  password: string;
+  confirmPassword: string;
+  email: string;
+  token: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +30,8 @@ export class UserService {
   constructor(private fb: FormBuilder, private http: HttpClient) {}
 
   readonly APIURL = 'http://localhost:65241/api';
+  // readonly ClientURL = 'http://localhost:4200';
+
   formModel = this.fb.group(
     {
       FirstName: [
@@ -159,23 +172,56 @@ export class UserService {
     return this.http.get(this.APIURL + '/ArticleMaster/article/' + articleid);
   }
   // filter article
-  getArticleByProduct(pid) {
-    return this.http.get(this.APIURL + '/ArticleMaster/product/' + pid);
-  }
-  getArticleByProductAndCategory(pid, cid) {
-    return this.http.get(
-      this.APIURL + '/ArticleMaster/product/' + pid + '/category/' + cid
-    );
-  }
-  getArticleByProductAndCategoryAndSection(pid, cid, sid) {
+  getArticleByProduct(pid, draft, archive, visibility) {
     return this.http.get(
       this.APIURL +
-        '/ArticleMaster/product/' +
+        '/ArticleMaster/articleByProduct?pid=' +
         pid +
-        '/category/' +
+        '&draft=' +
+        draft +
+        '&archive=' +
+        archive +
+        '&visibility=' +
+        visibility
+    );
+  }
+  getArticleByProductAndCategory(pid, cid, draft, archive, visibility) {
+    return this.http.get(
+      this.APIURL +
+        '/ArticleMaster/articleByProductAndCategory?pid=' +
+        pid +
+        '&cid=' +
         cid +
-        '/section/' +
-        sid
+        '&draft=' +
+        draft +
+        '&archive=' +
+        archive +
+        '&visibility=' +
+        visibility
+    );
+  }
+  getArticleByProductAndCategoryAndSection(
+    pid,
+    cid,
+    sid,
+    draft,
+    archive,
+    visibility
+  ) {
+    return this.http.get(
+      this.APIURL +
+        '/ArticleMaster/articleByProductCategorySection?pid=' +
+        pid +
+        '&cid=' +
+        cid +
+        '&sid=' +
+        sid +
+        '&draft=' +
+        draft +
+        '&archive=' +
+        archive +
+        '&visibility=' +
+        visibility
     );
   }
   //Articles
@@ -264,8 +310,11 @@ export class UserService {
       null
     );
   }
-  setreviewer(rid,aid){
-    return this.http.patch(this.APIURL + '/ArticleMaster/reviewer?rid='+rid+'&aid='+aid,null);
+  setreviewer(rid, aid) {
+    return this.http.patch(
+      this.APIURL + '/ArticleMaster/reviewer?rid=' + rid + '&aid=' + aid,
+      null
+    );
   }
   patch_disapprove_article(id) {
     return this.http.patch(
@@ -363,6 +412,9 @@ export class UserService {
   updateCategory(category: any) {
     return this.http.put(this.APIURL + '/CategoryMaster', category);
   }
+  countCategory() {
+    return this.http.get(this.APIURL + '/CategoryMaster/count');
+  }
 
   //get Sections
   getSection() {
@@ -386,6 +438,10 @@ export class UserService {
   updateSection(section: any) {
     return this.http.put(this.APIURL + '/SectionMaster', section);
   }
+  countSection() {
+    return this.http.get(this.APIURL + '/SectionMaster/count');
+  }
+
   //comment
   getCommentsByArticleId(Aid) {
     return this.http.get(this.APIURL + '/Comment/article/' + Aid);
@@ -420,36 +476,73 @@ export class UserService {
     return this.http.delete(this.APIURL + '/ArticleUseFullMaster/' + aid);
   }
 
-  public uploadFile(file){
+  public uploadFile(file, folder) {
     const formData: FormData = new FormData();
-    file.forEach(f => formData.append('formFiles',f))
+    file.forEach((f) => formData.append('formFiles', f));
     // formData.append('formFiles', file);
 
     console.log(formData);
-    const req = new HttpRequest('POST', `${this.APIURL}/ArticleMaster/Upload?subDirectory=first`, formData, {
-      reportProgress: true,
-      responseType: 'json'
-    });
+    const req = new HttpRequest(
+      'POST',
+      `${this.APIURL}/ArticleMaster/Upload?subDirectory=${folder}`,
+      formData,
+      {
+        reportProgress: true,
+        responseType: 'json',
+      }
+    );
 
     return this.http.request(req);
   }
 
-  public getFiles(): Observable<string[]> {
-    return this.http.get<string[]>(this.APIURL + '/ArticleMaster/files?folder=first');
+  public getFiles(folder): Observable<string[]> {
+    return this.http.get<string[]>(
+      this.APIURL + '/ArticleMaster/files?folder=' + folder
+    );
   }
 
-  public downloadFile(folder:string,file: string): Observable<HttpEvent<Blob>> {
-    return this.http.request(new HttpRequest(
-      'GET',
-      `${this.APIURL}/ArticleMaster/Download?folder=${folder}&fileUrl=${file}`,
-      null,
-      {
-        reportProgress: true,
-        responseType: 'blob'
-      }));
+  public downloadFile(
+    folder: string,
+    file: string
+  ): Observable<HttpEvent<Blob>> {
+    return this.http.request(
+      new HttpRequest(
+        'GET',
+        `${this.APIURL}/ArticleMaster/Download?folder=${folder}&fileUrl=${file}`,
+        null,
+        {
+          reportProgress: true,
+          responseType: 'blob',
+        }
+      )
+    );
   }
 
-  public deleteFilesFromArticle(folder:string,filename:string){
-    return this.http.delete(this.APIURL + '/ArticleMaster/deletefile?folder='+folder+'&filename='+filename);
+  public deleteFilesFromArticle(folder: string, filename: string) {
+    return this.http.delete(
+      this.APIURL +
+        '/ArticleMaster/deletefile?folder=' +
+        folder +
+        '&filename=' +
+        filename
+    );
+  }
+
+  //password
+  public forgotPassword = (body: ForgotPasswordDto) => {
+    return this.http.post(this.APIURL + '/Account/ForgotPassword', body);
+  };
+  public resetPassword = (body: ResetPasswordDto) => {
+    return this.http.post(this.APIURL + '/Account/ResetPassword', body);
+  };
+  public changePassword = (id, body) => {
+    return this.http.post(
+      this.APIURL + '/Account/ChangePassword?id=' + id,
+      body
+    );
+  };
+  // Contact Form
+  contactus(model) {
+    return this.http.post(this.APIURL + '/Account/contact', model);
   }
 }

@@ -1,0 +1,32 @@
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 20px;
+  width: auto;
+}
+
+li {
+  font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
+  border-bottom: 1px solid #ccc;
+}
+
+li:last-child {
+  border: none;
+}
+
+li a {
+  text-decoration: none;
+  color: #000;
+}
+
+li a:hover {
+  background: #f6f6f6;
+}
+button {
+  background-color: rgb(184, 12, 12);
+  border: none;
+  color: white;
+  padding: 6px 10px;
+  font-size: 16px;
+  cursor: pointer;
+}

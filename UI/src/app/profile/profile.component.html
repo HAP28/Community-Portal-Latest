@@ -2,7 +2,7 @@
   href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
   rel="stylesheet"
 />
-<app-header [display] = "display"></app-header>
+<app-header [display]="display"></app-header>
 <div class="content">
   <div class="container">
     <div class="row">
@@ -310,9 +310,10 @@
                               ><i class="fa fa-lock" aria-hidden="true"></i
                             ></span>
                             <input
-                              type="text"
+                              type="password"
                               class="form-control"
-                              placeholder="New Password"
+                              placeholder="Old Password"
+                              id="old_password"
                             />
                           </div>
                           <div class="input-group mb-3">
@@ -320,9 +321,10 @@
                               ><i class="fa fa-lock" aria-hidden="true"></i
                             ></span>
                             <input
-                              type="text"
+                              type="password"
                               class="form-control"
-                              placeholder="Confirm Password"
+                              placeholder="New Password"
+                              id="new_password"
                             />
                           </div>
                         </div>
@@ -331,11 +333,12 @@
                             type="button"
                             class="btn btn-secondary"
                             data-bs-dismiss="modal"
+                            id="close"
                           >
                             Close
                           </button>
-                          <button type="button" class="btn btn-primary">
-                            Save changes
+                          <button type="button" class="btn btn-primary" (click) = "changePassword()">
+                            Change Password
                           </button>
                         </div>
                       </div>
@@ -354,6 +357,7 @@
         <div class="card-box">
           <h4 class="header-title mt-0">Personal Information</h4>
           <div class="panel-body">
+            <code>Role: {{ Role }}</code>
             <p class="text-muted font-13">
               {{ this.userDetails.user_bio }}
             </p>
@@ -464,7 +468,11 @@
                 <p class="inbox-item-date">
                   <button
                     type="button"
-                    class="btn btn-icon btn-sm waves-effect waves-light btn-success"
+                    class="
+                      btn btn-icon btn-sm
+                      waves-effect waves-light
+                      btn-success
+                    "
                   >
                     Reply
                   </button>
@@ -485,7 +493,11 @@
                 <p class="inbox-item-date">
                   <button
                     type="button"
-                    class="btn btn-icon btn-sm waves-effect waves-light btn-success"
+                    class="
+                      btn btn-icon btn-sm
+                      waves-effect waves-light
+                      btn-success
+                    "
                   >
                     Reply
                   </button>
@@ -545,20 +557,32 @@
         <div class="card-box shadow">
           <!-- <div class=""> -->
           <!-- <hr /> -->
-          <div class="p-3" *ngFor="let item of getuserarticles">
-            <h5 class="text-custom">{{ item.Article_Title }}</h5>
-            <p class="mb-0">{{ item.PostedOn }}</p>
-            <p
-              class="text-muted font-13 mb-0 show-less"
-              [innerHTML]="item.Description"
-            >
-              <!-- {{ item.Description }} -->
-            </p>
-            <a (click)="readMore(item.Article_Id,item.Status,item.Draft,item.Archive)" class="readmore"
-              >Read More..</a
-            >
-            <hr />
-          </div>
+          <h6 class="text-muted text-center" *ngIf="atricleNotFound">No Articles Found</h6>
+          <ng-container *ngIf="!atricleNotFound">
+            <div class="p-3" *ngFor="let item of getuserarticles">
+              <h5 class="text-custom">{{ item.Article_Title }}</h5>
+              <p class="mb-0">{{ item.PostedOn }}</p>
+              <p
+                class="text-muted font-13 mb-0 show-less"
+                [innerHTML]="item.Description"
+              >
+                <!-- {{ item.Description }} -->
+              </p>
+              <a
+                (click)="
+                  readMore(
+                    item.Article_Id,
+                    item.Status,
+                    item.Draft,
+                    item.Archive
+                  )
+                "
+                class="readmore"
+                >Read More..</a
+              >
+              <hr />
+            </div>
+          </ng-container>
 
           <!-- <div class="">
               <h5 class="text-custom">Senior Graphic Designer</h5>

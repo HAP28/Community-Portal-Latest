@@ -15,11 +15,15 @@ import { UserComponent } from './admin/user/user.component';
 import { ProductComponent } from './admin/product/product.component';
 import { CategoryComponent } from './admin/category/category.component';
 import { SectionComponent } from './admin/section/section.component';
-import { PermissionComponent } from './admin/permission/permission.component';
 import { ManageRolesComponent } from './admin/manage-roles/manage-roles.component';
 import { FullarticleComponent } from './article/fullarticle/fullarticle.component';
-import {ProfileComponent} from './profile/profile.component';
+import { NotfoundComponent } from './notfound/notfound.component';
+import { ProfileComponent } from './profile/profile.component';
 import { ArticleComponent } from './admin/article/article.component';
+import { ForgotPasswordComponent } from './authentication/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
+import { ContactComponent } from './contact/contact.component';
+import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -29,7 +33,9 @@ const routes: Routes = [
   { path: 'registration', component: RegistrationComponent },
   { path: 'app', component: AppComponent },
   { path: 'user-profile', component: UserProfileComponent },
-  {path:  'profile',component:ProfileComponent, canActivate: [AuthGuard]},
+  { path: 'contact-us', component: ContactComponent },
+  { path: 'about', component: AboutComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   {
     path: 'article-create',
     component: ArticleCreateComponent,
@@ -74,12 +80,6 @@ const routes: Routes = [
     data: { roles: ['Admin'] },
   },
   {
-    path: 'permission',
-    component: PermissionComponent,
-    canActivate: [AuthGuard],
-    data: { roles: ['Admin'] },
-  },
-  {
     path: 'manageroles',
     component: ManageRolesComponent,
     canActivate: [AuthGuard],
@@ -95,6 +95,9 @@ const routes: Routes = [
     path: 'article',
     component: FullarticleComponent,
   },
+  { path: 'forgotpassword', component: ForgotPasswordComponent },
+  { path: 'resetpassword', component: ResetPasswordComponent },
+  { path: '**', component: NotfoundComponent },
 ];
 
 @NgModule({

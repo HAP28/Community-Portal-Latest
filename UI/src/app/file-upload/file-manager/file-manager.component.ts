@@ -1,33 +1,44 @@
-import { Component, OnInit } from '@angular/core';
-import { ProgressStatusEnum, ProgressStatus } from 'src/app/models/progress-status';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import {
+  ProgressStatusEnum,
+  ProgressStatus,
+} from 'src/app/models/progress-status';
 import { UserService } from 'src/app/shared/user.service';
+import { UploadComponent } from '../upload/upload.component';
 
 @Component({
   selector: 'app-filemanager',
-  templateUrl: './file-manager.component.html'
+  templateUrl: './file-manager.component.html',
+  styleUrls: ['./file-manager.component.css'],
 })
 export class FileManagerComponent implements OnInit {
-
+  @Input() display: boolean;
   public files: string[];
   public fileInDownload: string;
   public percentage: number;
   public showProgress: boolean;
   public showDownloadError: boolean;
   public showUploadError: boolean;
-
-  constructor(private service: UserService) { }
+  constructor(private service: UserService) {}
 
   ngOnInit() {
-    this.getFiles();
+    if (localStorage.getItem('folder')) {
+      this.getFiles(localStorage.getItem('folder'));
+    }
   }
 
-  private getFiles() {
-    this.service.getFiles().subscribe(
-      data => {
-        this.files = data;
-        console.log()
-      }
-    );
+  private getFiles(folder) {
+    this.service.getFiles(folder).subscribe((data) => {
+      this.files = data;
+      console.log();
+    });
   }
 
   public downloadStatus(event: ProgressStatus) {
@@ -60,7 +71,7 @@ export class FileManagerComponent implements OnInit {
         break;
       case ProgressStatusEnum.COMPLETE:
         this.showProgress = false;
-        this.getFiles();
+        this.getFiles(localStorage.getItem('folder'));
         break;
       case ProgressStatusEnum.ERROR:
         this.showProgress = false;
@@ -68,18 +79,21 @@ export class FileManagerComponent implements OnInit {
         break;
     }
   }
-  deleteFile(file){
+  deleteFile(file) {
     console.log(file);
-    this.service.deleteFilesFromArticle('first',file).subscribe(
-      (res) => {
-        this.getFiles();
-      },(err) =>{
-        if(err.status == 200){
-        this.getFiles();
-        }else{
-          console.log(err);
+    this.service
+      .deleteFilesFromArticle(localStorage.getItem('folder'), file)
+      .subscribe(
+        (res) => {
+          this.getFiles(localStorage.getItem('folder'));
+        },
+        (err) => {
+          if (err.status == 200) {
+            this.getFiles(localStorage.getItem('folder'));
+          } else {
+            console.log(err);
+          }
         }
-      }
-    )
+      );
   }
 }

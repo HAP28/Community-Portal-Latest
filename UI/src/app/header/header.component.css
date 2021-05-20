@@ -23,6 +23,7 @@
     text-align: right;
     color: white;
     font-weight: bold;
+    background-color: #16a596;
 }
 .dropdown-item:hover{
     color: black;

@@ -80,14 +80,20 @@ export class ArticleCreateComponent implements OnInit {
   editmode: boolean = false;
   currentarticle: any;
   defaultRTE: RichTextEditor;
+  folderName: string;
+  RandomFolderName: string;
+  loadUpload = true;
 
   ngOnInit(): void {
+    localStorage.removeItem('folder');
     this.activatedRoute.queryParams.subscribe((params) => {
       if (params['mode'] == 'edit') {
         this.editmode = true;
 
         $('#validateSubmit').css('display', 'none');
 
+        this.loadUpload = false;
+        // $('#validateSubmit').css('display','none');
         this.article_id = params['id'];
         console.log('Clicked Article: ', this.article_id);
       }
@@ -189,6 +195,9 @@ export class ArticleCreateComponent implements OnInit {
       this.x['productId'] = $('#product').val();
       this.x['sectionId'] = $('#section').val();
       this.x['visible'] = visibility;
+      if (localStorage.getItem('folder')) {
+        this.x['FolderName'] = localStorage.getItem('folder');
+      }
 
       if (id == 1) {
         this.x['status'] = false;
@@ -286,7 +295,9 @@ export class ArticleCreateComponent implements OnInit {
       this.service.getArticleById(this.article_id).subscribe(
         (res) => {
           this.currentarticle = res;
-
+          localStorage.setItem('folder', this.currentarticle[0].FolderName);
+          this.folderName = localStorage.getItem('folder');
+          this.loadUpload = true;
           console.log('Current Article Response :', this.currentarticle[0]);
           $('#title').val(this.currentarticle[0].Article_Title);
           $('#product').val(this.currentarticle[0].Product_Id).change();

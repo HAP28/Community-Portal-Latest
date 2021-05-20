@@ -518,3 +518,11 @@ C:\Users\HARSHIT\Desktop\Community-Portal-Latest\WebAPI\WebAPI\obj\Debug\net5.0\
 C:\Users\HARSHIT\Desktop\Community-Portal-Latest\WebAPI\WebAPI\obj\Debug\net5.0\ref\WebAPI.dll
 C:\Users\HARSHIT\Desktop\Community-Portal-Latest\WebAPI\WebAPI\obj\Debug\net5.0\WebAPI.pdb
 C:\Users\HARSHIT\Desktop\Community-Portal-Latest\WebAPI\WebAPI\obj\Debug\net5.0\WebAPI.genruntimeconfig.cache
+C:\Users\HARSHIT\Desktop\Community-Portal-Latest\WebAPI\WebAPI\bin\Debug\net5.0\MailKit.dll
+C:\Users\HARSHIT\Desktop\Community-Portal-Latest\WebAPI\WebAPI\bin\Debug\net5.0\MimeKit.dll
+C:\Users\HARSHIT\Desktop\Community-Portal-Latest\WebAPI\WebAPI\bin\Debug\net5.0\NETCore.MailKit.dll
+C:\Users\HARSHIT\Desktop\Community-Portal-Latest\WebAPI\WebAPI\bin\Debug\net5.0\BouncyCastle.Crypto.dll
+D:\Internship HIPL\Community Portal Main\Community-Portal-Latest\WebAPI\WebAPI\bin\Debug\net5.0\MailKit.dll
+D:\Internship HIPL\Community Portal Main\Community-Portal-Latest\WebAPI\WebAPI\bin\Debug\net5.0\MimeKit.dll
+D:\Internship HIPL\Community Portal Main\Community-Portal-Latest\WebAPI\WebAPI\bin\Debug\net5.0\NETCore.MailKit.dll
+D:\Internship HIPL\Community Portal Main\Community-Portal-Latest\WebAPI\WebAPI\bin\Debug\net5.0\BouncyCastle.Crypto.dll

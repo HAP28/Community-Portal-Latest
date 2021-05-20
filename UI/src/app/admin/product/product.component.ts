@@ -28,6 +28,10 @@ export class ProductComponent implements OnInit {
   submitted = false;
   productname: any;
   viewproduct: any;
+
+  searchText = '';
+  characters = []
+
   constructor(
     private service: UserService,
     private toastr: ToastrService,
@@ -61,6 +65,9 @@ export class ProductComponent implements OnInit {
       (res) => {
         this.productList = res;
         console.log(res);
+        this.productList.forEach(element => {
+          this.characters.push({'id':element.Product_Id ,'name' :element.Product_Name});
+        });
       },
       (err) => {
         console.log(err);

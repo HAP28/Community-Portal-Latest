@@ -12,6 +12,8 @@ export class ArticleComponent implements OnInit {
   user: any;
   data = false;
   dropdown = [{ name: 'Published', value: '0' }, { name: 'Not Published', value: '1' }];
+  searchText = '';
+  characters = []
   constructor(private service: UserService) {}
 
   ngOnInit(): void {
@@ -28,6 +30,9 @@ export class ArticleComponent implements OnInit {
     this.service.getPubishArticles().subscribe(
       (res) => {
         this.articles = res;
+        this.articles.forEach(element => {
+          this.characters.push({'id':element.Article_Id ,'name' :element.Article_Title});
+        });
         this.articles.forEach((element) => {
           this.service.getUserById(element.User_Id).subscribe((res) => {
             this.user = res;
@@ -65,6 +70,10 @@ export class ArticleComponent implements OnInit {
       this.service.getarticlesforreviewer().subscribe(
         (res) => {
           this.articles = res;
+          this.characters = [];
+          this.articles.forEach(element => {
+            this.characters.push({'id':element.Article_Id ,'name' :element.Article_Title});
+          });
           this.articles.forEach((element) => {
             this.service.getUserById(element.User_Id).subscribe((res) => {
               this.user = res;

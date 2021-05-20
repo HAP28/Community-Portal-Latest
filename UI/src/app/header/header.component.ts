@@ -6,58 +6,64 @@ import * as $ from 'jquery';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
   @Input() display: boolean;
 
-  loggedIn : boolean = false;
+  loggedIn: boolean = false;
   title = 'user-profile';
-  userDetails : any;
+  userDetails: any;
   admin = false;
-  constructor(private _router : Router,private service:UserService) { }
+  constructor(private _router: Router, private service: UserService) {}
 
   ngOnInit(): void {
-    if(localStorage.getItem('loggedUser')!= null){
+    if (localStorage.getItem('loggedUser') != null) {
       this.service.getUserProfile().subscribe(
         (res) => {
           this.userDetails = res;
           this.loggedIn = true;
           console.log(this.userDetails);
-          if(this.service.currentUser.Role == "Admin"){
+          if (this.service.currentUser.Role == 'Admin') {
             // $('#dashboard').show();
             this.admin = true;
           }
-        }, (err) => {
+        },
+        (err) => {
           console.log(err);
         }
       );
     }
   }
-  login(){
-    if(localStorage.getItem('loggedUser')==null)
-    {
+  login() {
+    if (localStorage.getItem('loggedUser') == null) {
       this.loggedIn = true;
       this._router.navigate(['/login']);
     }
   }
-  logout(){
+  logout() {
     alert('logged out');
     localStorage.removeItem('loggedUser');
     this._router.navigate(['/']);
     this.loggedIn = false;
   }
 
-  createarticle(){
-    this._router.navigate(['article-create'])
+  createarticle() {
+    this._router.navigate(['article-create']);
   }
-  dashboard(){
+  dashboard() {
     this._router.navigate(['/dashboard']);
   }
-  profile(){
-    if(localStorage.getItem('loggedUser')!= null){
+  profile() {
+    if (localStorage.getItem('loggedUser') != null) {
       this.loggedIn = true;
       this._router.navigate(['/profile']);
     }
+  }
+  contact() {
+    this._router.navigate(['/contact-us']);
+  }
+  about() {
+    this._router.navigate(['/about']);
   }
 }

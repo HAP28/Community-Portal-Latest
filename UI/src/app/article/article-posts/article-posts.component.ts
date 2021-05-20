@@ -23,6 +23,7 @@ export class ArticlePostsComponent implements OnInit {
   response: any;
   FullName: any;
   isDataAvailable: boolean = false;
+  searchText = '';
   constructor(
     private service: UserService,
     private router: Router,
@@ -30,6 +31,7 @@ export class ArticlePostsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getpublicArticles();
     this.refreshList();
     this.validateAdminReviewer();
     localStorage.setItem('mode', 'viewer');
@@ -51,6 +53,7 @@ export class ArticlePostsComponent implements OnInit {
     }
   }
   toogleswitch() {
+    this.refreshList();
     console.log('status', $('#toggle-one').prop('checked'));
     if ($('#toggle-one').prop('checked')) {
       this.toast.success('You are switch to review mode', 'Reviewer Mode', {
@@ -272,10 +275,18 @@ export class ArticlePostsComponent implements OnInit {
         console.log(err);
       }
     );
-    this.getpublicArticles();
+    // this.getpublicArticles();
   }
 
   searchArticle() {
+    let visibility = '1';
+    let draft;
+    let archive = false;
+    if (localStorage.getItem('mode') == 'viewer') {
+      draft = false;
+    } else {
+      draft = true;
+    }
     var product = $('#productList').val();
     var category = $('#categoryList').val();
     var section = $('#sectionList').val();
@@ -285,61 +296,69 @@ export class ArticlePostsComponent implements OnInit {
       return;
     } else {
       if (category == '') {
-        this.service.getArticleByProduct(product).subscribe(
-          (res) => {
-            this.Articles = res;
-            this.formatdate(this.Articles);
-            this.Articles.forEach((element) => {
-              this.service.getUserById(element.User_Id).subscribe(
-                (res) => {
-                  var response = res;
-                  element.user =
-                    response['FirstName'] + ' ' + response['LastName'];
-                },
-                (err) => {
-                  console.log(err);
-                }
-              );
-              this.service.getProductsById(element.Product_Id).subscribe(
-                (res) => {
-                  var responseP = res;
-                  element.product = responseP[0]['Product_Name'];
-                },
-                (err) => {
-                  console.log(err);
-                }
-              );
-              this.service.getCategoryById(element.Category_Id).subscribe(
-                (res) => {
-                  var response = res;
-                  element.category = response[0]['Category_Name'];
-                },
-                (err) => {
-                  console.log(err);
-                }
-              );
-              this.service.getSectionById(element.Section_Id).subscribe(
-                (res) => {
-                  var response = res;
-                  element.section = response[0]['Section_Name'];
-                },
-                (err) => {
-                  console.log(err);
-                }
-              );
-            });
+        this.service
+          .getArticleByProduct(product, draft, archive, visibility)
+          .subscribe(
+            (res) => {
+              this.Articles = res;
+              this.formatdate(this.Articles);
+              this.Articles.forEach((element) => {
+                this.service.getUserById(element.User_Id).subscribe(
+                  (res) => {
+                    var response = res;
+                    element.user =
+                      response['FirstName'] + ' ' + response['LastName'];
+                  },
+                  (err) => {
+                    console.log(err);
+                  }
+                );
+                this.service.getProductsById(element.Product_Id).subscribe(
+                  (res) => {
+                    var responseP = res;
+                    element.product = responseP[0]['Product_Name'];
+                  },
+                  (err) => {
+                    console.log(err);
+                  }
+                );
+                this.service.getCategoryById(element.Category_Id).subscribe(
+                  (res) => {
+                    var response = res;
+                    element.category = response[0]['Category_Name'];
+                  },
+                  (err) => {
+                    console.log(err);
+                  }
+                );
+                this.service.getSectionById(element.Section_Id).subscribe(
+                  (res) => {
+                    var response = res;
+                    element.section = response[0]['Section_Name'];
+                  },
+                  (err) => {
+                    console.log(err);
+                  }
+                );
+              });
 
-            this.isDataAvailable = true;
+              this.isDataAvailable = true;
 
-            console.log(this.Articles);
-          },
-          (err) => {
-            console.log(err);
-          }
-        );
+              console.log(this.Articles);
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
       } else if (section == '') {
         this.service
-          .getArticleByProductAndCategory(product, category)
+          .getArticleByProductAndCategory(
+            product,
+            category,
+            draft,
+            archive,
+            visibility
+          )
           .subscribe(
             (res) => {
               this.Articles = res;
@@ -392,7 +411,14 @@ export class ArticlePostsComponent implements OnInit {
           );
       } else {
         this.service
-          .getArticleByProductAndCategoryAndSection(product, category, section)
+          .getArticleByProductAndCategoryAndSection(
+            product,
+            category,
+            section,
+            draft,
+            archive,
+            visibility
+          )
           .subscribe(
             (res) => {
               this.Articles = res;

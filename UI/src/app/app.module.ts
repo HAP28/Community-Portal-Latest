@@ -25,7 +25,6 @@ import { RolesComponent } from './admin/roles/roles.component';
 import { ProductComponent } from './admin/product/product.component';
 import { CategoryComponent } from './admin/category/category.component';
 import { SectionComponent } from './admin/section/section.component';
-import { PermissionComponent } from './admin/permission/permission.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -39,8 +38,19 @@ import { DownloadComponent } from './file-upload/download/download.component';
 import { UploadComponent } from './file-upload/upload/upload.component';
 import { SafeHtmlPipe } from './shared/pipe';
 
+import { FilterPipe } from './shared/filter.pipe';
+import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
+import { ForgotPasswordComponent } from './authentication/forgot-password/forgot-password.component';
+import { NotfoundComponent } from './notfound/notfound.component';
+import { ContactComponent } from './contact/contact.component';
+import { AboutComponent } from './about/about.component';
+
 @NgModule({
   declarations: [
+    FilterPipe,
+    ResetPasswordComponent,
+    ForgotPasswordComponent,
+    NotfoundComponent,
     AppComponent,
     HeaderComponent,
     BodyComponent,
@@ -58,7 +68,6 @@ import { SafeHtmlPipe } from './shared/pipe';
     ProductComponent,
     CategoryComponent,
     SectionComponent,
-    PermissionComponent,
     ManageRolesComponent,
     FullarticleComponent,
     ProfileComponent,
@@ -67,6 +76,8 @@ import { SafeHtmlPipe } from './shared/pipe';
     FileManagerComponent,
     DownloadComponent,
     UploadComponent,
+    ContactComponent,
+    AboutComponent,
   ],
   imports: [
     BrowserModule,
