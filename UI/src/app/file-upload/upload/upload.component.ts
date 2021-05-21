@@ -41,7 +41,7 @@ export class UploadComponent {
 
       // const file = event.target.files[0];
       this.uploadStatus.emit({ status: ProgressStatusEnum.START });
-      if (!localStorage.getItem('folder')) {
+      if (!localStorage.getItem('folder') || localStorage.getItem('folder') == 'null') {
         let randomString = this.makeRandom();
         localStorage.setItem('folder', randomString);
       }

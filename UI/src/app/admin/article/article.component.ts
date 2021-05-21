@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/shared/user.service';
 import * as $ from 'jquery';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-article',
@@ -14,7 +15,7 @@ export class ArticleComponent implements OnInit {
   dropdown = [{ name: 'Published', value: '0' }, { name: 'Not Published', value: '1' }];
   searchText = '';
   characters = []
-  constructor(private service: UserService) {}
+  constructor(private service: UserService,private router:Router) {}
 
   ngOnInit(): void {
     if(localStorage.getItem('mode')){
@@ -89,5 +90,17 @@ export class ArticleComponent implements OnInit {
       localStorage['mode'] = 'viewer';
       this.refreshList();
     }
+  }
+  readMore(article_id, s, d, a) {
+    this.router.navigateByUrl(
+      '/article?page=dashboard&articleid=' +
+        article_id +
+        '&s=' +
+        s +
+        '&d=' +
+        d +
+        '&a=' +
+        a
+    );
   }
 }

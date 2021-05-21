@@ -22,6 +22,7 @@
 }
 .jumbotron {
   color: black;
+  margin-bottom: 0!important;
 }
 .hideme {
   opacity: 0;
@@ -29,13 +30,11 @@
 p.blocktext {
   margin-left: auto;
   margin-right: auto;
-  width: 25em;
+  max-width: 50em;
 }
-
 html {
   box-sizing: border-box;
 }
-
 *,
 *:before,
 *:after {

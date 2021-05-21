@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../shared/user.service';
 import * as $ from 'jquery';
+import { LoaderService } from '../shared/loader.service';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +16,7 @@ export class HeaderComponent implements OnInit {
   title = 'user-profile';
   userDetails: any;
   admin = false;
-  constructor(private _router: Router, private service: UserService) {}
+  constructor(private _router: Router, private service: UserService,public loader:LoaderService) {}
 
   ngOnInit(): void {
     if (localStorage.getItem('loggedUser') != null) {
@@ -55,10 +56,8 @@ export class HeaderComponent implements OnInit {
     this._router.navigate(['/dashboard']);
   }
   profile() {
-    if (localStorage.getItem('loggedUser') != null) {
-      this.loggedIn = true;
-      this._router.navigate(['/profile']);
-    }
+    this._router.navigate(['/profile']);
+
   }
   contact() {
     this._router.navigate(['/contact-us']);

@@ -330,6 +330,15 @@ export class ArticlePostsComponent implements OnInit {
                     console.log(err);
                   }
                 );
+                this.service.getUserById(element.Reviewer_Id).subscribe(
+                  (res) => {
+                    var response = res;
+                    element.reviewer = response['FirstName'] + ' ' + response['LastName'];
+                  },
+                  (err) => {
+                    console.log(err);
+                  }
+                );
                 this.service.getProductsById(element.Product_Id).subscribe(
                   (res) => {
                     var responseP = res;
@@ -392,6 +401,15 @@ export class ArticlePostsComponent implements OnInit {
                     console.log(err);
                   }
                 );
+                this.service.getUserById(element.Reviewer_Id).subscribe(
+                  (res) => {
+                    var response = res;
+                    element.reviewer = response['FirstName'] + ' ' + response['LastName'];
+                  },
+                  (err) => {
+                    console.log(err);
+                  }
+                );
                 this.service.getProductsById(element.Product_Id).subscribe(
                   (res) => {
                     var responseP = res;
@@ -447,6 +465,15 @@ export class ArticlePostsComponent implements OnInit {
                     var response = res;
                     element.user =
                       response['FirstName'] + ' ' + response['LastName'];
+                  },
+                  (err) => {
+                    console.log(err);
+                  }
+                );
+                this.service.getUserById(element.Reviewer_Id).subscribe(
+                  (res) => {
+                    var response = res;
+                    element.reviewer = response['FirstName'] + ' ' + response['LastName'];
                   },
                   (err) => {
                     console.log(err);

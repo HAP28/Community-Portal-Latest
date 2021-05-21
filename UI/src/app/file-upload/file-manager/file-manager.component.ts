@@ -26,11 +26,15 @@ export class FileManagerComponent implements OnInit {
   public showProgress: boolean;
   public showDownloadError: boolean;
   public showUploadError: boolean;
+  filedisplay = true;
   constructor(private service: UserService) {}
 
   ngOnInit() {
     if (localStorage.getItem('folder')) {
+      this.filedisplay = true;
       this.getFiles(localStorage.getItem('folder'));
+    }else{
+      this.filedisplay = false;
     }
   }
 
@@ -61,6 +65,7 @@ export class FileManagerComponent implements OnInit {
   }
 
   public uploadStatus(event: ProgressStatus) {
+    this.filedisplay = true;
     switch (event.status) {
       case ProgressStatusEnum.START:
         this.showUploadError = false;

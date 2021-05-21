@@ -2,16 +2,18 @@ import { HttpEvent, HttpHandler, HttpHeaders, HttpInterceptor, HttpRequest } fro
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { from, Observable } from "rxjs";
-import { tap } from "rxjs/operators";
+import { finalize, tap } from "rxjs/operators";
 import { UserService } from "../shared/user.service";
 import * as $ from 'jquery';
+import { LoaderService } from "../shared/loader.service";
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor{
 
-    constructor(private router: Router, private service: UserService) {
+    constructor(private router: Router, private service: UserService,public loader: LoaderService) {
     }
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{         
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{    
+        this.loader.isLoading.next(true);     
         if(localStorage.getItem('loggedUser') != null){
             const cloneReq = req.clone({
                 headers: req.headers.set('Authorization','Bearer ' + this.service.currentUser.Token)
@@ -27,11 +29,22 @@ export class AuthInterceptor implements HttpInterceptor{
                             this.router.navigate(['/login']);
                         }
                     } 
+                ),
+                finalize(
+                    () => {
+                        this.loader.isLoading.next(false);
+                    }
                 )
             )
         }
         else{
-            return next.handle(req.clone());
+            return next.handle(req).pipe(
+                finalize(
+                    () => {
+                        this.loader.isLoading.next(false);
+                    }
+                )
+            );
         }
     }
 }

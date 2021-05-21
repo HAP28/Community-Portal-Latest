@@ -149,11 +149,12 @@ export class FullarticleComponent implements OnInit {
       (res) => {
         this.data = true;
         this.fullarticle = res;
-        if(this.fullarticle[0].FolderName!=null){
+        if(this.fullarticle[0].FolderName!='' && this.fullarticle[0].FolderName!=null){
           this.folderfound = true;
           localStorage.setItem('folder',this.fullarticle[0].FolderName);
         }else{
-          this.folderfound = false
+          this.folderfound = false;
+          localStorage.removeItem('folder');
         }
         console.log('article response by id : ', this.fullarticle[0]);
         if (!this.fullarticle[0].CommentAllow) {

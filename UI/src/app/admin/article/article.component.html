@@ -44,7 +44,8 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
               <li>
-                <a class="dropdown-item" href="/article?page=dashboard&articleid={{item.Article_Id}}&s={{item.Status}}&d={{item.Draft}}&a={{item.Archive}}"
+                <a class="dropdown-item" (click)="
+                readMore(item.Article_Id, item.Status, item.Draft, item.Archive)"
                   >View</a
                 >
               </li>

@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit {
   mode: any;
   Role:any;
   atricleNotFound = true;
+  dataFetched = false;
   constructor(private service: UserService, private router: Router) {}
   s_a: any;
   c_a: any;
@@ -62,6 +63,7 @@ export class ProfileComponent implements OnInit {
       this.service.getUserProfile().subscribe(
         (res) => {
           this.userDetails = res;
+          this.dataFetched = true;
           this.uid = this.userDetails.Id;
           console.log('Userid ', this.userDetails);
           // append links to social media

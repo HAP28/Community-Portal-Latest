@@ -1,7 +1,7 @@
 <div class="header">
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"
+      <a class="navbar-brand" routerLink = "/"
         ><img
           src="../../assets/images/logo.png"
           width="200"
@@ -23,35 +23,15 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link colour-me" aria-current="page" href="#">Home</a>
+            <a class="nav-link colour-me" aria-current="page" routerLink = '/'>Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link colour-me" href="/article-posts">Articles</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle colour-me"
-              href="#"
-              id="navbarDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Community
-            </a>
-            <ul
-              class="dropdown-menu colour-me"
-              aria-labelledby="navbarDropdown"
-            >
-              <li><a class="dropdown-item" href="#">News</a></li>
-              <li><a class="dropdown-item" href="#">Medical</a></li>
-              <li><a class="dropdown-item" href="#">Politics</a></li>
-            </ul>
+            <a class="nav-link colour-me" routerLink="/article-posts">Articles</a>
           </li>
           <li class="nav-item">
             <a
               class="nav-link colour-me"
-              (click)="about()"
+              routerLink = "/about"
               style="cursor: pointer"
               >About Us</a
             >
@@ -59,7 +39,7 @@
           <li class="nav-item">
             <a
               class="nav-link colour-me"
-              (click)="contact()"
+              routerLink = '/contact-us'
               style="cursor: pointer"
               >Contact Us</a
             >
@@ -98,7 +78,7 @@
                 </button>
               </li>
               <li>
-                <button class="dropdown-item drop" (click)="profile()">
+                <button class="dropdown-item drop" routerLink = '/profile'>
                   <i class="fa fa-user"></i>&nbsp;Profile
                 </button>
               </li>
@@ -112,7 +92,7 @@
                 </button>
               </li>
               <li>
-                <button class="dropdown-item drop" href="#" (click)="logout()">
+                <button class="dropdown-item drop" routerLink = '/' (click)="logout()">
                   <i class="fa fa-sign-out"></i>&nbsp;Logout
                 </button>
               </li>
@@ -122,6 +102,7 @@
       </div>
     </div>
   </nav>
+  
   <div class="header-frame" id="header-frame" *ngIf="display">
     <div class="header-banner">Welcome to Developer's Community</div>
 
@@ -139,4 +120,7 @@
     </form>
     <br /><br /><br />
   </div>
+  <div class="loader-container" *ngIf="loader.isLoading | async">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>  
 </div>

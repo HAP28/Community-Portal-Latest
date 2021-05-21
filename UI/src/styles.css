@@ -1,3 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "~ngx-toastr/toastr";
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-progress-bar[mode=indeterminate] .mat-progress-bar-secondary, .mat-progress-bar[mode=query] .mat-progress-bar-secondary{
+    background-color: aqua!important;
+}
+.mat-progress-bar .mat-progress-bar-background{
+    display: none!important;
+}
+/*.mat-progress-spinner.mat-progress-spinner-indeterminate-animation[mode=indeterminate] svg{
+    background-color: aqua;
+}
+.mat-progress-spinner.mat-progress-spinner-indeterminate-animation[mode=indeterminate] circle{
+    background-color: white!important;
+    z-index: 999;
+} */

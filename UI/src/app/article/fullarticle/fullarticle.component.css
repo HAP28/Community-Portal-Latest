@@ -17,7 +17,8 @@
   border-radius: 50px;
   outline: none;
   padding: 0px 10px 5px 10px;
-  background-color: salmon;
+  background-color: black;
+  color: white;
   border: none;
   margin-bottom: 10px;
 }

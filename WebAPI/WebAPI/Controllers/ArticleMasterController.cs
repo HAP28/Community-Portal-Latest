@@ -563,7 +563,7 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet("userarticleforloggdin/{s}/{d}/{a}")]
         public async Task<IActionResult> getpublicandloggedinarticle(bool s, bool d, bool a)
         {
@@ -667,18 +667,26 @@ namespace WebAPI.Controllers
         {
             var result = new List<string>();
 
-            var uploads = Path.Combine(hostingEnv.WebRootPath, folder);
-            if (Directory.Exists(uploads))
+            try
             {
-                var provider = hostingEnv.ContentRootFileProvider;
-                foreach (string fileName in Directory.GetFiles(uploads))
+                var uploads = Path.Combine(hostingEnv.WebRootPath, folder);
+                if (Directory.Exists(uploads))
                 {
-                    //var fileInfo = fileName;
-                    var filename = Path.GetFileName(fileName);
-                    result.Add(filename);
+                    _ = hostingEnv.ContentRootFileProvider;
+                    foreach (string fileName in Directory.GetFiles(uploads))
+                    {
+                        //var fileInfo = fileName;
+                        var filename = Path.GetFileName(fileName);
+                        result.Add(filename);
+                    }
                 }
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
         }
 
         private string GetContentType(string path)
@@ -686,12 +694,19 @@ namespace WebAPI.Controllers
             var provider = new FileExtensionContentTypeProvider();
             string contentType;
 
-            if (!provider.TryGetContentType(path, out contentType))
+            try
             {
-                contentType = "application/octet-stream";
-            }
+                if (!provider.TryGetContentType(path, out contentType))
+                {
+                    contentType = "application/octet-stream";
+                }
 
-            return contentType;
+                return contentType;
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
         }
         [AllowAnonymous]
         [HttpDelete("deletefile")]

@@ -25,110 +25,146 @@ namespace WebAPI.Controllers
         // GET: ProductMasterController
         public JsonResult Get()
         {
-            string query = @"select * from Comment";
-            DataTable table = new DataTable();
-            string sqlDataSource = configuration.GetConnectionString("DataConnection");
-            SqlDataReader dataReader;
-            using (SqlConnection connection = new SqlConnection(sqlDataSource))
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(query, connection))
+                string query = @"select * from Comment";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
                 {
-                    dataReader = command.ExecuteReader();
-                    table.Load(dataReader);
-                    dataReader.Close();
-                    connection.Close();
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
                 }
+                return new JsonResult(table);
             }
-            return new JsonResult(table);
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
         }
         [AllowAnonymous]
         [HttpGet("{id:int}")]
         // GET: ProductMasterController/Details/5
         public JsonResult Get(int id)
         {
-            string query = @"select * from Comment where Comment_Id = '" + id + "'";
-            DataTable table = new DataTable();
-            string sqlDataSource = configuration.GetConnectionString("DataConnection");
-            SqlDataReader dataReader;
-            using (SqlConnection connection = new SqlConnection(sqlDataSource))
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(query, connection))
+                string query = @"select * from Comment where Comment_Id = '" + id + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
                 {
-                    dataReader = command.ExecuteReader();
-                    table.Load(dataReader);
-                    dataReader.Close();
-                    connection.Close();
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
                 }
+                return new JsonResult(table);
             }
-            return new JsonResult(table);
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
         }
 
         [HttpGet("{Uid}")]
         // GET: ProductMasterController/Details/5
         public JsonResult GetProductByUser(string Uid)
         {
-            string query = @"select * from Comment where User_Id = '" + Uid + "'";
-            DataTable table = new DataTable();
-            string sqlDataSource = configuration.GetConnectionString("DataConnection");
-            SqlDataReader dataReader;
-            using (SqlConnection connection = new SqlConnection(sqlDataSource))
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(query, connection))
+                string query = @"select * from Comment where User_Id = '" + Uid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
                 {
-                    dataReader = command.ExecuteReader();
-                    table.Load(dataReader);
-                    dataReader.Close();
-                    connection.Close();
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
                 }
+                return new JsonResult(table);
             }
-            return new JsonResult(table);
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
         }
         [AllowAnonymous]
         [HttpGet("article/{Aid}")]
         // GET: ProductMasterController/Details/5
         public JsonResult GetProductByArticle(int Aid)
         {
-            string query = @"select * from Comment where Article_Id = '" + Aid + "'";
-            DataTable table = new DataTable();
-            string sqlDataSource = configuration.GetConnectionString("DataConnection");
-            SqlDataReader dataReader;
-            using (SqlConnection connection = new SqlConnection(sqlDataSource))
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(query, connection))
+                string query = @"select * from Comment where Article_Id = '" + Aid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
                 {
-                    dataReader = command.ExecuteReader();
-                    table.Load(dataReader);
-                    dataReader.Close();
-                    connection.Close();
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
                 }
+                return new JsonResult(table);
             }
-            return new JsonResult(table);
+            catch (Exception e)
+            {
+
+                return new JsonResult(e.Message);
+            }
         }
 
         [HttpGet("{Aid}/{Uid}")]
         // GET: ProductMasterController/Details/5
         public JsonResult GetProductByArticleAndUser(int Aid,string Uid)
         {
-            string query = @"select * from Comment where Article_Id = '" + Aid + "' and User_Id = '" + Uid + "'";
-            DataTable table = new DataTable();
-            string sqlDataSource = configuration.GetConnectionString("DataConnection");
-            SqlDataReader dataReader;
-            using (SqlConnection connection = new SqlConnection(sqlDataSource))
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(query, connection))
+                string query = @"select * from Comment where Article_Id = '" + Aid + "' and User_Id = '" + Uid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
                 {
-                    dataReader = command.ExecuteReader();
-                    table.Load(dataReader);
-                    dataReader.Close();
-                    connection.Close();
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
                 }
+                return new JsonResult(table);
             }
-            return new JsonResult(table);
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
         }
         // POST: ProductMasterController/Create
         [HttpPost]
@@ -165,44 +201,59 @@ namespace WebAPI.Controllers
         // GET: ProductMasterController/Edit/5
         public JsonResult Edit(Comment comment)
         {
-            string query = @"Update Comment set Comment_Texte ='" + comment.Comment_text + "', User_Id = '" + comment.Id + "',Article_Id = '" + comment.ArticleId + "' where Comment_Id = " + comment.Comment_id;
-            DataTable table = new DataTable();
-            string sqlDataSource = configuration.GetConnectionString("DataConnection");
-            SqlDataReader dataReader;
-            using (SqlConnection connection = new SqlConnection(sqlDataSource))
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(query, connection))
+                string query = @"Update Comment set Comment_Texte ='" + comment.Comment_text + "', User_Id = '" + comment.Id + "',Article_Id = '" + comment.ArticleId + "' where Comment_Id = " + comment.Comment_id;
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
                 {
-                    dataReader = command.ExecuteReader();
-                    table.Load(dataReader);
-                    dataReader.Close();
-                    connection.Close();
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
                 }
+                return new JsonResult("Data Updated");
             }
-            return new JsonResult("Data Updated");
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         // GET: ProductMasterController/Delete/5
         public JsonResult Delete(int id)
         {
-            string query = @"delete from dbo.Comment where Comment_Id = '" + id + "'";
-            DataTable table = new DataTable();
-            string sqlDataSource = configuration.GetConnectionString("DataConnection");
-            SqlDataReader dataReader;
-            using (SqlConnection connection = new SqlConnection(sqlDataSource))
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(query, connection))
+                string query = @"delete from dbo.Comment where Comment_Id = '" + id + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
                 {
-                    dataReader = command.ExecuteReader();
-                    table.Load(dataReader);
-                    dataReader.Close();
-                    connection.Close();
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
                 }
+                return new JsonResult("Data Deleted");
             }
-            return new JsonResult("Data Deleted");
+            catch (Exception e)
+            {
+
+                return new JsonResult(e.Message);
+            }
         }
     }
 }

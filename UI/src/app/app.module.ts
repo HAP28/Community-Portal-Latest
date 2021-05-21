@@ -27,6 +27,8 @@ import { CategoryComponent } from './admin/category/category.component';
 import { SectionComponent } from './admin/section/section.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { ToastrModule } from 'ngx-toastr';
 import { ManageRolesComponent } from './admin/manage-roles/manage-roles.component';
@@ -90,6 +92,8 @@ import { AboutComponent } from './about/about.component';
     FontAwesomeModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    MatProgressBarModule,
+    MatProgressSpinnerModule
   ],
   providers: [
     UserService,
