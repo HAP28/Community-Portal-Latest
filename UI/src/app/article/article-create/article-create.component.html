@@ -1,16 +1,30 @@
+<!-- <form class="myForm text-center" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <input class="myInput form-control" placeholder="FirstName" type="text" id="firstname" formControlName="firstname" [ngClass]="{ 'is-invalid': submitted && f.firstname.errors }" /> 
+  <div *ngIf="submitted && f.firstname.errors" class="invalid-feedback">
+    <div *ngIf="f.firstname.errors.required">FirstName is required</div>
+    <div *ngIf="f.firstname.errors.pattern">FirstName must be a valid</div>
+  </div>
+  <select class="form-select" id="product" formControlName="product" [ngClass]="{ 'is-invalid': submitted && f.product.errors }">
+    <option selected>Products</option>
+    <option value="1">One</option>
+    <option value="2">Two</option>
+    <option value="3">Three</option>
+  </select>
+  <div *ngIf="submitted && f.product.errors" class="invalid-feedback">
+    <div *ngIf="f.product.errors.required">Product is required</div>
+  </div>
+  <button type="submit" class="butt">Register</button>
+</form> -->
+
+
 <app-header></app-header>
 
 <div class="container">
   <h1 class="text-center">Create Article</h1>
-  <form #rteForm="ngForm" id="form-element">
+  <form [formGroup]="articleCreate" #rteForm="ngForm" id="form-element">
     <div class="mb-3">
       <label class="form-label">Title</label>
-      <small
-        class="text-danger"
-        id="titlered"
-        style="visibility: hidden; float: right"
-        >this field is required*</small
-      >
+    
       <input
         type="text"
         #Title
@@ -20,18 +34,19 @@
         placeholder="Title.."
         name="title"
         autocomplete="off"
+        formControlName="title" [ngClass]="{ 'is-invalid': submitted && f.title.errors }"
       />
+      <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
+        <div *ngIf="f.title.errors.required">Title is required</div>
+        <div *ngIf="f.title.errors.pattern">Title must be alphanumeric</div>
+      </div>
+ 
     </div>
 
     <div class="row">
       <div class="col-md-4">
         <label for="product" class="form-label">Select Product</label>
-        <small
-          class="text-danger"
-          id="productred"
-          style="visibility: hidden; float: right"
-          >this field is required*</small
-        >
+       
         <select
           class="form-select"
           aria-label="Default select example"
@@ -39,18 +54,17 @@
           aria-placeholder="Choose Product"
           id="product"
           (change)="fetchCategory()"
+          formControlName="product" [ngClass]="{ 'is-invalid': submitted && f.product.errors }"
         >
           <option value="" selected>Choose Product</option>
         </select>
+        <div *ngIf="submitted && f.product.errors" class="invalid-feedback">
+          <div *ngIf="f.product.errors.required">Product is required</div>
+        </div>
       </div>
       <div class="col-md-4">
         <label for="category" class="form-label">Select Category</label>
-        <small
-          class="text-danger"
-          id="categoryred"
-          style="visibility: hidden; float: right"
-          >this field is required*</small
-        >
+      
         <select
           class="form-select"
           aria-label="Default select example"
@@ -58,45 +72,44 @@
           aria-placeholder="Choose Category"
           id="category"
           (change)="fetchSection()"
+          formControlName="category" [ngClass]="{ 'is-invalid': submitted && f.category.errors }"
         >
           <option value="" selected>Choose Category</option>
         </select>
+        <div *ngIf="submitted && f.category.errors" class="invalid-feedback">
+          <div *ngIf="f.category.errors.required">Category is required</div>
+        </div>
       </div>
       <div class="col-md-4">
         <label for="section" style="display: inline-block" class="form-label"
           >Select Section</label
         >
-        <small
-          class="text-danger"
-          id="sectionred"
-          style="visibility: hidden; float: right"
-          >this field is required*</small
-        >
+       
         <select
           class="form-select"
           aria-label="Default select example"
           name="section"
           aria-placeholder="Choose Section"
           id="section"
+          formControlName="section" [ngClass]="{ 'is-invalid': submitted && f.section.errors }"
         >
           <option value="" selected>Choose Section</option>
         </select>
+        <div *ngIf="submitted && f.section.errors" class="invalid-feedback">
+          <div *ngIf="f.section.errors.required">Section is required</div>
+        </div>
       </div>
     </div>
 
     <div class="form-group mt-3">
       <textarea
         id="defaultRTE"
-        required
         name="defaultRTE"
         class="form-control"
+        formControlName="editor" [ngClass]="{ 'is-invalid': submitted && f.editor.errors }"
       ></textarea>
-      <div id="dateError" style="padding-top: 10px"></div>
-    </div>
-    <div class="form-group">
-      <div class="col-sm-3 control-label"></div>
-      <div class="col-sm-6">
-        <div id="error"></div>
+      <div id="editorValidation" *ngIf="submitted && f.editor.errors" class="mt-2">
+        <div *ngIf="f.editor.errors.required">Description is required</div>
       </div>
     </div>
 
@@ -174,8 +187,6 @@
         class="btn btn-primary"
         type="submit"
         id="validateSubmit"
-        ejs-button
-        [disabled]="!rteForm.valid"
       >
         Save to Draft
       </button>
@@ -186,6 +197,9 @@
   </form>
 </div>
 <style>
+  .e-error{
+
+  }
   .e-rte-content body {
     color: black;
     background-color: white;

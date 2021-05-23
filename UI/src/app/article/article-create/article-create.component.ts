@@ -43,6 +43,7 @@ import {
   ProgressStatusEnum,
 } from 'src/app/models/progress-status';
 import { HttpEventType } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 RichTextEditor.Inject(Toolbar, Link, Image, HtmlEditor, Count, QuickToolbar);
 
 @Component({
@@ -59,6 +60,8 @@ RichTextEditor.Inject(Toolbar, Link, Image, HtmlEditor, Count, QuickToolbar);
   ],
 })
 export class ArticleCreateComponent implements OnInit {
+  showModal: boolean;
+  articleCreate: FormGroup;
   title = 'article-create';
   userDetails: any;
   submitted = false;
@@ -68,8 +71,11 @@ export class ArticleCreateComponent implements OnInit {
     private _router: Router,
     private service: UserService,
     private toast: ToastrService,
+    private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+    $("#editorValidation").hide();
+  }
   url: any;
   msg = '';
   product: any;
@@ -85,6 +91,21 @@ export class ArticleCreateComponent implements OnInit {
   loadUpload = true;
 
   ngOnInit(): void {
+    this.articleCreate = this.formBuilder.group({
+      title: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.pattern('^[_A-z,0-9]((-|s)[_A-z,0-9])*$'),
+        ],
+      ],
+      product: ['', [Validators.required]],
+      category: ['', [Validators.required]],
+      section: ['', [Validators.required]],
+      editor: ['', [Validators.required]],
+    });
+
     localStorage.removeItem('folder');
     this.activatedRoute.queryParams.subscribe((params) => {
       if (params['mode'] == 'edit') {
@@ -181,67 +202,89 @@ export class ArticleCreateComponent implements OnInit {
     });
 
     const getValue = (id) => {
-      let visibility = '';
-      $.each($("input[name='visibility']:checked"), function () {
-        visibility += $(this).val();
-      });
-
       let form = document.getElementById('form-element') as HTMLFormElement;
       let formData = new FormData(form);
       let rteValue = formData.get('defaultRTE');
-      this.x['articleTitle'] = formData.get('title');
-      this.x['articleDescription'] = rteValue;
-      this.x['categoryId'] = $('#category').val();
-      this.x['productId'] = $('#product').val();
-      this.x['sectionId'] = $('#section').val();
-      this.x['visible'] = visibility;
-      if (localStorage.getItem('folder')) {
-        this.x['FolderName'] = localStorage.getItem('folder');
-      }
+      this.submitted = true;
+      console.log(rteValue);
+      if (rteValue == '') {
+        if (this.articleCreate.invalid) {
+          // this.submitted = false;
+          $("#editorValidation").show();
+          return;
+        }
+      } else {
+        $("#editorValidation").hide(); 
+        // stop here if form is invalid
+        if (this.articleCreate.invalid) {
+          return;
+        }
+        if (this.submitted) {
+          this.showModal = false;
 
-      if (id == 1) {
-        this.x['status'] = false;
-        this.x['draft'] = true;
-        this.x['archive'] = false;
-      }
-      if (id == 2) {
-        this.x['status'] = true;
-        this.x['draft'] = true;
-        this.x['archive'] = false;
-      }
+          let visibility = '';
+          $.each($("input[name='visibility']:checked"), function () {
+            visibility += $(this).val();
+          });
 
-      this.x['commentAllow'] = this.commentonoff;
-      this.x['id'] = this.userDetails.Id;
-      // console.log(this.x);
-
-      if (this.editmode) {
-        console.log('article to update :', this.x);
-        this.service.updateArticle(this.x, this.article_id).subscribe(
-          (res) => {
-            console.log(res);
-          },
-          (err) => {
-            console.log(err);
+          this.x['articleTitle'] = formData.get('title');
+          this.x['articleDescription'] = rteValue;
+          this.x['categoryId'] = $('#category').val();
+          this.x['productId'] = $('#product').val();
+          this.x['sectionId'] = $('#section').val();
+          this.x['visible'] = visibility;
+          if (localStorage.getItem('folder')) {
+            this.x['FolderName'] = localStorage.getItem('folder');
           }
-        );
-      }
-      if (this.editmode == false) {
-        console.log(this.editmode);
-        this.service.postArticle(this.x).subscribe(
-          (res) => {
-            this.toast.success('Article Published', 'Success');
-            console.log(res);
-            // $('#title').text('');
-            // $('#category').text('Choose Category');
-            // $('#defaultRTE').text('');
-          },
-          (err) => {
-            this.toast.error('Article Failed to Publish', 'Error');
-            console.log(err);
+
+          if (id == 1) {
+            this.x['status'] = false;
+            this.x['draft'] = true;
+            this.x['archive'] = false;
           }
-        );
+          if (id == 2) {
+            this.x['status'] = true;
+            this.x['draft'] = true;
+            this.x['archive'] = false;
+          }
+
+          this.x['commentAllow'] = this.commentonoff;
+          this.x['id'] = this.userDetails.Id;
+          // console.log(this.x);
+
+          if (this.editmode) {
+            console.log('article to update :', this.x);
+            this.service.updateArticle(this.x, this.article_id).subscribe(
+              (res) => {
+                console.log(res);
+              },
+              (err) => {
+                console.log(err);
+              }
+            );
+          }
+          if (this.editmode == false) {
+            console.log(this.editmode);
+            this.service.postArticle(this.x).subscribe(
+              (res) => {
+                this.toast.success('Article Published', 'Success');
+                console.log(res);
+                // $('#title').text('');
+                // $('#category').text('Choose Category');
+                // $('#defaultRTE').text('');
+              },
+              (err) => {
+                this.toast.error('Article Failed to Publish', 'Error');
+                console.log(err);
+              }
+            );
+          }
+        }
       }
     };
+  }
+  get f() {
+    return this.articleCreate.controls;
   }
 
   clearProductList() {
