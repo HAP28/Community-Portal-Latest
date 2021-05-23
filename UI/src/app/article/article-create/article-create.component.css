@@ -55,3 +55,7 @@
 #iframeRTE p{
     background-color: aqua;
 }
+#editorValidation{
+    font-size: 80%;
+    color: #dc3545;   
+}
