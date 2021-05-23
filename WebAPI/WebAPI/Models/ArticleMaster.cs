@@ -49,5 +49,6 @@ namespace WebAPI.Models
         [Column("Archive")]
         public bool Archive { get; set; }
         public string FolderName { get; set; }
+        public string UnapproveMessage { get; set; }
     }
 }

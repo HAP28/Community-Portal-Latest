@@ -337,7 +337,11 @@
                           >
                             Close
                           </button>
-                          <button type="button" class="btn btn-primary" (click) = "changePassword()">
+                          <button
+                            type="button"
+                            class="btn btn-primary"
+                            (click)="changePassword()"
+                          >
                             Change Password
                           </button>
                         </div>
@@ -449,7 +453,6 @@
             </ul>
           </div>
         </div>
-
       </div>
 
       <div class="col-xl-8">
@@ -501,7 +504,9 @@
         <div class="card-box shadow">
           <!-- <div class=""> -->
           <!-- <hr /> -->
-          <h6 class="text-muted text-center" *ngIf="atricleNotFound">No Articles Found</h6>
+          <h6 class="text-muted text-center" *ngIf="atricleNotFound">
+            No Articles Found
+          </h6>
           <ng-container *ngIf="!atricleNotFound">
             <div class="p-3" *ngFor="let item of getuserarticles">
               <h5 class="text-custom">{{ item.Article_Title }}</h5>
@@ -524,6 +529,7 @@
                 class="readmore"
                 >Read More..</a
               >
+              <p style="float: right"></p>
               <hr />
             </div>
           </ng-container>

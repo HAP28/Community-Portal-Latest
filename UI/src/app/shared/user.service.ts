@@ -127,6 +127,9 @@ export class UserService {
   getRoles() {
     return this.http.get(this.APIURL + '/Roles');
   }
+  getRoleName(roleid) {
+    return this.http.get(this.APIURL + '/Roles/getrolename/' + roleid);
+  }
   addRoles(roleName) {
     return this.http.post(this.APIURL + '/Roles/' + roleName, null);
   }
@@ -236,7 +239,8 @@ export class UserService {
         false
     );
   }
-  getLoggedinArticles() {   //public + loggedin
+  getLoggedinArticles() {
+    //public + loggedin
     return this.http.get(
       this.APIURL +
         '/ArticleMaster/userarticleforloggdin/' +
@@ -341,6 +345,22 @@ export class UserService {
       null
     );
   }
+  disapprovemsg(id, msg) {
+    return this.http.patch(
+      this.APIURL +
+        '/ArticleMaster/articlepatchmessage/' +
+        id +
+        '/' +
+        false +
+        '/' +
+        false +
+        '/' +
+        true +
+        '/' +
+        msg,
+      null
+    );
+  }
   unpublish_article(id) {
     return this.http.patch(
       this.APIURL +
@@ -355,6 +375,7 @@ export class UserService {
       null
     );
   }
+
   // Count
   getCountArticles() {
     return this.http.get(this.APIURL + '/ArticleMaster/getarticlecounts');

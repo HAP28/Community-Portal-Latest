@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'src/app/shared/user.service';
 import * as $ from 'jquery';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 // import * as safeHtml from './pipe';
 
@@ -31,7 +31,6 @@ export class ArticlePostsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getpublicArticles();
     this.refreshList();
     this.validateAdminReviewer();
     this.getpublicArticles();
@@ -225,7 +224,7 @@ export class ArticlePostsComponent implements OnInit {
     this.isDataAvailable = true;
   }
   getpublicArticles() {
-    if(this.service.currentUser == null){
+    if (this.service.currentUser == null) {
       this.service.getPubishArticles().subscribe(
         (res) => {
           this.Articles = res;
@@ -238,7 +237,7 @@ export class ArticlePostsComponent implements OnInit {
           console.log(err);
         }
       );
-    }else{
+    } else {
       this.service.getLoggedinArticles().subscribe(
         (res) => {
           this.Articles = res;
@@ -252,7 +251,6 @@ export class ArticlePostsComponent implements OnInit {
         }
       );
     }
-    
   }
 
   refreshList() {
@@ -333,7 +331,8 @@ export class ArticlePostsComponent implements OnInit {
                 this.service.getUserById(element.Reviewer_Id).subscribe(
                   (res) => {
                     var response = res;
-                    element.reviewer = response['FirstName'] + ' ' + response['LastName'];
+                    element.reviewer =
+                      response['FirstName'] + ' ' + response['LastName'];
                   },
                   (err) => {
                     console.log(err);
@@ -404,7 +403,8 @@ export class ArticlePostsComponent implements OnInit {
                 this.service.getUserById(element.Reviewer_Id).subscribe(
                   (res) => {
                     var response = res;
-                    element.reviewer = response['FirstName'] + ' ' + response['LastName'];
+                    element.reviewer =
+                      response['FirstName'] + ' ' + response['LastName'];
                   },
                   (err) => {
                     console.log(err);
@@ -473,7 +473,8 @@ export class ArticlePostsComponent implements OnInit {
                 this.service.getUserById(element.Reviewer_Id).subscribe(
                   (res) => {
                     var response = res;
-                    element.reviewer = response['FirstName'] + ' ' + response['LastName'];
+                    element.reviewer =
+                      response['FirstName'] + ' ' + response['LastName'];
                   },
                   (err) => {
                     console.log(err);

@@ -38,9 +38,21 @@
         *ngIf="data"
         [innerHTML]="this.fullarticle[0].Description | safeHtml"
       ></div>
+      <div style="display: inline-block">
+        <h6
+          *ngIf="!Status && Archive && !Draft"
+          class="text-danger font-italic"
+        >
+          Unapprove Message :
+          {{ this.fullarticle[0].UnapproveMessage }}
+        </h6>
+      </div>
     </span>
   </p>
-  <app-filemanager *ngIf="folderfound" [display] = "displayUpload"></app-filemanager>
+  <app-filemanager
+    *ngIf="folderfound"
+    [display]="displayUpload"
+  ></app-filemanager>
   <div style="display: inline-flex; float: right">
     <div>
       <button
@@ -58,7 +70,8 @@
         (click)="editarticle()"
         *ngIf="
           (!Status && !Archive && Draft) ||
-          (Status && !Archive && Draft && (admin || reviewer))
+          (Status && !Archive && Draft && (admin || reviewer)) ||
+          (!Status && Archive && !Draft)
         "
       >
         Edit
@@ -67,7 +80,11 @@
         type="button"
         class="btn btn-danger"
         style="margin-left: 20px"
-        (click)="disapprovearticle()"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="unapprove_message"
+        data-bs-toggle="modal"
+        data-bs-target="#unapprove_message"
         *ngIf="Status && !Archive && Draft && (admin || reviewer)"
       >
         Unapprove
@@ -107,7 +124,14 @@
   >
     Comment
   </button>
-  <p class="text-danger" *ngIf="loggedInUser">Please Login to Comment</p>
+  <p
+    class="text-danger"
+    *ngIf="loggedInUser"
+    (click)="login()"
+    style="cursor: pointer"
+  >
+    Please Login to Comment
+  </p>
   <div>
     <p
       id="openclosecomment"
@@ -204,4 +228,67 @@
   <i class="fa fa-chevron-up" aria-hidden="true"></i>
 </button>
 
+<div
+  class="modal fade"
+  id="unapprove_message"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="unapprove_message"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Disapproval Message</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-2">
+            <div class="row">
+              <div class="col-md-12">
+                <label for="message" class="col-form-label"
+                  >Unapprove Message :</label
+                >
+                <textarea
+                  type="text"
+                  class="form-control"
+                  rows="3"
+                  id="message"
+                  placeholder="why you thing the article should be disapproved?"
+                ></textarea>
+                <div *ngIf="errormsg" class="text-danger font-italic">
+                  *Please Provide a valid Message
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          id="close"
+        >
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="disapprovearticle()"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 <app-footer></app-footer>

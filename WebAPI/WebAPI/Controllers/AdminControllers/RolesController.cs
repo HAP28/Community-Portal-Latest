@@ -63,5 +63,25 @@ namespace WebAPI.Controllers.AdminControllers
                 return BadRequest(role);
             }
         }
+
+        [HttpGet("getrolename/{roleid}")]
+        public async Task<IActionResult> GetRoleName(string roleid)
+        {
+            var role = await _roleManager.FindByIdAsync(roleid);
+            if (role != null)
+            {
+                var rolename = role.Name;
+                if (rolename == null)
+                {
+                    return Ok("Rolename is not present");
+                }
+                return Ok(rolename);
+            }
+            else
+            {
+                return BadRequest(role);
+            }
+        }
+
     }
 }

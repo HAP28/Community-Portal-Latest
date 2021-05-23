@@ -53,20 +53,37 @@ export class RolesComponent implements OnInit {
     );
   }
   deleteRole(id) {
+    var roles = ['Admin', 'Viewer', 'Reviewer', 'Publisher'];
     console.log(id);
-    if (confirm('Are you sure you want to delete the role ?')) {
-      this.service.deleteRoles(id).subscribe(
-        (res) => {
-          console.log(res);
-        },
-        (err) => {
-          console.log(err);
-          if (err.status == 200) {
-            this.toast.success('Role Deleted', 'Success');
-            this.refreshList();
+    this.service.getRoleName(id).subscribe(
+      (res) => {
+        //console.log('RoleName', res['text']);
+      },
+      (err) => {
+        if (err.status == 200) {
+          //console.log(err.error.text);
+          if (!roles.includes(err.error.text)) {
+            console.log('ook');
+            if (confirm('Are you sure you want to delete the role ?')) {
+              this.service.deleteRoles(id).subscribe(
+                (res) => {
+                  console.log(res);
+                },
+                (err) => {
+                  console.log(err);
+                  if (err.status == 200) {
+                    this.toast.success('Role Deleted', 'Success');
+                    this.refreshList();
+                  }
+                }
+              );
+            }
+          } else {
+            this.toast.error('Roles cannot be Deleted', 'Error');
           }
         }
-      );
-    }
+        console.log(err);
+      }
+    );
   }
 }

@@ -448,15 +448,42 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
-               
-
-        [AllowAnonymous]
+            
         [HttpPatch("articlepatch/{articleid}/{s}/{d}/{a}")]
         public async Task<IActionResult> articlepatch(string articleid,bool s,bool d,bool a)
         {
             try
             {
                 string query = @"Update ArticleMaster set Status ='"+ s +"', Draft = '" + d + "', Archive = '" + a + "' where Article_Id = '" + articleid + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult("Data Updated");
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message); ;
+            }
+
+        }
+
+        [HttpPatch("articlepatchmessage/{articleid}/{s}/{d}/{a}/{msg}")]
+        public async Task<IActionResult> articlepatchmessage(string articleid, bool s, bool d, bool a, string msg)
+        {
+            try
+            {
+                string query = @"Update ArticleMaster set  Status ='" + s + "', Draft = '" + d + "', Archive = '" + a + "', UnapproveMessage ='" + msg + "' where Article_Id = '" + articleid + "'";
                 DataTable table = new DataTable();
                 string sqlDataSource = configuration.GetConnectionString("DataConnection");
                 SqlDataReader dataReader;

@@ -16,7 +16,11 @@ export class HeaderComponent implements OnInit {
   title = 'user-profile';
   userDetails: any;
   admin = false;
-  constructor(private _router: Router, private service: UserService,public loader:LoaderService) {}
+  constructor(
+    private _router: Router,
+    private service: UserService,
+    public loader: LoaderService
+  ) {}
 
   ngOnInit(): void {
     if (localStorage.getItem('loggedUser') != null) {
@@ -43,10 +47,15 @@ export class HeaderComponent implements OnInit {
     }
   }
   logout() {
-    alert('logged out');
-    localStorage.removeItem('loggedUser');
-    this._router.navigate(['/']);
-    this.loggedIn = false;
+    if (confirm('Are you sure you want to Logout')) {
+      localStorage.removeItem('loggedUser');
+      this._router.navigate(['/']);
+      this.loggedIn = false;
+    } else {
+      this._router.navigate(['/home']);
+      this.loggedIn = true;
+    }
+    //alert('logged out');
   }
 
   createarticle() {
@@ -57,7 +66,6 @@ export class HeaderComponent implements OnInit {
   }
   profile() {
     this._router.navigate(['/profile']);
-
   }
   contact() {
     this._router.navigate(['/contact-us']);

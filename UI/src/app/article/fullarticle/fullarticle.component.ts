@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { UserService } from 'src/app/shared/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as $ from 'jquery';
+
 @Component({
   selector: 'app-fullarticle',
   templateUrl: './fullarticle.component.html',
@@ -9,6 +10,8 @@ import * as $ from 'jquery';
 })
 export class FullarticleComponent implements OnInit {
   isShow: boolean;
+  errormsg = false;
+  unapprovemessage = '';
   topPosToStartShowing = 100;
   article_id: any;
   user_id: any;
@@ -75,7 +78,7 @@ export class FullarticleComponent implements OnInit {
       this.Status = JSON.parse(params['s']);
       this.Draft = JSON.parse(params['d']);
       this.Archive = JSON.parse(params['a']);
-      console.log('Clicked Article: ',this.Draft,this.Status,this.Archive);
+      console.log('Clicked Article: ', this.Draft, this.Status, this.Archive);
     });
     this.validateadminreviewer();
     this.getFullArticle();
@@ -115,8 +118,7 @@ export class FullarticleComponent implements OnInit {
       );
       if (this.service.currentUser.Role == 'Admin') {
         this.admin = true;
-      }
-      else if (this.service.currentUser.Role == 'Reviewer') {
+      } else if (this.service.currentUser.Role == 'Reviewer') {
         this.reviewer = true;
       }
     }
@@ -149,10 +151,13 @@ export class FullarticleComponent implements OnInit {
       (res) => {
         this.data = true;
         this.fullarticle = res;
-        if(this.fullarticle[0].FolderName!='' && this.fullarticle[0].FolderName!=null){
+        if (
+          this.fullarticle[0].FolderName != '' &&
+          this.fullarticle[0].FolderName != null
+        ) {
           this.folderfound = true;
-          localStorage.setItem('folder',this.fullarticle[0].FolderName);
-        }else{
+          localStorage.setItem('folder', this.fullarticle[0].FolderName);
+        } else {
           this.folderfound = false;
           localStorage.removeItem('folder');
         }
@@ -413,14 +418,15 @@ export class FullarticleComponent implements OnInit {
     this.service.patch_approve_article(this.article_id).subscribe(
       (res) => {
         console.log(res);
-        this.service.setreviewer(this.user_id,this.article_id).subscribe(
+        this.service.setreviewer(this.user_id, this.article_id).subscribe(
           (res) => {
-            console.log((res));
-            this.router.navigateByUrl('/article-posts');            
-          },(err) => {
+            console.log(res);
+            this.router.navigateByUrl('/article-posts');
+          },
+          (err) => {
             console.log(err);
           }
-        )
+        );
       },
       (err) => {
         console.log(err);
@@ -429,15 +435,31 @@ export class FullarticleComponent implements OnInit {
   }
   disapprovearticle() {
     console.log('DisApprove');
-    this.service.patch_disapprove_article(this.article_id).subscribe(
-      (res) => {
-        console.log(res);
-        this.router.navigateByUrl('/article-posts');
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    if ($('#message').val() != '') {
+      this.errormsg = false;
+      let message = $('#message').val();
+      this.service.disapprovemsg(this.article_id, message).subscribe(
+        (res) => {
+          console.log(res);
+          this.router.navigateByUrl('/article-posts?message=disapprove');
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+      // this.service.patch_disapprove_article(this.article_id).subscribe(
+      //   (res) => {
+      //     console.log(res);
+      //     this.router.navigateByUrl('/article-posts');
+      //   },
+      //   (err) => {
+      //     console.log(err);
+      //   }
+      // );
+      console.log(message);
+    } else {
+      this.errormsg = true;
+    }
   }
   unpublisharticle() {
     this.service.unpublish_article(this.article_id).subscribe(
@@ -455,28 +477,30 @@ export class FullarticleComponent implements OnInit {
       '/article-create?mode=edit&id=' + this.article_id
     );
   }
-  navigate(){
-    this.activateroute.queryParams.subscribe(
-      (params) =>{
-        this.page = params['page'];
-        if(this.page == 'dashboard'){
-          this.router.navigateByUrl('/managearticles');
-        }else if(this.page == 'profile'){
-          this.router.navigateByUrl('/profile');
-        }else{
-          this.router.navigateByUrl('/article-posts');
-        }
+  navigate() {
+    this.activateroute.queryParams.subscribe((params) => {
+      this.page = params['page'];
+      if (this.page == 'dashboard') {
+        this.router.navigateByUrl('/managearticles');
+      } else if (this.page == 'profile') {
+        this.router.navigateByUrl('/profile');
+      } else {
+        this.router.navigateByUrl('/article-posts');
       }
-    )
+    });
   }
-  deletearticle(){
+  deletearticle() {
     this.service.deletearticle(this.article_id).subscribe(
       (res) => {
         console.log(res);
         this.navigate();
-      },(err) => {
+      },
+      (err) => {
         console.log(err);
       }
-    )
+    );
+  }
+  login() {
+    this.router.navigate(['/login']);
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../shared/user.service';
 import { ToastrService } from 'ngx-toastr';
+import * as $ from 'jquery';
 export class ContactDetails {
   public name: string;
   public email: string;
@@ -16,10 +17,21 @@ export class ContactComponent implements OnInit {
   display = false;
   model = new ContactDetails();
   feedback: boolean;
+  contactus: boolean = true;
   constructor(private service: UserService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.feedback = false;
+  }
+  termsandcondition() {
+    if ($('#terms').prop('checked')) {
+      console.log('yes');
+      this.contactus = false;
+    }
+    if (!$('#terms').prop('checked')) {
+      console.log('no');
+      this.contactus = true;
+    }
   }
   onSubmit(form) {
     console.log(form.value);
