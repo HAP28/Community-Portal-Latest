@@ -74,7 +74,6 @@ export class ArticleCreateComponent implements OnInit {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute
   ) {
-    $("#editorValidation").hide();
   }
   url: any;
   msg = '';
@@ -92,18 +91,11 @@ export class ArticleCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.articleCreate = this.formBuilder.group({
-      title: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.pattern('^[_A-z,0-9]((-|s)[_A-z,0-9])*$'),
-        ],
-      ],
+      title: ['', [Validators.required]],
       product: ['', [Validators.required]],
       category: ['', [Validators.required]],
       section: ['', [Validators.required]],
-      editor: ['', [Validators.required]],
+      // editor: ['', [Validators.required]],
     });
 
     localStorage.removeItem('folder');
@@ -111,7 +103,7 @@ export class ArticleCreateComponent implements OnInit {
       if (params['mode'] == 'edit') {
         this.editmode = true;
 
-        $('#validateSubmit').css('display', 'none');
+        // $('#validateSubmit').css('display', 'none');
 
         this.loadUpload = false;
         // $('#validateSubmit').css('display','none');
@@ -206,79 +198,85 @@ export class ArticleCreateComponent implements OnInit {
       let formData = new FormData(form);
       let rteValue = formData.get('defaultRTE');
       this.submitted = true;
+      if (this.articleCreate.invalid) {
+        console.log('form invalid');
+        return;
+      }
       console.log(rteValue);
-      if (rteValue == '') {
-        if (this.articleCreate.invalid) {
-          // this.submitted = false;
-          $("#editorValidation").show();
-          return;
+      if (this.submitted) {
+        this.showModal = false;
+
+        let visibility = '';
+        $.each($("input[name='visibility']:checked"), function () {
+          visibility += $(this).val();
+        });
+
+        this.x['articleTitle'] = formData.get('title');
+        this.x['articleDescription'] = rteValue;
+        this.x['categoryId'] = $('#category').val();
+        this.x['productId'] = $('#product').val();
+        this.x['sectionId'] = $('#section').val();
+        this.x['visible'] = visibility;
+        if (localStorage.getItem('folder')) {
+          this.x['FolderName'] = localStorage.getItem('folder');
         }
-      } else {
-        $("#editorValidation").hide(); 
-        // stop here if form is invalid
-        if (this.articleCreate.invalid) {
-          return;
+
+        if (id == 1) {
+          this.x['status'] = false;
+          this.x['draft'] = true;
+          this.x['archive'] = false;
         }
-        if (this.submitted) {
-          this.showModal = false;
+        if (id == 2) {
+          this.x['status'] = true;
+          this.x['draft'] = true;
+          this.x['archive'] = false;
+        }
 
-          let visibility = '';
-          $.each($("input[name='visibility']:checked"), function () {
-            visibility += $(this).val();
-          });
+        this.x['commentAllow'] = this.commentonoff;
+        this.x['id'] = this.userDetails.Id;
+        // console.log(this.x);
 
-          this.x['articleTitle'] = formData.get('title');
-          this.x['articleDescription'] = rteValue;
-          this.x['categoryId'] = $('#category').val();
-          this.x['productId'] = $('#product').val();
-          this.x['sectionId'] = $('#section').val();
-          this.x['visible'] = visibility;
-          if (localStorage.getItem('folder')) {
-            this.x['FolderName'] = localStorage.getItem('folder');
-          }
-
-          if (id == 1) {
-            this.x['status'] = false;
-            this.x['draft'] = true;
-            this.x['archive'] = false;
-          }
-          if (id == 2) {
-            this.x['status'] = true;
-            this.x['draft'] = true;
-            this.x['archive'] = false;
-          }
-
-          this.x['commentAllow'] = this.commentonoff;
-          this.x['id'] = this.userDetails.Id;
-          // console.log(this.x);
-
-          if (this.editmode) {
-            console.log('article to update :', this.x);
-            this.service.updateArticle(this.x, this.article_id).subscribe(
-              (res) => {
-                console.log(res);
-              },
-              (err) => {
-                console.log(err);
+        if (this.editmode) {
+          console.log('article to update :', this.x);
+          this.service.updateArticle(this.x, this.article_id).subscribe(
+            (res) => {
+              this.toast.success('Article Updated', 'Success');
+              this._router.navigateByUrl(
+                'article?page=article-posts&articleid=' +
+                  this.article_id +
+                  '&s=' +
+                  this.x['status'] +
+                  '&d=' +
+                  this.x['draft'] +
+                  '&a=' +
+                  this.x['archive']
+              );
+              console.log(res);
+            },
+            (err) => {
+              this.toast.error('Article Update failed', 'Error');
+              console.log(err);
+            }
+          );
+        }
+        if (!this.editmode) {
+          console.log(this.editmode);
+          this.service.postArticle(this.x).subscribe(
+            (res) => {
+              if (id == 1) {
+                this.toast.success('Article saved to draft', 'Success');
+                this._router.navigateByUrl('/profile');
+              } else {
+                this.toast.success('Article Published \n Wait for reviewer to review your article', 'Success');
+                this._router.navigateByUrl('/home');
               }
-            );
-          }
-          if (this.editmode == false) {
-            console.log(this.editmode);
-            this.service.postArticle(this.x).subscribe(
-              (res) => {
-                this.toast.success('Article Published', 'Success');
-                console.log(res);
-                // $('#title').text('');
-                // $('#category').text('Choose Category');
-                // $('#defaultRTE').text('');
-              },
-              (err) => {
-                this.toast.error('Article Failed to Publish', 'Error');
-                console.log(err);
-              }
-            );
-          }
+              console.log(res);
+            },
+            (err) => {
+              this.toast.error('Article Failed to Publish', 'Error');
+              console.log(err);
+            }
+          );
         }
       }
     };
@@ -342,12 +340,10 @@ export class ArticleCreateComponent implements OnInit {
           this.folderName = localStorage.getItem('folder');
           this.loadUpload = true;
           console.log('Current Article Response :', this.currentarticle[0]);
-          $('#title').val(this.currentarticle[0].Article_Title);
-          $('#product').val(this.currentarticle[0].Product_Id).change();
-
+          // $('#title').val(this.currentarticle[0].Article_Title);
+          this.articleCreate.controls['title'].setValue(this.currentarticle[0].Article_Title);
+          this.articleCreate.controls['product'].setValue(this.currentarticle[0].Product_Id);
           this.fetchCategory();
-
-          console.log(this.category);
 
           if (this.currentarticle[0].CommentAllow == true) {
             $('#togglecomment').prop('checked', true);
@@ -399,13 +395,7 @@ export class ArticleCreateComponent implements OnInit {
             .appendTo('#category');
         }
         if (this.editmode) {
-          for (var i = 0; i < this.category.length; i++) {
-            if (
-              this.category[i].Category_Id == this.currentarticle[0].Category_Id
-            ) {
-              $('#category')[0].selectedIndex = i + 1;
-            }
-          }
+          this.articleCreate.controls['category'].setValue(this.currentarticle[0].Category_Id);
           this.fetchSection();
         }
       },
@@ -432,13 +422,7 @@ export class ArticleCreateComponent implements OnInit {
         }
         $('#section').prop('disabled', false);
         if (this.editmode) {
-          for (var i = 0; i < this.section.length; i++) {
-            if (
-              this.section[i].Section_Id == this.currentarticle[0].Section_Id
-            ) {
-              $('#section')[0].selectedIndex = i + 1;
-            }
-          }
+          this.articleCreate.controls['section'].setValue(this.currentarticle[0].Section_Id);
         }
       },
       (err) => {

@@ -441,21 +441,13 @@ export class FullarticleComponent implements OnInit {
       this.service.disapprovemsg(this.article_id, message).subscribe(
         (res) => {
           console.log(res);
+          $('#closemodal').click();
           this.router.navigateByUrl('/article-posts?message=disapprove');
         },
         (err) => {
           console.log(err);
         }
       );
-      // this.service.patch_disapprove_article(this.article_id).subscribe(
-      //   (res) => {
-      //     console.log(res);
-      //     this.router.navigateByUrl('/article-posts');
-      //   },
-      //   (err) => {
-      //     console.log(err);
-      //   }
-      // );
       console.log(message);
     } else {
       this.errormsg = true;
