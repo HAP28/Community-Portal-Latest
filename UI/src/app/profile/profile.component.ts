@@ -109,6 +109,7 @@ export class ProfileComponent implements OnInit {
         if(err.status == 403){
           this.atricleNotFound = true;
         }
+        this.atricleNotFound = true;
         console.log(err);
       }
     );

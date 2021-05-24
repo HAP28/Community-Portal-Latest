@@ -116,20 +116,25 @@
       </div>
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <div class="col">
-          <div class="card">
+          <div
+            class="card"
+            (click)="
+              navigateArticles(
+                '/article?page=article-posts&articleid=38&s=true&d=false&a=false'
+              )
+            "
+          >
             <img
-              src="https://cdn.pixabay.com/photo/2020/12/24/19/21/laptop-5858081__340.jpg"
+              src="https://www.cdc.gov/fungal/diseases/mucormycosis/images/318301-A_WEB_FungalLandingPages_Mucor_Infection.jpg"
               class="card-img-top"
               alt="..."
             />
             <div class="card-body">
-              <h5 class="card-title">
-                Technologies Driving Digital Transformation (Card title)
-              </h5>
+              <h5 class="card-title">About Mucormycosis</h5>
               <p class="card-text">
-                This is a longer card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
+                Mucormycosis (previously called zygomycosis) is a serious but
+                rare fungal infection caused by a group of molds called
+                mucormycetes.
               </p>
             </div>
             <div class="card-footer">
@@ -138,38 +143,53 @@
           </div>
         </div>
         <div class="col">
-          <div class="card">
+          <div
+            class="card"
+            (click)="
+              navigateArticles(
+                '/article?page=article-posts&articleid=17&s=true&d=false&a=false'
+              )
+            "
+          >
             <img
-              src="https://cdn.pixabay.com/photo/2015/01/08/18/30/entrepreneur-593378__340.jpg"
+              src="../../assets/images/corona.jpg"
               class="card-img-top"
               alt="..."
             />
             <div class="card-body">
-              <h5 class="card-title">Card title</h5>
+              <h5 class="card-title">Corona Prevention</h5>
               <p class="card-text">
-                This is a longer card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
+                Covid – 19 or Coronavirus was declared as a global pandemic by
+                the World Health Organization. And while the countries are
+                grappling with imminent dangers that
               </p>
             </div>
             <div class="card-footer">
-              <small class="text-muted">Posted 10 mins ago</small>
+              <small class="text-muted">Posted On Fri Apr 30 2021</small>
             </div>
           </div>
         </div>
         <div class="col">
-          <div class="card">
+          <div
+            class="card"
+            (click)="
+              navigateArticles(
+                '/article?page=article-posts&articleid=43&s=true&d=false&a=false'
+              )
+            "
+          >
             <img
-              src="https://cdn.pixabay.com/photo/2017/08/31/15/56/woman-2701154__340.jpg"
+              src="https://www.sundayguardianlive.com/wp-content/uploads/2020/04/Kundan-ayurveda-edited.jpg"
               class="card-img-top"
               alt="..."
             />
             <div class="card-body">
-              <h5 class="card-title">Card title</h5>
+              <h5 class="card-title">
+                AYURVEDA: A BRIEF INTRODUCTION AND GUIDE
+              </h5>
               <p class="card-text">
-                This is a longer card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
+                Ayurveda is considered by many scholars to be the oldest healing
+                science. In Sanskrit, Ayurveda means “The Science of Life.”
               </p>
             </div>
             <div class="card-footer">
@@ -179,7 +199,13 @@
         </div>
       </div>
       <div class="d-grid col-3 mx-auto m-3">
-        <button class="btn btn-success" type="button">Read More</button>
+        <button
+          class="btn btn-success"
+          type="button"
+          routerLink="/article-posts"
+        >
+          Read More
+        </button>
       </div>
     </div>
   </div>

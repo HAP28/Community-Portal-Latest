@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { UserService } from '../shared/user.service';
 declare var jQuery: any;
 import * as $ from 'jquery';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-body',
@@ -10,12 +11,12 @@ import * as $ from 'jquery';
 })
 export class BodyComponent implements OnInit {
   isShow: boolean;
-  countuser : any;
-  countProducts :any;
-  countarticles : any;
+  countuser: any;
+  countProducts: any;
+  countarticles: any;
   topPosToStartShowing = 100;
   categoryList: any;
-  constructor(private service: UserService) {}
+  constructor(private service: UserService, private router: Router) {}
   @HostListener('window:scroll')
   checkScroll() {
     const scrollPosition =
@@ -85,30 +86,36 @@ export class BodyComponent implements OnInit {
       }
     );
   }
-  getAllCounts(){
+  getAllCounts() {
     this.service.getCountProducts().subscribe(
-    (res)=>{
-      this.countProducts = res[0].Column1;
-      console.log("Product count ",this.countProducts);
-    },(err)=>{
-      console.log(err);
-    }
-    );
-    this.service.getCountArticles().subscribe(
-      (res)=>{
-        this.countarticles = res[0].Column1;
-        console.log("Article count ",this.countarticles);
-      },(err)=>{
+      (res) => {
+        this.countProducts = res[0].Column1;
+        console.log('Product count ', this.countProducts);
+      },
+      (err) => {
         console.log(err);
       }
-      );
-      this.service.countTotalUsers().subscribe(
-        (res)=>{
-          this.countuser = res[0].Column1;
-          console.log("Product count ",this.countuser);
-        },(err)=>{
-          console.log(err);
-        }
-        );
+    );
+    this.service.getCountArticles().subscribe(
+      (res) => {
+        this.countarticles = res[0].Column1;
+        console.log('Article count ', this.countarticles);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+    this.service.countTotalUsers().subscribe(
+      (res) => {
+        this.countuser = res[0].Column1;
+        console.log('Product count ', this.countuser);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+  navigateArticles(url) {
+    this.router.navigateByUrl(url);
   }
 }

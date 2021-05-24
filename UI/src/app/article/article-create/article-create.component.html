@@ -38,7 +38,6 @@
       />
       <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
         <div *ngIf="f.title.errors.required">Title is required</div>
-        <div *ngIf="f.title.errors.pattern">Title must be alphanumeric</div>
       </div>
  
     </div>
@@ -106,11 +105,11 @@
         id="defaultRTE"
         name="defaultRTE"
         class="form-control"
-        formControlName="editor" [ngClass]="{ 'is-invalid': submitted && f.editor.errors }"
       ></textarea>
-      <div id="editorValidation" *ngIf="submitted && f.editor.errors" class="mt-2">
+      <!-- formControlName="editor" [ngClass]="{ 'is-invalid': submitted && f.editor.errors }" -->
+      <!-- <div id="editorValidation" *ngIf="submitted && f.editor.errors" class="mt-2">
         <div *ngIf="f.editor.errors.required">Description is required</div>
-      </div>
+      </div> -->
     </div>
 
     <!-- file-manager -->
@@ -197,9 +196,6 @@
   </form>
 </div>
 <style>
-  .e-error{
-
-  }
   .e-rte-content body {
     color: black;
     background-color: white;
