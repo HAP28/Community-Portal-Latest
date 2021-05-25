@@ -59,7 +59,7 @@ namespace WebAPI.Controllers.AdminControllers
                         UserName = request.Email,
                         NormalizedUserName = request.Email,
                         Email = request.Email,
-                        EmailConfirmed = true,
+                        EmailConfirmed = false,
                         PhoneNumberConfirmed = true,
                     };
 
@@ -71,7 +71,22 @@ namespace WebAPI.Controllers.AdminControllers
                             var role = await userManager.AddToRoleAsync(user, Roles.Viewer.ToString());
                             if (role.Succeeded)
                             {
+                                var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                                var param = new Dictionary<string, string>
+                                {
+                                    {"token", token },
+                                    {"email", user.Email }
+                                };
+                                var callback = QueryHelpers.AddQueryString("http://localhost:4200/emailconfirm", param);
+                                //var path = Url.Action("EmailConfirmation", new { uid = user.Id, token = token });
+
+                                var message = new Message(new string[] { user.Email }, "Email Confirmation token",callback, null);
+                                await _emailSender.SendEmailAsync(message);
+
                                 return Ok("User Successfull Added");
+
+
                             }
                             else
                             {
@@ -99,6 +114,35 @@ namespace WebAPI.Controllers.AdminControllers
                 }
             }
             return BadRequest(request);
+        }
+        [HttpGet("EmailConfirmation")]
+       
+        public async Task<IActionResult> EmailConfirmation([FromQuery] string email, [FromQuery] string token)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
+                return BadRequest("Invalid Email Confirmation Request 1");
+            var confirmResult = await userManager.ConfirmEmailAsync(user, token);
+            if (!confirmResult.Succeeded)
+                return BadRequest("Invalid Email Confirmation Request 2");
+            return Ok();
+            //try
+            //{
+            //    var user = await userManager.FindByIdAsync(uid);
+            //    if (user == null)
+            //        return BadRequest();
+            //    else
+            //    {
+            //        var result = this.userManager.ConfirmEmailAsync(user, token);
+            //        if (result.Result.Succeeded)
+            //            return Ok();
+            //    }
+            //    return Ok();
+            //}catch(Exception e)
+            //{
+            //    return Ok(e.Message);
+            //}
+
         }
         [AllowAnonymous]
         [HttpPatch("updateprofile/{uid}")]
@@ -174,6 +218,8 @@ namespace WebAPI.Controllers.AdminControllers
                 var user = await userManager.FindByEmailAsync(model.Email);
                 if (user != null)
                 {
+                    if (!await userManager.IsEmailConfirmedAsync(user))
+                        return BadRequest("Email is not confirmed");
                     if (await this.userManager.IsLockedOutAsync(user))
                     {
                         ModelState.AddModelError("userbanned", "Your account has been disabled by an administrator.");

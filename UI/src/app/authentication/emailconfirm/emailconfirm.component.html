@@ -1,0 +1,72 @@
+<!-- <div class="card">
+  <div class="card-body">
+    <h1 class="card-title">Email Confirmation</h1>
+    <div *ngIf="showError" class="alert alert-danger" role="alert">
+      {{ errorMessage }}
+    </div>
+    <div *ngIf="showSuccess" class="alert alert-success" role="alert">
+      Your email has been successfully confirmed. Please
+      <a routerLink="/login"> click here to log in. </a>
+    </div>
+  </div>
+</div> -->
+
+<app-header [display]="display"></app-header>
+<app-body></app-body>
+<app-footer></app-footer>
+<div class="container">
+  <div class="myCard">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="myLeftCtn">
+          <form>
+            <!-- [formGroup]="loginForm" -->
+            <header>Email Confirmation</header>
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/f/f8/01_Icon-Community%402x.png"
+              style="
+                height: 200px;
+                width: 200px;
+                text-align: center;
+                margin-left: 50px;
+              "
+            />
+            <div *ngIf="showError" class="alert alert-danger mt-3" role="alert">
+              {{ errorMessage }}
+            </div>
+            <div
+              *ngIf="showSuccess"
+              class="alert alert-success mt-3"
+              role="alert"
+            >
+              Your email has been successfully confirmed. Please
+              <a routerLink="/login"> click here to log in. </a>
+            </div>
+            <!-- <input type="submit" class="butt" value="Login" /> -->
+          </form>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="myRightCtn">
+          <button class="close" (click)="close()" mat-button>X</button>
+          <div class="box">
+            <header>About the Community Portal</header>
+            <p class="mt-2">
+              Community Portal is a great place to share information and
+              collaborate with people. Moreover, that is key to business
+              processes .i.e. customers, partners, or employees. However, one
+              calls it a portal, a help forum, a support site, HR central, or
+              something else. An online community is a great place to connect
+              with the essential folks in an organization in a new and different
+              way.
+            </p>
+            <a routerLink="/about"
+              ><input type="button" class="butt_out mt-3" value="Learn More"
+            /></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

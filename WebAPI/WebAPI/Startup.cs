@@ -47,7 +47,9 @@ namespace WebAPI
                    Configuration.GetConnectionString("DataConnection")).EnableSensitiveDataLogging());
 
       
-            services.AddIdentity<UserRegistrationDto, IdentityRole>()
+            services.AddIdentity<UserRegistrationDto, IdentityRole>(
+               
+                )
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
@@ -69,6 +71,7 @@ namespace WebAPI
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 8;
+                options.User.RequireUniqueEmail = true;
             });
 
             //services.AddCors();
@@ -98,6 +101,7 @@ namespace WebAPI
                 };
             });
             services.AddTransient<IFileService, FileService>();
+
 
             //Mail service
             var emailConfig = Configuration

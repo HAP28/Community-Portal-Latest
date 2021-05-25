@@ -78,11 +78,18 @@
                 <a [routerLink]="['/forgotpassword']"> Forgot Password </a>
               </div>
             </div>
+            <div *ngIf="showError" class="alert alert-danger mt-2" role="alert">
+              <!-- <div *ngFor="let item of errorMessage">{{item}}</div> -->
+              {{ errorMessage }}
+            </div>
 
             <input type="submit" class="butt" value="Login" />
 
             <div class="my-3">
-              Not have an account ? <span class="text-info signup" (click)="gotoregistration()">Sign Up here</span>
+              Not have an account ?
+              <span class="text-info signup" (click)="gotoregistration()"
+                >Sign Up here</span
+              >
             </div>
           </form>
         </div>

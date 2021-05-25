@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+
 import {
   HttpClient,
   HttpClientModule,
@@ -7,10 +8,12 @@ import {
   HttpEvent,
   HttpHeaderResponse,
   HttpHeaders,
+  HttpParams,
   HttpRequest,
 } from '@angular/common/http';
 import { ConfirmedValidator } from '../custom-validators';
 import { Observable } from 'rxjs';
+import { CustomEncoder } from './CustomEncoder';
 
 interface ForgotPasswordDto {
   email: string;
@@ -577,4 +580,14 @@ export class UserService {
   contactus(model) {
     return this.http.post(this.APIURL + '/Account/contact', model);
   }
+
+  // Email
+  public confirmEmail = (token: string, email: string) => {
+    let params = new HttpParams({ encoder: new CustomEncoder() });
+    params = params.append('token', token);
+    params = params.append('email', email);
+    return this.http.get(this.APIURL + '/Account/EmailConfirmation', {
+      params: params,
+    });
+  };
 }

@@ -156,7 +156,13 @@
                 </div>
               </div>
             </div>
-
+            <div *ngIf="showError" class="alert alert-danger mt-1" role="alert">
+              <!-- <div *ngFor="let item of errorMessage">{{item}}</div> -->
+              {{ errorMessage }}
+            </div>
+            <div *ngIf="showSuccess" class="alert alert-success" role="alert">
+              Check your email for confirmation
+            </div>
             <button type="submit" class="butt">Register</button>
 
             <div class="my-3">

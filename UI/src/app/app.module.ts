@@ -46,6 +46,7 @@ import { ForgotPasswordComponent } from './authentication/forgot-password/forgot
 import { NotfoundComponent } from './notfound/notfound.component';
 import { ContactComponent } from './contact/contact.component';
 import { AboutComponent } from './about/about.component';
+import { EmailconfirmComponent } from './authentication/emailconfirm/emailconfirm.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { AboutComponent } from './about/about.component';
     UploadComponent,
     ContactComponent,
     AboutComponent,
+    EmailconfirmComponent,
   ],
   imports: [
     BrowserModule,
