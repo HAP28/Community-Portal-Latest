@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Internship HIPL\\Final Project Community Portal\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj": {}
+    "C:\\Users\\HARSHIT\\Desktop\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj": {}
   },
   "projects": {
-    "D:\\Internship HIPL\\Final Project Community Portal\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj": {
+    "C:\\Users\\HARSHIT\\Desktop\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Internship HIPL\\Final Project Community Portal\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\HARSHIT\\Desktop\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj",
         "projectName": "WebAPI",
-        "projectPath": "D:\\Internship HIPL\\Final Project Community Portal\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj",
-        "packagesPath": "C:\\Users\\meet0\\.nuget\\packages\\",
-        "outputPath": "D:\\Internship HIPL\\Final Project Community Portal\\Community-Portal-Latest\\WebAPI\\WebAPI\\obj\\",
+        "projectPath": "C:\\Users\\HARSHIT\\Desktop\\Community-Portal-Latest\\WebAPI\\WebAPI\\WebAPI.csproj",
+        "packagesPath": "C:\\Users\\HARSHIT\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HARSHIT\\Desktop\\Community-Portal-Latest\\WebAPI\\WebAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\meet0\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\HARSHIT\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -111,7 +111,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
         }
       }
     }
