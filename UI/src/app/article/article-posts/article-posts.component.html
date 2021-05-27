@@ -1,124 +1,134 @@
 <app-header [display]="display"></app-header>
 <div class="maindiv pb-5">
-<div class="searching py-3">
-  <div class="container">
-    <div class="content" role="main">
-      <div class="form-group">
-        <label for="search-text">Search Article</label>
-        <input
-          type="text"
-          class="form-control"
-          id="search-text"
-          aria-describedby="search-text"
-          [(ngModel)]="searchText"
-          placeholder="Enter text to search"
-          autofocus
-        />
+  <div class="searching py-3">
+    <div class="container">
+      <div class="content" role="main">
+        <div class="form-group">
+          <label for="search-text">Search Article</label>
+          <input
+            type="text"
+            class="form-control"
+            id="search-text"
+            aria-describedby="search-text"
+            [(ngModel)]="searchText"
+            placeholder="Enter text to search"
+            autofocus
+          />
+        </div>
       </div>
-    </div>
-    <div class="card shadow">
-      <div class="card-body">
-        <form (ngSubmit)="searchArticle()">
-          <div class="row">
-            <div class="form-group col-sm-3">
-              <label>Product</label>
-              <select
-                class="form-select"
-                id="productList"
-                (change)="fetchCategory()"
-              >
-                <option value="" selected>Choose Product</option>
-              </select>
+      <div class="card shadow">
+        <div class="card-body">
+          <form (ngSubmit)="searchArticle()">
+            <div class="row">
+              <div class="form-group col-sm-3">
+                <label>Product</label>
+                <select
+                  class="form-select"
+                  id="productList"
+                  (change)="fetchCategory()"
+                >
+                  <option value="" selected>Choose Product</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-3">
+                <label>Category</label>
+                <select
+                  class="form-select"
+                  id="categoryList"
+                  (change)="fetchSection()"
+                >
+                  <option value="" selected>Choose Category</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-3">
+                <label>Section</label>
+                <select class="form-select" id="sectionList">
+                  <option value="" selected>Choose Section</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-3">
+                <table>
+                  <tr>
+                    <td>
+                      <button type="submit" class="btn btn-primary size">
+                        Search
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        type="reset"
+                        class="btn btn-danger size1"
+                        (click)="refreshList()"
+                      >
+                        Reset
+                      </button>
+                    </td>
+                    <td class="feku">
+                      <br /><span class="ml-2 mr-4">Mode</span>
+                    </td>
+                    <td class="feku">
+                      <div class="form-check form-switch">
+                        <abbr
+                          data-title="Toggle button to switch in Review Mode"
+                        >
+                          <input
+                            class="form-check-input mt-3"
+                            type="checkbox"
+                            id="toggle-one"
+                            (change)="toogleswitch()"
+                          />
+                        </abbr>
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </div>
             </div>
-            <div class="form-group col-sm-3">
-              <label>Category</label>
-              <select
-                class="form-select"
-                id="categoryList"
-                (change)="fetchSection()"
-              >
-                <option value="" selected>Choose Category</option>
-              </select>
-            </div>
-            <div class="form-group col-sm-3">
-              <label>Section</label>
-              <select class="form-select" id="sectionList">
-                <option value="" selected>Choose Section</option>
-              </select>
-            </div>
-            <div class="form-group col-sm-3">
-              <table>
-                <tr>
-                  <td>
-                    <button type="submit" class="btn btn-primary size">
-                      Search
-                    </button>
-                  </td>
-                  <td>
-                    <button
-                      type="reset"
-                      class="btn btn-danger size1"
-                      (click)="refreshList()"
-                    >
-                      Reset
-                    </button>
-                  </td>
-                  <td class="feku"><br /><span class="ml-2 mr-4">Mode</span></td>
-                  <td class="feku">
-                    <div class="form-check form-switch">
-                      <abbr data-title="Toggle button to switch in Review Mode">
-                        <input
-                          class="form-check-input mt-3"
-                          type="checkbox"
-                          id="toggle-one"
-                          (change)="toogleswitch()"
-                        />
-                      </abbr>
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<div class="container" *ngIf="isDataAvailable">
-  <div class="card-box shadow-lg" *ngFor="let item of Articles | appFilter: searchText : 'Article_Title'">
-    <div class="py-3" style="display: flex">
-      <h4 class="header-title" [innerHTML] ="item.Article_Title | safeHtml"></h4>
-    </div>
-    <div class="main">
-      <h5 class="text-custom">
-        {{ item.product }} / {{ item.category }} / {{ item.section }}
-      </h5>
-      <p
-        class="text-muted font-18 mb-0 show-less"
-        [innerHTML]="item.Description | safeHtml"
-      ></p>
+  <div class="container" *ngIf="isDataAvailable">
+    <div
+      class="card-box shadow-lg"
+      *ngFor="let item of Articles | appFilter: searchText:'Article_Title'"
+    >
+      <div class="py-3" style="display: flex">
+        <h4
+          class="header-title"
+          [innerHTML]="item.Article_Title | safeHtml"
+        ></h4>
+      </div>
+      <div class="main">
+        <h5 class="text-custom">
+          {{ item.product }} / {{ item.category }} / {{ item.section }}
+        </h5>
+        <p
+          class="text-muted font-18 mb-0 show-less"
+          [innerHTML]="item.Description | safeHtml"
+        ></p>
 
-      <!-- <a href="/fullarticle">Read More..</a> -->
-      <a
-        (click)="
-          readMore(item.Article_Id, item.Status, item.Draft, item.Archive)
-        "
-        >Read More</a
-      >
+        <!-- <a href="/fullarticle">Read More..</a> -->
+        <a
+          (click)="
+            readMore(item.Article_Id, item.Status, item.Draft, item.Archive)
+          "
+          >Read More</a
+        >
 
-      <footer class="blockquote-footer m-3">
-        Posted On <cite title="Source Title">{{ item.PostedOn }}</cite>
-      </footer>
-      <small style="text-align: right">Posted By : {{ item.user }}</small>
-      <small
-        style="float: right"
-        *ngIf="item.Status && !item.Draft && !item.Archive"
-        >Reviewed By : {{ item.reviewer }}</small
-      >
+        <footer class="blockquote-footer m-3">
+          Posted On <cite title="Source Title">{{ item.PostedOn }}</cite>
+        </footer>
+        <small style="text-align: right">Posted By : {{ item.user }}</small>
+        <small
+          style="float: right"
+          *ngIf="item.Status && !item.Draft && !item.Archive"
+          >Reviewed By : {{ item.reviewer }}</small
+        >
+      </div>
+      <!-- <hr /> -->
     </div>
-    <!-- <hr /> -->
   </div>
-</div>
 </div>
 <app-footer></app-footer>

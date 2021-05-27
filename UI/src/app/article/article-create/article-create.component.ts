@@ -73,8 +73,7 @@ export class ArticleCreateComponent implements OnInit {
     private toast: ToastrService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute
-  ) {
-  }
+  ) {}
   url: any;
   msg = '';
   product: any;
@@ -88,7 +87,7 @@ export class ArticleCreateComponent implements OnInit {
   folderName: string;
   RandomFolderName: string;
   loadUpload = true;
-
+  userid: any;
   ngOnInit(): void {
     this.articleCreate = this.formBuilder.group({
       title: ['', [Validators.required]],
@@ -108,6 +107,7 @@ export class ArticleCreateComponent implements OnInit {
         this.loadUpload = false;
         // $('#validateSubmit').css('display','none');
         this.article_id = params['id'];
+        this.userid = params['uid'];
         console.log('Clicked Article: ', this.article_id);
       }
     });
@@ -170,8 +170,8 @@ export class ArticleCreateComponent implements OnInit {
         saveUrl: 'http://localhost:65241/api/ArticleMaster/image',
         path: 'http://localhost:65241/Uploads/',
         removeUrl: 'https://ej2.syncfusion.com/services/api/uploadbox/Remove',
-        minWidth: '80px',
-        minHeight: '80px',
+        // minWidth: '80px',
+        // minHeight: '80px',
       },
       fileManagerSettings: {
         enable: true,
@@ -237,6 +237,7 @@ export class ArticleCreateComponent implements OnInit {
         // console.log(this.x);
 
         if (this.editmode) {
+          this.x['id'] = this.userid;
           console.log('article to update :', this.x);
           this.service.updateArticle(this.x, this.article_id).subscribe(
             (res) => {
@@ -267,7 +268,10 @@ export class ArticleCreateComponent implements OnInit {
                 this.toast.success('Article saved to draft', 'Success');
                 this._router.navigateByUrl('/profile');
               } else {
-                this.toast.success('Article Published \n Wait for reviewer to review your article', 'Success');
+                this.toast.success(
+                  'Article Published \n Wait for reviewer to review your article',
+                  'Success'
+                );
                 this._router.navigateByUrl('/home');
               }
               console.log(res);
@@ -341,8 +345,12 @@ export class ArticleCreateComponent implements OnInit {
           this.loadUpload = true;
           console.log('Current Article Response :', this.currentarticle[0]);
           // $('#title').val(this.currentarticle[0].Article_Title);
-          this.articleCreate.controls['title'].setValue(this.currentarticle[0].Article_Title);
-          this.articleCreate.controls['product'].setValue(this.currentarticle[0].Product_Id);
+          this.articleCreate.controls['title'].setValue(
+            this.currentarticle[0].Article_Title
+          );
+          this.articleCreate.controls['product'].setValue(
+            this.currentarticle[0].Product_Id
+          );
           this.fetchCategory();
 
           if (this.currentarticle[0].CommentAllow == true) {
@@ -395,7 +403,9 @@ export class ArticleCreateComponent implements OnInit {
             .appendTo('#category');
         }
         if (this.editmode) {
-          this.articleCreate.controls['category'].setValue(this.currentarticle[0].Category_Id);
+          this.articleCreate.controls['category'].setValue(
+            this.currentarticle[0].Category_Id
+          );
           this.fetchSection();
         }
       },
@@ -422,7 +432,9 @@ export class ArticleCreateComponent implements OnInit {
         }
         $('#section').prop('disabled', false);
         if (this.editmode) {
-          this.articleCreate.controls['section'].setValue(this.currentarticle[0].Section_Id);
+          this.articleCreate.controls['section'].setValue(
+            this.currentarticle[0].Section_Id
+          );
         }
       },
       (err) => {

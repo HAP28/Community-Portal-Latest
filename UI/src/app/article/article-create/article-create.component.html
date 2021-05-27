@@ -1,5 +1,5 @@
 <!-- <form class="myForm text-center" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  <input class="myInput form-control" placeholder="FirstName" type="text" id="firstname" formControlName="firstname" [ngClass]="{ 'is-invalid': submitted && f.firstname.errors }" /> 
+  <input class="myInput form-control" placeholder="FirstName" type="text" id="firstname" formControlName="firstname" [ngClass]="{ 'is-invalid': submitted && f.firstname.errors }" />
   <div *ngIf="submitted && f.firstname.errors" class="invalid-feedback">
     <div *ngIf="f.firstname.errors.required">FirstName is required</div>
     <div *ngIf="f.firstname.errors.pattern">FirstName must be a valid</div>
@@ -16,7 +16,6 @@
   <button type="submit" class="butt">Register</button>
 </form> -->
 
-
 <app-header></app-header>
 
 <div class="container">
@@ -24,7 +23,7 @@
   <form [formGroup]="articleCreate" #rteForm="ngForm" id="form-element">
     <div class="mb-3">
       <label class="form-label">Title</label>
-    
+
       <input
         type="text"
         #Title
@@ -34,18 +33,18 @@
         placeholder="Title.."
         name="title"
         autocomplete="off"
-        formControlName="title" [ngClass]="{ 'is-invalid': submitted && f.title.errors }"
+        formControlName="title"
+        [ngClass]="{ 'is-invalid': submitted && f.title.errors }"
       />
       <div *ngIf="submitted && f.title.errors" class="invalid-feedback">
         <div *ngIf="f.title.errors.required">Title is required</div>
       </div>
- 
     </div>
 
     <div class="row">
       <div class="col-md-4">
         <label for="product" class="form-label">Select Product</label>
-       
+
         <select
           class="form-select"
           aria-label="Default select example"
@@ -53,7 +52,8 @@
           aria-placeholder="Choose Product"
           id="product"
           (change)="fetchCategory()"
-          formControlName="product" [ngClass]="{ 'is-invalid': submitted && f.product.errors }"
+          formControlName="product"
+          [ngClass]="{ 'is-invalid': submitted && f.product.errors }"
         >
           <option value="" selected>Choose Product</option>
         </select>
@@ -63,7 +63,7 @@
       </div>
       <div class="col-md-4">
         <label for="category" class="form-label">Select Category</label>
-      
+
         <select
           class="form-select"
           aria-label="Default select example"
@@ -71,7 +71,8 @@
           aria-placeholder="Choose Category"
           id="category"
           (change)="fetchSection()"
-          formControlName="category" [ngClass]="{ 'is-invalid': submitted && f.category.errors }"
+          formControlName="category"
+          [ngClass]="{ 'is-invalid': submitted && f.category.errors }"
         >
           <option value="" selected>Choose Category</option>
         </select>
@@ -83,14 +84,15 @@
         <label for="section" style="display: inline-block" class="form-label"
           >Select Section</label
         >
-       
+
         <select
           class="form-select"
           aria-label="Default select example"
           name="section"
           aria-placeholder="Choose Section"
           id="section"
-          formControlName="section" [ngClass]="{ 'is-invalid': submitted && f.section.errors }"
+          formControlName="section"
+          [ngClass]="{ 'is-invalid': submitted && f.section.errors }"
         >
           <option value="" selected>Choose Section</option>
         </select>
@@ -113,7 +115,7 @@
     </div>
 
     <!-- file-manager -->
-    <app-filemanager *ngIf="loadUpload" [display] = "true"></app-filemanager>
+    <app-filemanager *ngIf="loadUpload" [display]="true"></app-filemanager>
 
     <label class="my-3"><b>Visibility :</b></label
     ><small
@@ -182,11 +184,7 @@
     </div>
     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
       <button type="reset" class="btn btn-danger me-md-2">Reset</button>
-      <button
-        class="btn btn-primary"
-        type="submit"
-        id="validateSubmit"
-      >
+      <button class="btn btn-primary" type="submit" id="validateSubmit">
         Save to Draft
       </button>
       <button class="btn btn-success me-md-2" id="publishforreview">

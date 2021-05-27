@@ -92,6 +92,7 @@
             class="btn-close"
             data-bs-dismiss="modal"
             aria-label="Close"
+            id="closeprod"
           ></button>
         </div>
         <div class="modal-body">
@@ -180,7 +181,10 @@
   <br />
 
   <div class="row row-cols-1 row-cols-md-3 g-4">
-    <div class="col" *ngFor="let item of productList | appFilter: searchText : 'Product_Name'">
+    <div
+      class="col"
+      *ngFor="let item of productList | appFilter: searchText:'Product_Name'"
+    >
       <div
         class="card shadow p-3 mb-5 bg-body rounded animate"
         data-bs-toggle="modal"
@@ -188,7 +192,10 @@
         (click)="viewspecificProduct(item.Product_Id)"
       >
         <div class="card-body">
-          <h5 class="card-title" [innerHTML] = "item.Product_Name | safeHtml"></h5>
+          <h5
+            class="card-title"
+            [innerHTML]="item.Product_Name | safeHtml"
+          ></h5>
           <p class="card-text" class="show-less">
             {{ item.Product_Description }}
           </p>

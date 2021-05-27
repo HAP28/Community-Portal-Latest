@@ -76,6 +76,16 @@
   margin-right: -15px;
   margin-left: -15px;
 }
+.card {
+  box-shadow: 0px 0px 0px grey;
+  -webkit-transition: box-shadow 0.4s ease-out;
+  box-shadow: 0.8px 0.9px 3px grey;
+}
+.card:hover {
+  cursor: pointer;
+  box-shadow: 1px 8px 20px grey;
+  -webkit-transition: box-shadow 0.4s ease-in;
+}
 .card-body {
   padding-top: 20px;
   padding-bottom: 30px;
@@ -273,4 +283,11 @@ footer {
   .footer-distributed .footer-center i {
     margin-left: 0;
   }
+}
+
+.show-less {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

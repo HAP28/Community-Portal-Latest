@@ -756,5 +756,34 @@ namespace WebAPI.Controllers
                 throw;
             }
         }
+        [AllowAnonymous]
+        [HttpGet("getnewcreatedarticles")]
+        public async Task<IActionResult> GetNewlyCreatedArticles()
+        {
+            try
+            {
+                string query = @"Select top 3 * from dbo.ArticleMaster where Visibility='1' and Status=1 and Draft=0 and Archive=0 order by dbo.ArticleMaster.PostedOn desc, dbo.ArticleMaster.Article_Id desc";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return Ok(table);
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(e.Message);
+            }
+
+        }
     }
 }

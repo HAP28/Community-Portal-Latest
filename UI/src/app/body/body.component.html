@@ -115,98 +115,33 @@
         <h2>Latest Articles</h2>
       </div>
       <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col">
-          <div
-            class="card"
-            (click)="
-              navigateArticles(
-                '/article?page=article-posts&articleid=38&s=true&d=false&a=false'
-              )
-            "
-          >
+        <div class="col" *ngFor="let item of topthreearticles">
+          <div class="card" (click)="navigateArticles(item.Article_Id)">
             <img
-              src="https://www.cdc.gov/fungal/diseases/mucormycosis/images/318301-A_WEB_FungalLandingPages_Mucor_Infection.jpg"
+              src="../../assets/images/article.jpg"
               class="card-img-top"
               alt="..."
             />
             <div class="card-body">
-              <h5 class="card-title">About Mucormycosis</h5>
-              <p class="card-text">
-                Mucormycosis (previously called zygomycosis) is a serious but
-                rare fungal infection caused by a group of molds called
-                mucormycetes.
+              <h5 class="card-title">{{ item.Article_Title }}</h5>
+              <p
+                class="card-text show-less"
+                [innerHTML]="item.Description | safeHtml"
+              >
+                <!-- {{ item.Description }} -->
               </p>
             </div>
             <div class="card-footer">
-              <small class="text-muted">Posted On Mon May 24 2021</small>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div
-            class="card"
-            (click)="
-              navigateArticles(
-                '/article?page=article-posts&articleid=17&s=true&d=false&a=false'
-              )
-            "
-          >
-            <img
-              src="../../assets/images/corona.jpg"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">Corona Prevention</h5>
-              <p class="card-text">
-                Covid – 19 or Coronavirus was declared as a global pandemic by
-                the World Health Organization. And while the countries are
-                grappling with imminent dangers that
-              </p>
-            </div>
-            <div class="card-footer">
-              <small class="text-muted">Posted On Fri Apr 30 2021</small>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div
-            class="card"
-            (click)="
-              navigateArticles(
-                '/article?page=article-posts&articleid=43&s=true&d=false&a=false'
-              )
-            "
-          >
-            <img
-              src="https://www.sundayguardianlive.com/wp-content/uploads/2020/04/Kundan-ayurveda-edited.jpg"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">
-                AYURVEDA: A BRIEF INTRODUCTION AND GUIDE
-              </h5>
-              <p class="card-text">
-                Ayurveda is considered by many scholars to be the oldest healing
-                science. In Sanskrit, Ayurveda means “The Science of Life.”
-              </p>
-            </div>
-            <div class="card-footer">
-              <small class="text-muted">Posted On Tue May 25 2021</small>
+              <small class="text-muted">Posted On {{ item.PostedOn }}</small>
             </div>
           </div>
         </div>
       </div>
-      <div class="d-grid col-3 mx-auto m-3">
-        <button
-          class="btn btn-success"
-          type="button"
-          routerLink="/article-posts"
-        >
-          Read More
-        </button>
-      </div>
+    </div>
+    <div class="d-grid col-3 mx-auto m-3">
+      <button class="btn btn-success" type="button" routerLink="/article-posts">
+        Read More
+      </button>
     </div>
   </div>
 

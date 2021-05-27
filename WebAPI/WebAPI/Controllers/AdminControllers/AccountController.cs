@@ -60,7 +60,7 @@ namespace WebAPI.Controllers.AdminControllers
                         NormalizedUserName = request.Email,
                         Email = request.Email,
                         EmailConfirmed = false,
-                        PhoneNumberConfirmed = true,
+                        PhoneNumberConfirmed = true
                     };
 
                     var result = await userManager.CreateAsync(user, request.Password);

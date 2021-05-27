@@ -101,7 +101,6 @@ export class ArticlePostsComponent implements OnInit {
         '&a=' +
         a
     );
-    //this._router.navigateByUrl('/permission?id=' + id);
   }
   fetchCategory() {
     var product = $('#productList').val();

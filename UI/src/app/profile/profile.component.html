@@ -264,6 +264,11 @@
                       >
                     </li>
                     <li>
+                      <a class="dropdown-item" (click)="userreviewarticles()"
+                        >Review</a
+                      >
+                    </li>
+                    <li>
                       <a class="dropdown-item" (click)="userdraftarticles()"
                         >Draft</a
                       >
@@ -457,7 +462,7 @@
 
       <div class="col-xl-8">
         <div class="row">
-          <div class="col-sm-3">
+          <div class="col-sm">
             <div class="card-box tilebox-one shadow">
               <i class="icon-layers float-right text-muted"></i>
               <h6 class="text-muted text-uppercase mt-0">Articles</h6>
@@ -467,7 +472,7 @@
             </div>
           </div>
 
-          <div class="col-sm-3">
+          <div class="col-sm">
             <div class="card-box tilebox-one shadow">
               <i class="icon-paypal float-right text-muted"></i>
               <h6 class="text-muted text-uppercase mt-0">Published</h6>
@@ -479,8 +484,17 @@
               <!-- <span class="badge badge-custom">-29% </span><span class="text-muted">previous period</span> -->
             </div>
           </div>
+          <div class="col-sm">
+            <div class="card-box tilebox-one shadow">
+              <i class="icon-layers float-right text-muted"></i>
+              <h6 class="text-muted text-uppercase mt-0">Review</h6>
+              <h2 class="counter-count" data-plugin="counterup">
+                {{ this.userarticlereviewcount }}
+              </h2>
+            </div>
+          </div>
 
-          <div class="col-sm-3">
+          <div class="col-sm">
             <div class="card-box tilebox-one shadow">
               <i class="icon-rocket float-right text-muted"></i>
               <h6 class="text-muted text-uppercase mt-0">Draft</h6>
@@ -490,7 +504,7 @@
             </div>
           </div>
 
-          <div class="col-sm-3">
+          <div class="col-sm">
             <div class="card-box tilebox-one shadow">
               <i class="icon-rocket float-right text-muted"></i>
               <h6 class="text-muted text-uppercase mt-0">Archive</h6>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebAPI.Models.AdminUserModels
 {
@@ -20,7 +21,5 @@ namespace WebAPI.Models.AdminUserModels
         public string fb_link { get; set; }
         public string ln_link { get; set; }
         public string tw_link { get; set; }
-
-
     }
 }

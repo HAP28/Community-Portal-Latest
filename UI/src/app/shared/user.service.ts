@@ -231,6 +231,9 @@ export class UserService {
     );
   }
   //Articles
+  getnewcreatedarticles() {
+    return this.http.get(this.APIURL + '/ArticleMaster/getnewcreatedarticles');
+  }
   getPubishArticles() {
     return this.http.get(
       this.APIURL +
@@ -298,6 +301,19 @@ export class UserService {
         true +
         '/' +
         false +
+        '/' +
+        false
+    );
+  }
+  getreviewarticleforuser(uid) {
+    return this.http.get(
+      this.APIURL +
+        '/ArticleMaster/articlegetforuser/' +
+        uid +
+        '/' +
+        true +
+        '/' +
+        true +
         '/' +
         false
     );

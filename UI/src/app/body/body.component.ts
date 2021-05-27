@@ -16,6 +16,7 @@ export class BodyComponent implements OnInit {
   countarticles: any;
   topPosToStartShowing = 100;
   categoryList: any;
+  topthreearticles: any;
   constructor(private service: UserService, private router: Router) {}
   @HostListener('window:scroll')
   checkScroll() {
@@ -45,25 +46,6 @@ export class BodyComponent implements OnInit {
     this.refreshList();
     this.getAllCounts();
     (function ($) {
-      // $(document).ready(function () {
-      //   console.log('Counter Working!');
-      //   $('.counter-count').each(function () {
-      //     $(this)
-      //       .prop('Counter', 0)
-      //       .animate(
-      //         {
-      //           Counter: $(this).text(),
-      //         },
-      //         {
-      //           duration: 7000,
-      //           easing: 'swing',
-      //           step: function (now) {
-      //             $(this).text(Math.ceil(now));
-      //           },
-      //         }
-      //       );
-      //   });
-      // });
       $('.card').hover(
         function () {
           $(this).addClass('shadow-lg').css('cursor', 'pointer');
@@ -73,6 +55,29 @@ export class BodyComponent implements OnInit {
         }
       );
     })(jQuery);
+    this.getnewarticles();
+  }
+  getnewarticles() {
+    this.service.getnewcreatedarticles().subscribe(
+      (res) => {
+        this.topthreearticles = res;
+        console.log(this.topthreearticles);
+        for (var i in this.topthreearticles) {
+          var date = new Date(this.topthreearticles[i].PostedOn);
+          this.topthreearticles[i].PostedOn = date.toDateString();
+          var temp = this.topthreearticles[i].Description;
+          //console.log(this.topthreearticles[i].Description);
+          // console.log('content ', i, ' : ', temp.replace(/<img[^>]*>/g, ''));
+          this.topthreearticles[i].Description = temp.replace(
+            /<img[^>]*>/g,
+            ''
+          );
+        }
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   refreshList() {
@@ -115,7 +120,8 @@ export class BodyComponent implements OnInit {
       }
     );
   }
-  navigateArticles(url) {
+  navigateArticles(aid) {
+    const url = `/article?page=article-posts&articleid=${aid}&s=true&d=false&a=false`;
     this.router.navigateByUrl(url);
   }
 }

@@ -42,7 +42,7 @@ export class FullarticleComponent implements OnInit {
   display = false;
   displayUpload = false;
   folderfound = false;
-
+  articlepostedbyuser: any;
   constructor(
     private service: UserService,
     private activateroute: ActivatedRoute,
@@ -92,7 +92,7 @@ export class FullarticleComponent implements OnInit {
         (res) => {
           this.currentUser = true;
           this.user = res;
-          console.log(this.user);
+          console.log(this.user.Id);
           this.user_id = this.user.Id;
           this.service
             .getarticleusefullmasterbyarticleanduser(
@@ -151,6 +151,8 @@ export class FullarticleComponent implements OnInit {
       (res) => {
         this.data = true;
         this.fullarticle = res;
+        this.articlepostedbyuser = this.fullarticle[0].User_Id;
+        console.log('Full article ', this.fullarticle[0].User_Id);
         if (
           this.fullarticle[0].FolderName != '' &&
           this.fullarticle[0].FolderName != null
@@ -466,7 +468,10 @@ export class FullarticleComponent implements OnInit {
   }
   editarticle() {
     this.router.navigateByUrl(
-      '/article-create?mode=edit&id=' + this.article_id
+      '/article-create?mode=edit&id=' +
+        this.article_id +
+        '&uid=' +
+        this.articlepostedbyuser
     );
   }
   navigate() {

@@ -30,7 +30,7 @@ export class ProductComponent implements OnInit {
   viewproduct: any;
 
   searchText = '';
-  characters = []
+  characters = [];
 
   constructor(
     private service: UserService,
@@ -65,8 +65,11 @@ export class ProductComponent implements OnInit {
       (res) => {
         this.productList = res;
         console.log(res);
-        this.productList.forEach(element => {
-          this.characters.push({'id':element.Product_Id ,'name' :element.Product_Name});
+        this.productList.forEach((element) => {
+          this.characters.push({
+            id: element.Product_Id,
+            name: element.Product_Name,
+          });
         });
       },
       (err) => {
@@ -171,6 +174,7 @@ export class ProductComponent implements OnInit {
   clearUpdateForm() {
     $('#pname').val('');
     $('#editdesc').val('');
+    $('#closeprod').click();
     document.getElementById('closewindow').click();
     this.refreshList();
   }

@@ -16,12 +16,13 @@ export class ProfileComponent implements OnInit {
   userarticlepublishcount: any;
   userarticledraftcount: any;
   userarticlearchivecount: any;
+  userarticlereviewcount: any;
   country_arr: any;
   getuserarticles: any;
   editpersonaldata = {};
   display = false;
   mode: any;
-  Role:any;
+  Role: any;
   atricleNotFound = true;
   dataFetched = false;
   constructor(private service: UserService, private router: Router) {}
@@ -97,16 +98,13 @@ export class ProfileComponent implements OnInit {
     this.mode = 'publish';
     this.service.getarticleforuser(uid).subscribe(
       (res) => {
-        
-          this.atricleNotFound = false;          
-          this.getuserarticles = res;
+        this.atricleNotFound = false;
+        this.getuserarticles = res;
         this.formatdate(this.getuserarticles);
         console.log('all user article ', this.getuserarticles);
-        
-        
       },
       (err) => {
-        if(err.status == 403){
+        if (err.status == 403) {
           this.atricleNotFound = true;
         }
         this.atricleNotFound = true;
@@ -149,6 +147,17 @@ export class ProfileComponent implements OnInit {
         }
       );
     //Archive
+    this.service
+      .getUserArticlesCountForAll(userid, true, true, false)
+      .subscribe(
+        (res) => {
+          this.userarticlereviewcount = res[0].Column1;
+          console.log('Review ', this.userarticlereviewcount);
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
     this.service
       .getUserArticlesCountForAll(userid, false, false, true)
       .subscribe(
@@ -425,6 +434,18 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
+  userreviewarticles() {
+    this.service.getreviewarticleforuser(this.uid).subscribe(
+      (res) => {
+        this.getuserarticles = res;
+        this.formatdate(this.getuserarticles);
+        console.log(this.getuserarticles);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
   userdraftarticles() {
     this.service.getdraftarticleforuser(this.uid).subscribe(
       (res) => {
@@ -449,22 +470,32 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
-  readMore(article_id,s,d,a) {
-    this.router.navigateByUrl('/article?page=profile&articleid=' + article_id + '&s='+ s + '&d=' + d + '&a=' + a);
+  readMore(article_id, s, d, a) {
+    this.router.navigateByUrl(
+      '/article?page=profile&articleid=' +
+        article_id +
+        '&s=' +
+        s +
+        '&d=' +
+        d +
+        '&a=' +
+        a
+    );
     //this._router.navigateByUrl('/permission?id=' + id);
   }
-  changePassword(){
+  changePassword() {
     var body = {
       OldPassword: $('#old_password').val(),
-      NewPassword: $('#new_password').val()
-    }
-    this.service.changePassword(this.uid,body).subscribe(
+      NewPassword: $('#new_password').val(),
+    };
+    this.service.changePassword(this.uid, body).subscribe(
       (res) => {
         $('#close').click();
-        alert('password changed')
-      },(err) => {
+        alert('password changed');
+      },
+      (err) => {
         console.log(err);
       }
-    )
+    );
   }
 }
