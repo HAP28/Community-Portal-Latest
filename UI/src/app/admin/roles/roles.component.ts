@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 export class RolesComponent implements OnInit {
   rolesList: any;
   roleName = {};
+  roles = ['Admin','Reviewer','Viewer','Admin','Publisher']
   constructor(
     private _router: Router,
     private service: UserService,

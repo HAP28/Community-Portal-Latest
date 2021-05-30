@@ -42,7 +42,7 @@ export class HeaderComponent implements OnInit {
   }
   login() {
     if (localStorage.getItem('loggedUser') == null) {
-      this.loggedIn = true;
+      // this.loggedIn = true;
       this._router.navigate(['/login']);
     }
   }

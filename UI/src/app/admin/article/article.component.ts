@@ -68,20 +68,31 @@ export class ArticleComponent implements OnInit {
   }
 
   deleteArticle(aid) {
-    this.service.deletearticlefullmaster(aid).subscribe((res) => {
-      this.service.deletearticle(aid).subscribe(
-        (res) => {
-          console.log(res);
-          this.refreshList();
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-    }),
+    this.service.deleteCommentByArticle(aid).subscribe(
+      (res) => {
+        console.log(res)
+        this.service.deletearticlefullmaster(aid).subscribe(
+          (res) => {
+            console.log(res);
+            this.service.deletearticle(aid).subscribe(
+              (res) => {
+                console.log(res);
+                this.refreshList();
+              },
+              (err) => {
+                console.log(err);
+              }
+            );
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      },
       (err) => {
         console.log(err);
-      };
+      }
+    );
   }
 
   fetchArticle(e) {

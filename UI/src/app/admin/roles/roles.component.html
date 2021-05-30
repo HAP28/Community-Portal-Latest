@@ -30,7 +30,7 @@
         <td>{{ item.Id }}</td>
         <td>
           <div class="dropdown">
-            <button
+            <!-- <button
               class="btn btn-secondary dropdown-toggle"
               type="button"
               id="dropdownMenuButton1"
@@ -40,13 +40,15 @@
               Action
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <!-- <li><a class="dropdown-item" href="#">Edit</a></li> -->
+              
               <li>
                 <a class="dropdown-item" (click)="deleteRole(item.Id)"
                   >Delete</a
                 >
               </li>
-            </ul>
+            </ul> -->
+            <button class="btn btn-danger" (click)="deleteRole(item.Id)" [disabled] = "roles.includes(item.Name)"
+                  >Delete</button>
           </div>
         </td>
       </tr>

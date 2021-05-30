@@ -255,5 +255,34 @@ namespace WebAPI.Controllers
                 return new JsonResult(e.Message);
             }
         }
+        [HttpDelete("commentbyarticle/{id}")]
+        // GET: ProductMasterController/Delete/5
+        public JsonResult Deletecomment(int id)
+        {
+            try
+            {
+                string query = @"delete from dbo.Comment where Article_Id = '" + id + "'";
+                DataTable table = new DataTable();
+                string sqlDataSource = configuration.GetConnectionString("DataConnection");
+                SqlDataReader dataReader;
+                using (SqlConnection connection = new SqlConnection(sqlDataSource))
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        dataReader = command.ExecuteReader();
+                        table.Load(dataReader);
+                        dataReader.Close();
+                        connection.Close();
+                    }
+                }
+                return new JsonResult("Data Deleted");
+            }
+            catch (Exception e)
+            {
+
+                return new JsonResult(e.Message);
+            }
+        }
     }
 }

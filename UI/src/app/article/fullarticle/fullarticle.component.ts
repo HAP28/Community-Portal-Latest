@@ -487,15 +487,32 @@ export class FullarticleComponent implements OnInit {
     });
   }
   deletearticle() {
-    this.service.deletearticle(this.article_id).subscribe(
+    this.service.deleteCommentByArticle(this.article_id).subscribe(
       (res) => {
-        console.log(res);
-        this.navigate();
+        console.log(res)
+        this.service.deletearticlefullmaster(this.article_id).subscribe(
+          (res) => {
+            console.log(res);
+            this.service.deletearticle(this.article_id).subscribe(
+              (res) => {
+                console.log(res);
+                this.navigate();
+              },
+              (err) => {
+                console.log(err);
+              }
+            );
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
       },
       (err) => {
         console.log(err);
       }
     );
+    
   }
   login() {
     this.router.navigate(['/login']);

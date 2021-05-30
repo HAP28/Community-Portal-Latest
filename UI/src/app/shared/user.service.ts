@@ -503,6 +503,9 @@ export class UserService {
   deleteComments(id) {
     return this.http.delete(this.APIURL + '/Comment/' + id);
   }
+  deleteCommentByArticle(aid){
+    return this.http.delete(this.APIURL + '/Comment/commentbyarticle/' + aid);
+  }
 
   //likes dislikes
   getarticleusefullmaster() {
